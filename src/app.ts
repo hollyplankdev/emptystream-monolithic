@@ -10,7 +10,7 @@ import transmissionRouter from "./routes/transmission.routes.js";
 
 const DEFAULT_EXPRESS_PORT = 3000;
 const DEFAULT_API_SPEC_PATH = "./openapi.yml";
-const DEFAULT_DB_URL = "mongodb://mongodb:27017";
+const DEFAULT_DB_URL = "mongodb://localhost:27017";
 
 //
 //  RUNTIME VARIABLES
