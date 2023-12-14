@@ -23,8 +23,6 @@ tags:
 paths:
   /transmission/{id}:
     get:
-      x-eov-operation-id: get
-      x-eov-operation-handler: transmission/get
       tags:
         - Song Management API
       summary: Get Transmission by ID

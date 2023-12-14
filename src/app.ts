@@ -1,11 +1,14 @@
 import * as dotenv from "dotenv";
 import express from "express";
+import * as OpenAPIValidator from "express-openapi-validator";
+import transmissionRouter from "./routes/transmission.routes.js";
 
 //
 //  DEFAULTS
 //
 
 const DEFAULT_EXPRESS_PORT = 3000;
+const DEFAULT_API_SPEC_PATH = "./openapi.yml";
 
 //
 //  APPLICATION START
@@ -14,15 +17,40 @@ const DEFAULT_EXPRESS_PORT = 3000;
 // Load env vars from the `.env` file
 dotenv.config();
 
-// Load our port either from env vars, or use the default
 const expressPort = process.env.EXPRESS_PORT || DEFAULT_EXPRESS_PORT;
+const apiSpecPath = process.env.API_SPEC_PATH || DEFAULT_API_SPEC_PATH;
 
 // Construct the Express application
 const app = express();
 
+// Tell express how to parse the body of incoming requests
+app.use(express.json());
+
+// Configure express to use the OpenAPI spec to wire up our routes
+app.use(
+  OpenAPIValidator.middleware({
+    apiSpec: apiSpecPath,
+    validateRequests: true,
+    validateResponses: true,
+  }),
+);
+
 // Setup a default router
 app.get("/", (req, res) => {
   res.send(JSON.stringify({ message: "Hello World!" }));
+});
+
+// Add the routers from the routes directory
+app.use("/transmission", transmissionRouter);
+
+// Handle any errors from express and wrap them as JSON
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err, req, res, next) => {
+  // Report a catch-all for any errors.
+  res.status(err.status || 500).json({
+    message: err.message,
+    errors: err.errors,
+  });
 });
 
 // ...Start the Express server!
