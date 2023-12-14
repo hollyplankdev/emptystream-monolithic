@@ -1,12 +1,7 @@
-# typescript-boilerplate
+# `emptystream`-monolithic
 
-A template project that just includes enough to start a TypeScript application.
+# Resources
 
-# Features
+## Project Structure
 
-- TypeScript!
-- Run w/out compile via `npm run dev`
-- Tests w/ Jest via `npm run test`
-- Auto reload on file change via `npm run dev:watch`
-- Auto re-run tests on file change via `npm run test:watch`
-- Linked linting and formatting using the AirBnB TypeScript standards
+[This article](https://medium.com/codechef-vit/a-better-project-structure-with-express-and-node-js-c23abc2d736f) has been very helpful in structuring everything under `./src`.
