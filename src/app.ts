@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import express from "express";
-import * as OpenAPIValidator from "express-openapi-validator";
 import transmissionRouter from "./routes/transmission.routes.js";
+import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.middleware.js";
 
 //
 //  DEFAULTS
@@ -11,7 +11,7 @@ const DEFAULT_EXPRESS_PORT = 3000;
 const DEFAULT_API_SPEC_PATH = "./openapi.yml";
 
 //
-//  APPLICATION START
+//  RUNTIME VARIABLES
 //
 
 // Load env vars from the `.env` file
@@ -23,17 +23,16 @@ const apiSpecPath = process.env.API_SPEC_PATH || DEFAULT_API_SPEC_PATH;
 // Construct the Express application
 const app = express();
 
-// Tell express how to parse the body of incoming requests
-app.use(express.json());
+//
+//  Middleware
+//
 
-// Configure express to use the OpenAPI spec to wire up our routes
-app.use(
-  OpenAPIValidator.middleware({
-    apiSpec: apiSpecPath,
-    validateRequests: true,
-    validateResponses: true,
-  }),
-);
+app.use(express.json());
+app.use(createOpenApiValidatorMiddleware(apiSpecPath));
+
+//
+//  Routes
+//
 
 // Setup a default router
 app.get("/", (req, res) => {
@@ -52,6 +51,10 @@ app.use((err, req, res, next) => {
     errors: err.errors,
   });
 });
+
+//
+//  Listen
+//
 
 // ...Start the Express server!
 app.listen(expressPort, () => {
