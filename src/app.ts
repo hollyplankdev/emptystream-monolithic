@@ -1,7 +1,8 @@
 import * as dotenv from "dotenv";
 import express from "express";
-import transmissionRouter from "./routes/transmission.routes.js";
+import { connect as mongooseConnect } from "mongoose";
 import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.middleware.js";
+import transmissionRouter from "./routes/transmission.routes.js";
 
 //
 //  DEFAULTS
@@ -9,6 +10,7 @@ import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.midd
 
 const DEFAULT_EXPRESS_PORT = 3000;
 const DEFAULT_API_SPEC_PATH = "./openapi.yml";
+const DEFAULT_DB_URL = "mongodb://mongodb:27017";
 
 //
 //  RUNTIME VARIABLES
@@ -19,6 +21,7 @@ dotenv.config();
 
 const expressPort = process.env.EXPRESS_PORT || DEFAULT_EXPRESS_PORT;
 const apiSpecPath = process.env.API_SPEC_PATH || DEFAULT_API_SPEC_PATH;
+const dbUrl = process.env.DB_URL || DEFAULT_DB_URL;
 
 // Construct the Express application
 const app = express();
@@ -56,7 +59,12 @@ app.use((err, req, res, next) => {
 //  Listen
 //
 
+// Connect to the DB
+console.log(`Connecting to DB (${dbUrl})...`);
+await mongooseConnect(dbUrl);
+
 // ...Start the Express server!
+console.log("Starting express...");
 app.listen(expressPort, () => {
   console.log(`Listening on port ${expressPort}`);
 });
