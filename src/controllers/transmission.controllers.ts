@@ -8,6 +8,13 @@ const create: RequestHandler = (req, res) => {
 
 const read: RequestHandler = async (req, res) => {
   const transmission = await Transmission.findById(req.params.id);
+
+  // If there's no transmission... EXIT EARLY.
+  if (!transmission) {
+    res.status(400).json({ message: `${req.params.id} not found.` });
+    return;
+  }
+
   res.status(200).json({
     message: "OK",
     transmission,
