@@ -11,6 +11,7 @@ import transmissionRouter from "./routes/transmission.routes.js";
 const DEFAULT_EXPRESS_PORT = 3000;
 const DEFAULT_API_SPEC_PATH = "./openapi.yml";
 const DEFAULT_DB_URL = "mongodb://localhost:27017";
+const DEFAULT_FILE_DEST_PATH = "./.temp/uploads";
 
 //
 //  RUNTIME VARIABLES
@@ -22,6 +23,7 @@ dotenv.config();
 const expressPort = process.env.EXPRESS_PORT || DEFAULT_EXPRESS_PORT;
 const apiSpecPath = process.env.API_SPEC_PATH || DEFAULT_API_SPEC_PATH;
 const dbUrl = process.env.DB_URL || DEFAULT_DB_URL;
+const uploadFileDestPath = process.env.FILE_DEST_PATH || DEFAULT_FILE_DEST_PATH;
 
 // Construct the Express application
 const app = express();
@@ -31,7 +33,7 @@ const app = express();
 //
 
 app.use(express.json());
-app.use(createOpenApiValidatorMiddleware(apiSpecPath));
+app.use(createOpenApiValidatorMiddleware(apiSpecPath, uploadFileDestPath));
 
 //
 //  Routes

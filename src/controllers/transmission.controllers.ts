@@ -3,6 +3,9 @@ import { RequestHandler } from "express";
 import { Transmission } from "../models/transmission.js";
 
 const create: RequestHandler = (req, res) => {
+  console.log(req.body);
+  console.log(req.files);
+
   throw new Error("Not implemented!");
 };
 

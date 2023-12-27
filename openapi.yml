@@ -188,9 +188,12 @@ paths:
         description: Data relating to the new Transmission.
         required: true
         content:
-          multipart/formdata:
+          multipart/form-data:
             schema:
               type: object
+              required:
+                - "name"
+                - "audio"
               properties:
                 name:
                   type: string
