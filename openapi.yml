@@ -34,7 +34,7 @@ paths:
           required: true
           schema:
             type: string
-            format: nanoId
+            format: mongo-objectid
       responses:
         "200":
           description: The transmission matching the specified ID.
@@ -45,7 +45,7 @@ paths:
                 properties:
                   lastEvaulatedId:
                     type: string
-                    format: nanoId
+                    format: mongo-objectid
                     example: fMW0PcHRJGUtUnadq4mvy
                   itemCount:
                     type: integer
@@ -79,7 +79,7 @@ paths:
           required: true
           schema:
             type: string
-            format: nanoId
+            format: mongo-objectid
       requestBody:
         description: Fields to update.
         required: true
@@ -123,7 +123,7 @@ paths:
           required: true
           schema:
             type: string
-            format: nanoId
+            format: mongo-objectid
       responses:
         "200":
           description: The transmission has been removed
@@ -152,7 +152,7 @@ paths:
           required: false
           schema:
             type: string
-            format: nanoId
+            format: mongo-objectid
             example: fMW0PcHRJGUtUnadq4mvy
       responses:
         "200":
@@ -164,7 +164,7 @@ paths:
                 properties:
                   lastEvaulatedId:
                     type: string
-                    format: nanoId
+                    format: mongo-objectid
                     example: fMW0PcHRJGUtUnadq4mvy
                   itemCount:
                     type: integer
@@ -233,12 +233,12 @@ components:
     Transmission:
       type: object
       required:
-        - id
+        - _id
         - name
       properties:
-        id:
+        _id:
           type: string
-          format: nanoId
+          format: mongo-objectid
           example: fMW0PcHRJGUtUnadq4mvy
         name:
           type: string
@@ -252,12 +252,12 @@ components:
     TransmissionChannel:
       type: object
       required:
-        - id
+        - _id
         - type
       properties:
-        id:
+        _id:
           type: string
-          format: nanoId
+          format: mongo-objectid
           example: fMW0PcHRJGUtUnadq4mvy
         type:
           type: string

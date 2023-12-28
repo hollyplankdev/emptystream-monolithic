@@ -2,11 +2,15 @@
 import { RequestHandler } from "express";
 import { Transmission } from "../models/transmission.js";
 
-const create: RequestHandler = (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
+const create: RequestHandler = async (req, res) => {
+  // Text multipart fields available at `req.body`
+  // File multipart fields available at `req.files`
 
-  throw new Error("Not implemented!");
+  // TODO - actually save the audio file.
+  const transmission = new Transmission({ name: req.body.name });
+  await transmission.save();
+
+  res.status(200).contentType("json").send(JSON.stringify(transmission));
 };
 
 const read: RequestHandler = async (req, res) => {

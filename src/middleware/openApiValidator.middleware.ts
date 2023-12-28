@@ -1,4 +1,5 @@
 import * as OpenAPIValidator from "express-openapi-validator";
+import mongoose from "mongoose";
 
 /**
  * @param apiSpecPath Where the OpenAPI yaml specification is on disk.
@@ -13,5 +14,12 @@ export default function create(apiSpecPath: string, uploadFileDestPath: string) 
     fileUploader: {
       dest: uploadFileDestPath,
     },
+    serDes: [
+      {
+        format: "mongo-objectid",
+        deserialize: (s: string) => mongoose.Types.ObjectId.createFromHexString(s),
+        serialize: (o: mongoose.Types.ObjectId) => o.toHexString(),
+      },
+    ],
   });
 }
