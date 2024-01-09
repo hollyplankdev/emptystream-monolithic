@@ -47,10 +47,7 @@ const update: RequestHandler = async (req, res) => {
 const remove: RequestHandler = async (req, res) => {
   const transmission = await Transmission.findByIdAndDelete(req.params.id);
 
-  console.log(JSON.stringify(transmission));
-
   // TODO - actually remove audio related to transmission
-
   if (!transmission) {
     res.status(404).json({ message: `${req.params.id} not found.` });
     return;
