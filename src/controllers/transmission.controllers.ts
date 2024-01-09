@@ -61,28 +61,26 @@ const remove: RequestHandler = async (req, res) => {
 
 const list: RequestHandler = async (req, res) => {
   // Following the example at https://stackoverflow.com/a/23640287
-  const pageSize: number = parseInt(req.params.pageSize, 10);
+  const pageSize: number = parseInt(req.query.pageSize as string, 10);
 
-  // If we're trying to paginate results, use our page
-  // key to skip through results from MongoDB. Otherwise
-  // just use an empty query to get the first `pageSize`
-  // documents.
+  // If we're trying to paginate results, use our page key to skip through results from MongoDB.
+  // Otherwise, just use an empty query to get the first `pageSize` number of documents.
   const searchQuery: FilterQuery<ITransmission> = {};
-  if (req.params.lastPageKey) {
-    searchQuery.createdOn = { $lte: req.params.lastPageKey };
+  if (req.query.lastPageKey) {
+    searchQuery.createdAt = { $lt: new Date(parseInt(req.query.lastPageKey as string, 10)) };
   }
 
-  const foundItems = await Transmission.find(searchQuery).limit(pageSize).sort("-createdOn").lean();
+  const foundItems = await Transmission.find(searchQuery).limit(pageSize).sort("-createdAt").lean();
 
-  //
-  // const pageKey = foundItems.length > 0 ? foundItems[foundItems.length - 1].createdAt : undefined;
+  // Get the date from the last item in the list and use it as our page key
+  const rawPageKey =
+    foundItems.length > 0 ? foundItems[foundItems.length - 1].createdAt : undefined;
+
   const response = {
+    pageKey: rawPageKey ? rawPageKey.valueOf() : undefined, // Convert the page key to a 64-bit int
     items: foundItems,
   };
-
-  console.log(JSON.stringify(foundItems));
   res.status(200).contentType("json").send(JSON.stringify(response));
-  // throw new Error("Not implemented!");
 };
 
 export default {

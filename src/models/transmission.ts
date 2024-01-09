@@ -5,6 +5,11 @@ export interface ITransmission {
   name: String;
 }
 
+export interface ITimestamps {
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export const TransmissionSchema = new Schema<ITransmission>(
   {
     name: { type: String, required: true },
@@ -12,4 +17,4 @@ export const TransmissionSchema = new Schema<ITransmission>(
   { timestamps: true },
 );
 
-export const Transmission = model<ITransmission>("Transmission", TransmissionSchema);
+export const Transmission = model<ITransmission & ITimestamps>("Transmission", TransmissionSchema);

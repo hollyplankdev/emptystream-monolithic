@@ -151,9 +151,8 @@ paths:
           description: If paginating, the value of pageKey from the previous request.
           required: false
           schema:
-            type: string
-            format: mongo-objectid
-            example: fMW0PcHRJGUtUnadq4mvy
+            type: integer
+            example: 1704829257257
         - in: query
           name: pageSize
           description: If paginating, the max number of entries per page.
