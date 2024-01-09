@@ -5,8 +5,11 @@ export interface ITransmission {
   name: String;
 }
 
-export const TransmissionSchema = new Schema<ITransmission>({
-  name: { type: String, required: true },
-});
+export const TransmissionSchema = new Schema<ITransmission>(
+  {
+    name: { type: String, required: true },
+  },
+  { timestamps: true },
+);
 
 export const Transmission = model<ITransmission>("Transmission", TransmissionSchema);

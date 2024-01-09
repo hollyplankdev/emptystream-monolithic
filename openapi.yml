@@ -147,13 +147,22 @@ paths:
         - Song Management API
       parameters:
         - in: query
-          name: lastEvaluatedId
-          description: If paginating, the lastEvaluatedId of the previous request.
+          name: lastPageKey
+          description: If paginating, the value of pageKey from the previous request.
           required: false
           schema:
             type: string
             format: mongo-objectid
             example: fMW0PcHRJGUtUnadq4mvy
+        - in: query
+          name: pageSize
+          description: If paginating, the max number of entries per page.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 32
+            default: 8
       responses:
         "200":
           description: A list of Transmissions (starting from the provided lastEvaluatedId, if there was one).
@@ -162,13 +171,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  lastEvaulatedId:
+                  pageKey:
                     type: string
-                    format: mongo-objectid
                     example: fMW0PcHRJGUtUnadq4mvy
-                  itemCount:
-                    type: integer
-                    example: 1
                   items:
                     type: array
                     items:
