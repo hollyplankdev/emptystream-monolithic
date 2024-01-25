@@ -21,6 +21,47 @@ tags:
   - name: Admin Panel API
     description: Exposes control to administrative functionality through the web.
 paths:
+  /transmission/{id}/{stemType}:
+    get:
+      tags:
+        - Song Management API
+      summary: Get the audio for a Transmission's stems
+      description: Download the audio file for single stem of a Transmission using the type of stem.
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the Transmission that owns the stem to get.
+          required: true
+          schema:
+            type: string
+            format: mongo-objectid
+        - in: path
+          name: stemType
+          description: The name of the type of stem to get.
+          required: true
+          schema:
+            type: string
+            enum: [source, drums, bass, vocals, other]
+      responses:
+        "200":
+          description: The audio file of the specific stem for the desired Transmission.
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Malformed Transmission ID or stem type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: No transmission with the specified ID found, or no stem with the specified type found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
   /transmission/{id}:
     get:
       tags:
