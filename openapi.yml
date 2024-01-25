@@ -301,4 +301,4 @@ components:
       description: An error message.
 servers:
   - url: http://localhost:30330
-    description: The local serverless offline deployment
+    description: The local express deployment
