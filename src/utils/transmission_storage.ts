@@ -3,7 +3,7 @@ import { Writable, Readable } from "stream";
 import DiskStorageProvider from "./disk_storage_provider.js";
 
 /** Values that Transmission stems types are allowed to be */
-export type StemType = ["source", "drums", "bass", "vocals", "other"];
+export type StemType = "source" | "drums" | "bass" | "vocals" | "other";
 
 export default class TransmissionStorage {
   private storage: DiskStorageProvider;
@@ -49,7 +49,7 @@ export default class TransmissionStorage {
 declare global {
   namespace Express {
     interface Request {
-      transmissionStorage?: TransmissionStorage;
+      transmissionStorage: TransmissionStorage;
     }
   }
 }

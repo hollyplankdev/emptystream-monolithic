@@ -2,14 +2,22 @@
 import { RequestHandler } from "express";
 import { FilterQuery } from "mongoose";
 import { ITransmission, Transmission } from "../models/transmission.js";
+import getFileReadStreamFromRequest from "../utils/get_file_read_stream_from_request.js";
 
 const create: RequestHandler = async (req, res) => {
-  // Text multipart fields available at `req.body`
-  // File multipart fields available at `req.files`
-
-  // TODO - actually save the audio file.
+  // Create the entry for the Transmission
   const transmission = new Transmission({ name: req.body.name });
   await transmission.save();
+
+  // Create a stream that reads the audio file from the request
+  const streamFromRequest = getFileReadStreamFromRequest(req, "audio");
+  // Create a stream that writes data to the stem in storage
+  const streamToFile = await req.transmissionStorage.createStemWriteStream(
+    transmission.id,
+    "source",
+  );
+  // Pipe the audio bytes from the request to the file in storage
+  streamFromRequest.pipe(streamToFile);
 
   res.status(200).contentType("json").send(JSON.stringify(transmission));
 };
