@@ -153,3 +153,4 @@ dist
 #   Project-Specific Ignore
 #
 .temp/**/*
+.local_storage/**/*
