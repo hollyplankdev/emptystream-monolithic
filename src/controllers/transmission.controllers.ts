@@ -27,6 +27,13 @@ const read: RequestHandler = async (req, res) => {
   res.status(200).contentType("json").send(JSON.stringify(transmission));
 };
 
+const downloadStem: RequestHandler = async (req, res) => {
+  // Input:
+  //  - req.params.id
+  //  - req.params.stemType
+  // TODO - fill me in!
+};
+
 const update: RequestHandler = async (req, res) => {
   const transmission = await Transmission.findById(req.params.id);
 
@@ -83,6 +90,7 @@ const list: RequestHandler = async (req, res) => {
 export default {
   create,
   read,
+  downloadStem,
   update,
   remove,
   list,
