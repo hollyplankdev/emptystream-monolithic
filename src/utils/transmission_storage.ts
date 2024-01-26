@@ -32,7 +32,7 @@ export default class TransmissionStorage {
   public async createStemReadStream(
     transmissionId: string,
     type: StemType | string,
-  ): Promise<Readable> {
+  ): Promise<Readable | undefined> {
     return this.storage.createReadStream(this.createFileKey(transmissionId, type));
   }
 

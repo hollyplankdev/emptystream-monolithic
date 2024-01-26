@@ -7,7 +7,7 @@ export default interface DiskStorageProvider {
    * @param key The key to the file. Depending on the storage provider, this could be an ID, a file
    *   path, or some other unique identifier.
    */
-  createReadStream(key: string): Promise<Readable>;
+  createReadStream(key: string): Promise<Readable | undefined>;
 
   /**
    * Create a writable stream to a specific file located in this storage provider.

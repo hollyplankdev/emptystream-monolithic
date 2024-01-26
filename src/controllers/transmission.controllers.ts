@@ -44,6 +44,14 @@ const downloadStem: RequestHandler = async (req, res) => {
     req.params.stemType,
   );
 
+  // If there's no stem... EXIT EARLY
+  if (!streamFromFile) {
+    res
+      .status(400)
+      .json({ message: `Stem ${req.params.stemType} for ${req.params.id} not found.` });
+    return;
+  }
+
   // Create a stream that writes data to the response
   const streamToResponse = res.status(200).contentType("audio/mpeg");
 
