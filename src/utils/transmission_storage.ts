@@ -22,11 +22,17 @@ export default class TransmissionStorage {
   //  Public Methods
   //
 
-  public async createStemWriteStream(transmissionId: string, type: StemType): Promise<Writable> {
+  public async createStemWriteStream(
+    transmissionId: string,
+    type: StemType | string,
+  ): Promise<Writable> {
     return this.storage.createWriteStream(this.createFileKey(transmissionId, type));
   }
 
-  public async createStemReadStream(transmissionId: string, type: StemType): Promise<Readable> {
+  public async createStemReadStream(
+    transmissionId: string,
+    type: StemType | string,
+  ): Promise<Readable> {
     return this.storage.createReadStream(this.createFileKey(transmissionId, type));
   }
 
@@ -40,7 +46,7 @@ export default class TransmissionStorage {
    * @param transmissionId The ID of the transmission to look in
    * @param type The specific type of stem to address
    */
-  private createFileKey(transmissionId: string, type: StemType): string {
+  private createFileKey(transmissionId: string, type: StemType | string): string {
     return path.join("transmissions", transmissionId, `${type}${this.fileExtension}`);
   }
 }
