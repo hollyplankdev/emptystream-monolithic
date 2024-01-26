@@ -4,6 +4,10 @@ import * as path from "path";
 import { Readable, Writable } from "stream";
 import DiskStorageProvider from "./disk_storage_provider.js";
 
+/**
+ * A disk storage provider that stores files on local disk, in a hidden folder at the current
+ * working directory.
+ */
 export default class LocalDiskStorageProvider implements DiskStorageProvider {
   /** The base location that all files will be read from and written to, under this provider. */
   private basePath: string;

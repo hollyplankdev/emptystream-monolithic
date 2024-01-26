@@ -5,6 +5,7 @@ import DiskStorageProvider from "./disk_storage_provider.js";
 /** Values that Transmission stems types are allowed to be */
 export type StemType = "source" | "drums" | "bass" | "vocals" | "other";
 
+/** A wrapper around DiskStorageProvider that allows for simple access to Transmission Stems. */
 export default class TransmissionStorage {
   private storage: DiskStorageProvider;
 
@@ -22,6 +23,13 @@ export default class TransmissionStorage {
   //  Public Methods
   //
 
+  /**
+   * Create a Writable stream pointing to the desired Transmission Stem.
+   *
+   * @param transmissionId The ID of the transmission to write to.
+   * @param type The type of stem to write to.
+   * @returns A Writable stream.
+   */
   public async createStemWriteStream(
     transmissionId: string,
     type: StemType | string,
@@ -29,6 +37,13 @@ export default class TransmissionStorage {
     return this.storage.createWriteStream(this.createFileKey(transmissionId, type));
   }
 
+  /**
+   * Create a Readable stream pointing to the desired Transmission Stem.
+   *
+   * @param transmissionId The ID of the transmission to read.
+   * @param type The type of stem to read from.
+   * @returns A Readable stream, or undefined if not found.
+   */
   public async createStemReadStream(
     transmissionId: string,
     type: StemType | string,
@@ -51,7 +66,7 @@ export default class TransmissionStorage {
   }
 }
 
-/** Tell TypeScript that Requests may potentially hold TransmissionStorage */
+/** Tell TypeScript that Requests will hold TransmissionStorage */
 declare global {
   namespace Express {
     interface Request {
