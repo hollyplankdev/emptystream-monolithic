@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import { connect as mongooseConnect } from "mongoose";
 import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.middleware.js";
+import createTransmissionStorageMiddleware from "./middleware/transmissionStorage.middleware.js";
 import transmissionRouter from "./routes/transmission.routes.js";
 
 //
@@ -34,6 +35,7 @@ const app = express();
 
 app.use(express.json());
 app.use(createOpenApiValidatorMiddleware(apiSpecPath, uploadFileDestPath));
+app.use(createTransmissionStorageMiddleware());
 
 //
 //  Routes

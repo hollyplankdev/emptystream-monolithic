@@ -1,6 +1,6 @@
 import * as path from "path";
 import { Writable, Readable } from "stream";
-import DiskStorageProvider from "./disk_storage_provider";
+import DiskStorageProvider from "./disk_storage_provider.js";
 
 /** Values that Transmission stems types are allowed to be */
 export type StemType = ["source", "drums", "bass", "vocals", "other"];
@@ -42,5 +42,14 @@ export default class TransmissionStorage {
    */
   private createFileKey(transmissionId: string, type: StemType): string {
     return path.join("transmissions", transmissionId, `${type}${this.fileExtension}`);
+  }
+}
+
+/** Tell TypeScript that Requests may potentially hold TransmissionStorage */
+declare global {
+  namespace Express {
+    interface Request {
+      transmissionStorage?: TransmissionStorage;
+    }
   }
 }

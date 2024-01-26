@@ -2,7 +2,7 @@ import * as fsPromise from "fs/promises";
 import * as fs from "fs";
 import * as path from "path";
 import { Readable, Writable } from "stream";
-import DiskStorageProvider from "./disk_storage_provider";
+import DiskStorageProvider from "./disk_storage_provider.js";
 
 export default class LocalDiskStorageProvider implements DiskStorageProvider {
   /** The base location that all files will be read from and written to, under this provider. */
