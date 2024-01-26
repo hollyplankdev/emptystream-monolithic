@@ -2,14 +2,24 @@
 import { RequestHandler } from "express";
 import { FilterQuery } from "mongoose";
 import { ITransmission, Transmission } from "../models/transmission.js";
+import getFileReadStreamFromRequest from "../utils/get_file_read_stream_from_request.js";
 
 const create: RequestHandler = async (req, res) => {
-  // Text multipart fields available at `req.body`
-  // File multipart fields available at `req.files`
-
-  // TODO - actually save the audio file.
+  // Create the entry for the Transmission
   const transmission = new Transmission({ name: req.body.name });
   await transmission.save();
+
+  // Create a stream that reads the audio file from the request
+  const streamFromRequest = getFileReadStreamFromRequest(req, "audio");
+
+  // Create a stream that writes data to the stem in storage
+  const streamToFile = await req.transmissionStorage.createStemWriteStream(
+    transmission.id,
+    "source",
+  );
+
+  // Pipe the audio bytes from the request to the file in storage
+  streamFromRequest.pipe(streamToFile);
 
   res.status(200).contentType("json").send(JSON.stringify(transmission));
 };
@@ -25,6 +35,28 @@ const read: RequestHandler = async (req, res) => {
 
   // Send the transmission!
   res.status(200).contentType("json").send(JSON.stringify(transmission));
+};
+
+const downloadStem: RequestHandler = async (req, res) => {
+  // Create a stream that reads the audio file from storage
+  const streamFromFile = await req.transmissionStorage.createStemReadStream(
+    req.params.id,
+    req.params.stemType,
+  );
+
+  // If there's no stem... EXIT EARLY
+  if (!streamFromFile) {
+    res
+      .status(400)
+      .json({ message: `Stem ${req.params.stemType} for ${req.params.id} not found.` });
+    return;
+  }
+
+  // Create a stream that writes data to the response
+  const streamToResponse = res.status(200).contentType("audio/mpeg");
+
+  // Pipe the data from the file to the responses
+  streamFromFile.pipe(streamToResponse);
 };
 
 const update: RequestHandler = async (req, res) => {
@@ -83,6 +115,7 @@ const list: RequestHandler = async (req, res) => {
 export default {
   create,
   read,
+  downloadStem,
   update,
   remove,
   list,

@@ -3,6 +3,7 @@ import controller from "../controllers/transmission.controllers.js";
 
 const transmissionRouter: Router = Router();
 
+transmissionRouter.get("/:id/:stemType", controller.downloadStem);
 transmissionRouter.get("/:id", controller.read);
 transmissionRouter.patch("/:id", controller.update);
 transmissionRouter.delete("/:id", controller.remove);
