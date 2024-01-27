@@ -3,6 +3,7 @@ import { RequestHandler } from "express";
 import { FilterQuery } from "mongoose";
 import { ITransmission, Transmission } from "../models/transmission.js";
 import getFileReadStreamFromRequest from "../utils/get_file_read_stream_from_request.js";
+import splitAudio from "../utils/demucs_local.js";
 
 const create: RequestHandler = async (req, res) => {
   // Create the entry for the Transmission
@@ -21,6 +22,31 @@ const create: RequestHandler = async (req, res) => {
   // Pipe the audio bytes from the request to the file in storage
   streamFromRequest.pipe(streamToFile);
 
+  // Split the audio
+  const splitResults = await splitAudio(streamFromRequest);
+
+  // Upload Drums
+  splitResults.drumsReadStream.pipe(
+    await req.transmissionStorage.createStemWriteStream(transmission.id, "drums"),
+  );
+
+  // Upload Bass
+  splitResults.bassReadStream.pipe(
+    await req.transmissionStorage.createStemWriteStream(transmission.id, "bass"),
+  );
+
+  // Upload Vocals
+  splitResults.vocalsReadStream.pipe(
+    await req.transmissionStorage.createStemWriteStream(transmission.id, "vocals"),
+  );
+
+  // Upload Other
+  splitResults.otherReadStream.pipe(
+    await req.transmissionStorage.createStemWriteStream(transmission.id, "other"),
+  );
+
+  // CLEAN UP
+  await splitResults.cleanupFunc();
   res.status(200).contentType("json").send(JSON.stringify(transmission));
 };
 
