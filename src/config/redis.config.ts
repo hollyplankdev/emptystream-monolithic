@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 //  Defaults
 //
 
-const DEFAULT_REDIS_HOST = "cache";
+const DEFAULT_REDIS_HOST = "localhost";
 const DEFAULT_REDIS_PORT = 6379;
 const DEFAULT_REDIS_PASSWORD = "tM7lUI/gmtg/a67VjrtikA==";
 
