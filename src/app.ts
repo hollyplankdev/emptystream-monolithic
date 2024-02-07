@@ -7,6 +7,7 @@ import { API_SPEC_PATH } from "./config/apiValidator.config.js";
 import { MULTER_FILE_DEST_PATH } from "./config/multer.config.js";
 import { MONGODB_URL } from "./config/mongoDb.config.js";
 import { EXPRESS_PORT } from "./config/express.config.js";
+import * as splitAudioQueue from "./queue/splitAudio.queue.js";
 
 // Construct the Express application
 const app = express();
@@ -18,6 +19,12 @@ const app = express();
 app.use(express.json());
 app.use(createOpenApiValidatorMiddleware(API_SPEC_PATH, MULTER_FILE_DEST_PATH));
 app.use(createTransmissionStorageMiddleware());
+
+//
+//  Queue Workers
+//
+
+splitAudioQueue.createWorker();
 
 //
 //  Routes

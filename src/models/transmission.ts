@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 export interface ISplitOperation {
   /** The current status of the operation. */
-  status: String;
+  status: string;
 
   /** How complete the operation is, from 0-100. */
   percentage: number;
@@ -15,10 +15,10 @@ export interface ITimestamps {
 
 export interface ITransmission {
   /** The name describing this transmission. */
-  name: String;
+  name: string;
 
   /** The stem types that this transmission has. */
-  stems: [String];
+  stems: [string];
 
   /** Information about the audio splitting operation for this Transmission. */
   splitOperation: ISplitOperation;
