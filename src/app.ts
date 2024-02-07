@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import { connect as mongooseConnect } from "mongoose";
 import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.middleware.js";
 import createTransmissionStorageMiddleware from "./middleware/transmissionStorage.middleware.js";
@@ -34,6 +35,8 @@ splitAudioQueue.createWorker();
 app.get("/", (req, res) => {
   res.send(JSON.stringify({ message: "Hello World!" }));
 });
+
+app.use(express.static(path.join(process.cwd(), "static")));
 
 // Add the routers from the routes directory
 app.use("/transmission", transmissionRouter);

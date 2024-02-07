@@ -31,7 +31,7 @@ const create: RequestHandler = async (req, res) => {
   await splitAudioQueue.addToQueue(transmission.id, transmission.name, streamFromRequest);
 
   // ...and we're done!
-  res.status(200).contentType("json").send(JSON.stringify(transmission));
+  res.status(202).contentType("json").send(JSON.stringify(transmission));
 };
 
 const read: RequestHandler = async (req, res) => {
