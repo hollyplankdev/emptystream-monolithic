@@ -24,10 +24,13 @@ export interface ITransmission {
   splitOperation: ISplitOperation;
 }
 
-export const SplitOperationSchema = new Schema<ISplitOperation>({
-  status: { type: String, required: true },
-  percentage: { type: Number, required: true },
-});
+export const SplitOperationSchema = new Schema<ISplitOperation>(
+  {
+    status: { type: String, required: true },
+    percentage: { type: Number, required: true },
+  },
+  { _id: false },
+);
 
 export const TransmissionSchema = new Schema<ITransmission>(
   {
