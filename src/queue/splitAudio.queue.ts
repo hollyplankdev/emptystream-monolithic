@@ -64,12 +64,12 @@ const queue = new Queue<ISplitAudioInput>(queueName, { connection: getRedisConne
  */
 export function addToQueue(transmissionId: string, transmissionName: string, inputAudio: Readable) {
   // Generate a random file name to use
-  const randomFileName = crypto.randomBytes(32).toString("hex");
+  const randomFileName = `${crypto.randomBytes(32).toString("hex")}.mp3`;
 
   // TODO - refactor this to NOT need input audio. We should be able to read the source from
   // transmission storage in the TASK ITSELF.
   // Store the input audio in the local filesystem
-  const sourceFilePath = path.join(demucsInputPath, `${randomFileName}.mp3`);
+  const sourceFilePath = path.join(demucsInputPath, randomFileName);
   const sourceWriteStream = fs.createWriteStream(sourceFilePath);
   inputAudio.pipe(sourceWriteStream);
 
@@ -104,14 +104,14 @@ export function createWorker() {
 
         // Log stdout!
         demucsProcess.stdout.setEncoding("utf-8");
-        demucsProcess.stdout.on("data", (chunk) => {
-          console.log(chunk);
+        demucsProcess.stdout.on("data", async (chunk) => {
+          await job.log(chunk);
         });
 
         // Log stderr!
         demucsProcess.stderr.setEncoding("utf-8");
-        demucsProcess.stderr.on("data", (chunk) => {
-          console.log(chunk);
+        demucsProcess.stderr.on("data", async (chunk) => {
+          await job.log(chunk);
         });
 
         // Resolve the promise when the process is finished
@@ -126,7 +126,10 @@ export function createWorker() {
 
       // Now that demucs is done, we can upload our stems!
       const transmissionStorage = getTransmissionStorageClient();
-      const outputStemBasePath = path.join(demucsOutputPath, job.data.inputFileName);
+      const outputStemBasePath = path.join(
+        demucsOutputPath,
+        path.parse(job.data.inputFileName).name,
+      );
       const stemTypes = ["drums", "bass", "vocals", "other"];
 
       // Pipe each stem into transmission storage
@@ -151,7 +154,7 @@ export function createWorker() {
       );
 
       // Add the stem types to the DB object
-      await Transmission.updateOne({ id: job.data.transmissionId }, { stems: stemTypes });
+      await Transmission.updateOne({ _id: job.data.transmissionId }, { stems: stemTypes });
 
       // Clean up created files, now that we don't need them.
       await job.updateProgress({ percentage: 90, status: "cleaning_up" });
@@ -180,7 +183,7 @@ queueEvents.on("active", async (args) => {
 
   // Update the split operation field.
   await Transmission.updateOne(
-    { id: jobData.transmissionId },
+    { _id: jobData.transmissionId },
     { splitOperation: { status: "started_job", percentage: 5 } },
   );
 });
@@ -189,7 +192,9 @@ queueEvents.on("active", async (args) => {
 queueEvents.on("progress", async (args) => {
   // Get info about this job
   const jobData = (await queue.getJob(args.jobId))?.data;
-  if (!jobData) return;
+  if (!jobData) {
+    return;
+  }
 
   // Transform the given progress from args into the appropriate update data for the DB.
   // (We have to do this because args.data might be a number OR an object)
@@ -203,7 +208,7 @@ queueEvents.on("progress", async (args) => {
 
   // Update the split operation field.
   await Transmission.updateOne(
-    { id: jobData.transmissionId },
+    { _id: jobData.transmissionId },
     { splitOperation: splitOperationUpdate },
   );
 });
@@ -216,7 +221,7 @@ queueEvents.on("completed", async (args) => {
 
   // Update the split operation field.
   await Transmission.updateOne(
-    { id: jobData.transmissionId },
+    { _id: jobData.transmissionId },
     { splitOperation: { status: "complete", percentage: 100 } },
   );
 });
@@ -229,7 +234,7 @@ queueEvents.on("failed", async (args) => {
 
   // Update the split operation field.
   await Transmission.updateOne(
-    { id: jobData.transmissionId },
+    { _id: jobData.transmissionId },
     { splitOperation: { status: "failed" } },
   );
 });
