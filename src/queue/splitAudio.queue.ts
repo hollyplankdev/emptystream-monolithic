@@ -53,7 +53,7 @@ const demucsOutputPath: string = path.join(
 //
 
 /** The queue holding all audio splitting jobs. */
-const queue = new Queue<ISplitAudioInput>(queueName);
+const queue = new Queue<ISplitAudioInput>(queueName, { connection: getRedisConnectionOptions() });
 
 /**
  * Add an audio split operation to the queue.
@@ -170,7 +170,7 @@ export function createWorker() {
 //
 
 /** The object allowing us to listen to events on the queue described by this file. */
-const queueEvents = new QueueEvents(queueName);
+const queueEvents = new QueueEvents(queueName, { connection: getRedisConnectionOptions() });
 
 /** Called when a job is started. */
 queueEvents.on("active", async (args) => {
