@@ -3,11 +3,15 @@ import { RequestHandler } from "express";
 import { FilterQuery } from "mongoose";
 import { ITransmission, Transmission } from "../models/transmission.js";
 import getFileReadStreamFromRequest from "../utils/get_file_read_stream_from_request.js";
-import splitAudio from "../utils/demucs_local.js";
+import splitAudioQueue from "../queue/splitAudio.queue.js";
 
 const create: RequestHandler = async (req, res) => {
   // Create the entry for the Transmission
-  const transmission = new Transmission({ name: req.body.name });
+  const transmission = new Transmission({
+    name: req.body.name,
+    stems: [],
+    splitOperation: { status: "starting", percentage: 0 },
+  });
   await transmission.save();
 
   // Create a stream that reads the audio file from the request
@@ -19,35 +23,14 @@ const create: RequestHandler = async (req, res) => {
     "source",
   );
 
-  // Pipe the audio bytes from the request to the file in storage
+  // Pipe the audio from the request into Transmission Storage
   streamFromRequest.pipe(streamToFile);
 
-  // Split the audio
-  const splitResults = await splitAudio(streamFromRequest);
+  // Queue up the audio splitting operation
+  await splitAudioQueue.addJob(transmission.id, transmission.name);
 
-  // Upload Drums
-  splitResults.drumsReadStream.pipe(
-    await req.transmissionStorage.createStemWriteStream(transmission.id, "drums"),
-  );
-
-  // Upload Bass
-  splitResults.bassReadStream.pipe(
-    await req.transmissionStorage.createStemWriteStream(transmission.id, "bass"),
-  );
-
-  // Upload Vocals
-  splitResults.vocalsReadStream.pipe(
-    await req.transmissionStorage.createStemWriteStream(transmission.id, "vocals"),
-  );
-
-  // Upload Other
-  splitResults.otherReadStream.pipe(
-    await req.transmissionStorage.createStemWriteStream(transmission.id, "other"),
-  );
-
-  // CLEAN UP
-  await splitResults.cleanupFunc();
-  res.status(200).contentType("json").send(JSON.stringify(transmission));
+  // ...and we're done!
+  res.status(202).contentType("json").send(JSON.stringify(transmission));
 };
 
 const read: RequestHandler = async (req, res) => {

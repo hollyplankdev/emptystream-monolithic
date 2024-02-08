@@ -14,6 +14,7 @@ export default function create(apiSpecPath: string, uploadFileDestPath: string) 
     fileUploader: {
       dest: uploadFileDestPath,
     },
+    ignoreUndocumented: true,
     serDes: [
       {
         format: "mongo-objectid",

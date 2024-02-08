@@ -40,8 +40,7 @@ paths:
           description: The name of the type of stem to get.
           required: true
           schema:
-            type: string
-            enum: [source, drums, bass, vocals, other]
+            $ref: "#/components/schemas/StemType"
       responses:
         "200":
           description: The audio file of the specific stem for the desired Transmission.
@@ -82,19 +81,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  lastEvaulatedId:
-                    type: string
-                    format: mongo-objectid
-                    example: fMW0PcHRJGUtUnadq4mvy
-                  itemCount:
-                    type: integer
-                    example: 1
-                  items:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Transmission"
+                $ref: "#/components/schemas/Transmission"
+
         "400":
           description: Missing input ID or malformed input ID
           content:
@@ -249,8 +237,8 @@ paths:
                   format: binary
                   description: The audio file of the Transmission. This will automatially be split into stems.
       responses:
-        "200":
-          description: The newly created Transmission.
+        "202":
+          description: The newly created Transmission, with an indication that audio is being split.
           content:
             application/json:
               schema:
@@ -280,6 +268,8 @@ components:
       required:
         - _id
         - name
+        - stems
+        - splitStatus
       properties:
         _id:
           type: string
@@ -288,30 +278,32 @@ components:
         name:
           type: string
           example: "loosestars"
+        stems:
+          type: array
+          items:
+            $ref: "#/components/schemas/StemType"
+          example: ["drums", "bass", "vocals", "other"]
+        splitOperation:
+          type: object
+          required:
+            - status
+            - percentage
+          properties:
+            status:
+              type: string
+              example: "complete"
+            percentage:
+              type: integer
+              example: 100
       description: |
         A general transmission on emptystream. This is a looping sound consisting of four individual channels, split into:
         * Bass
         * Drums
         * Vocals
         * Everything Else
-    TransmissionChannel:
-      type: object
-      required:
-        - _id
-        - type
-      properties:
-        _id:
-          type: string
-          format: mongo-objectid
-          example: fMW0PcHRJGUtUnadq4mvy
-        type:
-          type: string
-          enum:
-            - bass
-            - drums
-            - other
-            - vocals
-      description: A single channel from some parent transmission. This is one of a handful of possible stems from a split source track.
+    StemType:
+      type: string
+      enum: [source, drums, bass, vocals, other]
     NotFoundError:
       type: object
       properties:

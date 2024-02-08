@@ -6,6 +6,16 @@ services:
       - "27017:27017"
     volumes:
       - dbdata6:/data/db
+  # The Redis instance
+  cache:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass tM7lUI/gmtg/a67VjrtikA==
+    volumes:
+      - cache:/data
 
 volumes:
   dbdata6:
+  cache:
+    driver: local

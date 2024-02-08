@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <header>
+    <h1>Transmission Upload Test</h1>
+  </header>
+  <body>
+    <div>
+      <h2>New Transmission</h2>
+      <form enctype="multipart/form-data">
+        <label for="name">Transmission Name:</label>
+        <input type="text" id="name" name="name" />
+        <label for="audio">Audio:</label>
+        <input type="file" id="audio" name="audio" accept="audio/mpeg" multiple="false" />
+        <input type="submit" value="Submit" />
+      </form>
+      <div>
+        <h2>Response</h2>
+        <p id="status-paragraph">...</p>
+      </div>
+      <div>
+        <h2>Progress</h2>
+        <p id="split-status">...</p>
+        <progress id="split-percentage" value="0" max="100"></progress>
+      </div>
+    </div>
+  </body>
+  <footer>
+    <script src="upload-test.js"></script>
+  </footer>
+</html>
