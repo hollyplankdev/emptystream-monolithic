@@ -8,7 +8,7 @@ import { API_SPEC_PATH } from "./config/apiValidator.config.js";
 import { MULTER_FILE_DEST_PATH } from "./config/multer.config.js";
 import { MONGODB_URL } from "./config/mongoDb.config.js";
 import { EXPRESS_PORT } from "./config/express.config.js";
-import * as splitAudioQueue from "./queue/splitAudio.queue.js";
+import splitAudioQueue from "./queue/splitAudio.queue.js";
 
 // Construct the Express application
 const app = express();

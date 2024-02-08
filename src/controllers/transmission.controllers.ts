@@ -3,8 +3,7 @@ import { RequestHandler } from "express";
 import { FilterQuery } from "mongoose";
 import { ITransmission, Transmission } from "../models/transmission.js";
 import getFileReadStreamFromRequest from "../utils/get_file_read_stream_from_request.js";
-import splitAudio from "../utils/demucs_local.js";
-import * as splitAudioQueue from "../queue/splitAudio.queue.js";
+import splitAudioQueue from "../queue/splitAudio.queue.js";
 
 const create: RequestHandler = async (req, res) => {
   // Create the entry for the Transmission
@@ -28,7 +27,7 @@ const create: RequestHandler = async (req, res) => {
   streamFromRequest.pipe(streamToFile);
 
   // Queue up the audio splitting operation
-  await splitAudioQueue.addToQueue(transmission.id, transmission.name);
+  await splitAudioQueue.addJob(transmission.id, transmission.name);
 
   // ...and we're done!
   res.status(202).contentType("json").send(JSON.stringify(transmission));
