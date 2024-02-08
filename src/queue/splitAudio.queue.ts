@@ -4,7 +4,6 @@ import crypto from "crypto";
 import * as fs from "fs";
 import * as fsPromise from "fs/promises";
 import path from "path";
-import { Readable } from "stream";
 import { getRedisConnectionOptions } from "../config/redis.config.js";
 import { getTransmissionStorageClient } from "../config/transmissionStorage.config.js";
 import { ISplitOperation, Transmission } from "../models/transmission.js";
@@ -19,15 +18,6 @@ export interface ISplitAudioInput {
 
   /** The name of the Transmission that we are splitting audio for. */
   transmissionName: string;
-
-  /**
-   * The name of the audio track we are splitting. This is it's file name (including extension)
-   * relative to `demucsInputPath`.
-   */
-  inputFileName: string;
-
-  /** The full path to the audio track we are splitting. */
-  inputFilePathFull: string;
 }
 
 //
@@ -60,25 +50,12 @@ const queue = new Queue<ISplitAudioInput>(queueName, { connection: getRedisConne
  *
  * @param transmissionId The ID of the transmission to split.
  * @param transmissionName The name of the transmission that we're splitting.
- * @param inputAudio The stream containing the source audio.
  */
-export function addToQueue(transmissionId: string, transmissionName: string, inputAudio: Readable) {
-  // Generate a random file name to use
-  const randomFileName = `${crypto.randomBytes(32).toString("hex")}.mp3`;
-
-  // TODO - refactor this to NOT need input audio. We should be able to read the source from
-  // transmission storage in the TASK ITSELF.
-  // Store the input audio in the local filesystem
-  const sourceFilePath = path.join(demucsInputPath, randomFileName);
-  const sourceWriteStream = fs.createWriteStream(sourceFilePath);
-  inputAudio.pipe(sourceWriteStream);
-
+export function addToQueue(transmissionId: string, transmissionName: string) {
   // ...then tell our queue that we want to split this audio!
   return queue.add(`split_${transmissionName}`, {
     transmissionId,
     transmissionName,
-    inputFileName: randomFileName,
-    inputFilePathFull: sourceFilePath,
   });
 }
 
@@ -90,17 +67,39 @@ export function createWorker() {
   return new Worker<ISplitAudioInput>(
     queueName,
     async (job) => {
+      //
+      //  1. DOWNLOAD TRANSMISSION SOURCE
+      //
+
+      await job.updateProgress({ percentage: 10, status: "downloading_source" });
+      const transmissionStorage = getTransmissionStorageClient();
+
+      // Generate a random file name to use
+      const inputFileName = `${crypto.randomBytes(32).toString("hex")}.mp3`;
+
+      // Create a stream that allows us to read the transmission source audio from storage
+      const sourceReadStream = await transmissionStorage.createStemReadStream(
+        job.data.transmissionId,
+        "source",
+      );
+      if (!sourceReadStream) throw new Error("Source stream not found");
+
+      // Store the source audio in the local filesystem
+      const inputFilePathFull = path.join(demucsInputPath, inputFileName);
+      const sourceWriteStream = fs.createWriteStream(inputFilePathFull);
+      sourceReadStream.pipe(sourceWriteStream);
+
+      //
+      //  2. SPLIT AUDIO WITH DEMUCS
+      //
+
       // Run demucs locally, and have it split the desired audio
-      await job.updateProgress({ percentage: 10, status: "running_demucs" });
+      await job.updateProgress({ percentage: 20, status: "running_demucs" });
       await new Promise<void>((resolve, reject) => {
         // Start the demucs process for the given track
-        const demucsProcess = spawn(
-          "make",
-          ["run", `track=${job.data.inputFileName}`, "mp3output=true"],
-          {
-            cwd: path.join(process.cwd(), "docker-facebook-demucs"),
-          },
-        );
+        const demucsProcess = spawn("make", ["run", `track=${inputFileName}`, "mp3output=true"], {
+          cwd: path.join(process.cwd(), "docker-facebook-demucs"),
+        });
 
         // Log stdout!
         demucsProcess.stdout.setEncoding("utf-8");
@@ -124,12 +123,12 @@ export function createWorker() {
         });
       });
 
+      //
+      //  3. UPLOAD SPLIT STEMS
+      //
+
       // Now that demucs is done, we can upload our stems!
-      const transmissionStorage = getTransmissionStorageClient();
-      const outputStemBasePath = path.join(
-        demucsOutputPath,
-        path.parse(job.data.inputFileName).name,
-      );
+      const outputStemBasePath = path.join(demucsOutputPath, path.parse(inputFileName).name);
       const stemTypes = ["drums", "bass", "vocals", "other"];
 
       // Pipe each stem into transmission storage
@@ -156,10 +155,14 @@ export function createWorker() {
       // Add the stem types to the DB object
       await Transmission.updateOne({ _id: job.data.transmissionId }, { stems: stemTypes });
 
+      //
+      //  4. CLEAN UP TEMP FILES
+      //
+
       // Clean up created files, now that we don't need them.
       await job.updateProgress({ percentage: 90, status: "cleaning_up" });
       await fsPromise.rm(outputStemBasePath, { recursive: true, force: true });
-      await fsPromise.rm(job.data.inputFilePathFull, { recursive: true, force: true });
+      await fsPromise.rm(inputFilePathFull, { recursive: true, force: true });
     },
     {
       concurrency: 1,

@@ -24,11 +24,11 @@ const create: RequestHandler = async (req, res) => {
     "source",
   );
 
-  // Pipe the audio bytes from the request to the file in storage
+  // Pipe the audio from the request into Transmission Storage
   streamFromRequest.pipe(streamToFile);
 
   // Queue up the audio splitting operation
-  await splitAudioQueue.addToQueue(transmission.id, transmission.name, streamFromRequest);
+  await splitAudioQueue.addToQueue(transmission.id, transmission.name);
 
   // ...and we're done!
   res.status(202).contentType("json").send(JSON.stringify(transmission));
