@@ -7,6 +7,7 @@ import path from "path";
 import { getTransmissionStorageClient } from "../../config/transmissionStorage.config.js";
 import { Transmission } from "../../models/transmission.js";
 import { ISplitAudioInput } from "./interfaces.js";
+import TransmissionStorage from "../../utils/transmission_storage.js";
 
 /** Where demucs expects audio files to be located when splitting, on the local filesystem. */
 const demucsInputPath: string = path.join(process.cwd(), "docker-facebook-demucs", "input");
@@ -19,56 +20,43 @@ const demucsOutputPath: string = path.join(
   "htdemucs",
 );
 
+//
+//  Private Functions
+//
+
 /**
- * Runs the audio splitting job. Meant to be called by a BullMQ worker.
+ * Download the source audio file of a transmission to local disk, from transmission storage.
  *
- * @param job
+ * @param destFilePath Where to store the file on disk. This must be the whole path, including file
+ *   name and extension.
+ * @param id The ID of the Transmission to download the source from.
+ * @param storage The instance of TransmissionStorage to use when downloading audio.
  */
-const runJob: Processor<ISplitAudioInput> = async (job) => {
-  //
-  //  1. DOWNLOAD TRANSMISSION SOURCE
-  //
-
-  await job.updateProgress({ percentage: 10, status: "downloading_source" });
-  const transmissionStorage = getTransmissionStorageClient();
-
-  // Generate a random file name to use
-  const inputFileName = `${crypto.randomBytes(32).toString("hex")}.mp3`;
-
+async function downloadTransmissionSource(
+  destFilePath: string,
+  id: string,
+  storage: TransmissionStorage,
+) {
   // Create a stream that allows us to read the transmission source audio from storage
-  const sourceReadStream = await transmissionStorage.createStemReadStream(
-    job.data.transmissionId,
-    "source",
-  );
+  const sourceReadStream = await storage.createStemReadStream(id, "source");
   if (!sourceReadStream) throw new Error("Source stream not found");
 
   // Store the source audio in the local filesystem
-  const inputFilePathFull = path.join(demucsInputPath, inputFileName);
-  const sourceWriteStream = fs.createWriteStream(inputFilePathFull);
+  const sourceWriteStream = fs.createWriteStream(destFilePath);
   sourceReadStream.pipe(sourceWriteStream);
+}
 
-  //
-  //  2. SPLIT AUDIO WITH DEMUCS
-  //
-
-  // Run demucs locally, and have it split the desired audio
-  await job.updateProgress({ percentage: 20, status: "running_demucs" });
-  await new Promise<void>((resolve, reject) => {
+/**
+ * Splits an audio file into stems by running demucs through docker.
+ *
+ * @param inputFileName The name of the audio file to split, including file extension. This file is
+ *   assumed to be in demus' input folder.
+ */
+function splitWithDemucs(inputFileName: string) {
+  return new Promise<void>((resolve, reject) => {
     // Start the demucs process for the given track
     const demucsProcess = spawn("make", ["run", `track=${inputFileName}`, "mp3output=true"], {
       cwd: path.join(process.cwd(), "docker-facebook-demucs"),
-    });
-
-    // Log stdout!
-    demucsProcess.stdout.setEncoding("utf-8");
-    demucsProcess.stdout.on("data", async (chunk) => {
-      await job.log(chunk);
-    });
-
-    // Log stderr!
-    demucsProcess.stderr.setEncoding("utf-8");
-    demucsProcess.stderr.on("data", async (chunk) => {
-      await job.log(chunk);
     });
 
     // Resolve the promise when the process is finished
@@ -80,44 +68,74 @@ const runJob: Processor<ISplitAudioInput> = async (job) => {
       }
     });
   });
+}
 
-  //
-  //  3. UPLOAD SPLIT STEMS
-  //
-
-  // Now that demucs is done, we can upload our stems!
-  const outputStemBasePath = path.join(demucsOutputPath, path.parse(inputFileName).name);
+/**
+ * Takes stems in a folder, uploads them to TransmissionStorage, and updates the Transmission in the
+ * DB to reflect the new stems.
+ *
+ * @param stemBasePath The filepath to the directory containing the stems to upload.
+ * @param id The ID of the Transmission to upload stems for.
+ * @param storage The instance of TransmissionStorage that we should upload stems to.
+ */
+async function uploadTransmissionStems(
+  stemBasePath: string,
+  id: string,
+  storage: TransmissionStorage,
+) {
   const stemTypes = ["drums", "bass", "vocals", "other"];
 
   // Pipe each stem into transmission storage
-  await job.updateProgress({ percentage: 70, status: "uploading_stems" });
   await Promise.all(
     stemTypes.map(async (stemType) => {
       // Open a stream that allows reading from the local stem audio file.
-      const localFileReadStream = fs.createReadStream(
-        path.join(outputStemBasePath, `${stemType}.mp3`),
-      );
+      const localFileReadStream = fs.createReadStream(path.join(stemBasePath, `${stemType}.mp3`));
 
       // Open a stream that allows writing to wherever the stem should be stored
       // in TransmissionStorage.
-      const stemWriteStream = await transmissionStorage.createStemWriteStream(
-        job.data.transmissionId,
-        stemType,
-      );
+      const stemWriteStream = await storage.createStemWriteStream(id, stemType);
 
       // Pipe bytes from the stem to TransmissionStorage!
       localFileReadStream.pipe(stemWriteStream);
     }),
   );
 
-  // Add the stem types to the DB object
-  await Transmission.updateOne({ _id: job.data.transmissionId }, { stems: stemTypes });
+  // Update the DB object for this transmission to display what stems it contains
+  await Transmission.updateOne({ _id: id }, { stems: stemTypes });
+}
 
-  //
-  //  4. CLEAN UP TEMP FILES
-  //
+//
+//
+//  Main Job Function
+//
+//
 
-  // Clean up created files, now that we don't need them.
+/**
+ * Runs the audio splitting job. Meant to be called by a BullMQ worker.
+ *
+ * @param job
+ */
+const runJob: Processor<ISplitAudioInput> = async (job) => {
+  const transmissionStorage = getTransmissionStorageClient();
+
+  // Generate a random file name to use
+  const inputFileName = `${crypto.randomBytes(32).toString("hex")}.mp3`;
+  const inputFilePathFull = path.join(demucsInputPath, inputFileName);
+  const outputStemBasePath = path.join(demucsOutputPath, path.parse(inputFileName).name);
+
+  // 1. DOWNLOAD TRANSMISSION SOURCE
+  await job.updateProgress({ percentage: 10, status: "downloading_source" });
+  await downloadTransmissionSource(inputFilePathFull, job.data.transmissionId, transmissionStorage);
+
+  // 2. SPLIT AUDIO WITH DEMUCS
+  await job.updateProgress({ percentage: 20, status: "running_demucs" });
+  await splitWithDemucs(inputFileName);
+
+  // 3. UPLOAD SPLIT STEMS
+  await job.updateProgress({ percentage: 70, status: "uploading_stems" });
+  await uploadTransmissionStems(outputStemBasePath, job.data.transmissionId, transmissionStorage);
+
+  // 4. CLEAN UP TEMP FILES
   await job.updateProgress({ percentage: 90, status: "cleaning_up" });
   await fsPromise.rm(outputStemBasePath, { recursive: true, force: true });
   await fsPromise.rm(inputFilePathFull, { recursive: true, force: true });
