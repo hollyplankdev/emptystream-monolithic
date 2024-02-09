@@ -1,7 +1,8 @@
 import express from "express";
-import { createServer } from "http";
+import * as http from "http";
 import { connect as mongooseConnect } from "mongoose";
 import path from "path";
+import { WebSocketServer } from "ws";
 import { API_SPEC_PATH } from "./config/apiValidator.config.js";
 import { HTTP_PORT } from "./config/http.config.js";
 import { MONGODB_URL } from "./config/mongoDb.config.js";
@@ -10,12 +11,22 @@ import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.midd
 import createTransmissionStorageMiddleware from "./middleware/transmissionStorage.middleware.js";
 import splitAudioQueue from "./queue/splitAudio.queue.js";
 import transmissionRouter from "./routes/transmission.routes.js";
+import setupStreamWebSocketServer from "./websockets/stream.websocket.js";
 
 // Construct the Express application
 const app = express();
 
 // Construct the HTTP server
-const httpServer = createServer(app);
+const httpServer = http.createServer(app);
+
+// Construct the WebSocket server
+const webSocketServer = new WebSocketServer({ server: httpServer, path: "/stream" });
+
+//
+//  WebSocket Implementations
+//
+
+setupStreamWebSocketServer(webSocketServer);
 
 //
 //  Middleware
