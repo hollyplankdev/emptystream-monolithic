@@ -1,17 +1,21 @@
 import express from "express";
-import path from "path";
+import { createServer } from "http";
 import { connect as mongooseConnect } from "mongoose";
+import path from "path";
+import { API_SPEC_PATH } from "./config/apiValidator.config.js";
+import { HTTP_PORT } from "./config/http.config.js";
+import { MONGODB_URL } from "./config/mongoDb.config.js";
+import { MULTER_FILE_DEST_PATH } from "./config/multer.config.js";
 import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.middleware.js";
 import createTransmissionStorageMiddleware from "./middleware/transmissionStorage.middleware.js";
-import transmissionRouter from "./routes/transmission.routes.js";
-import { API_SPEC_PATH } from "./config/apiValidator.config.js";
-import { MULTER_FILE_DEST_PATH } from "./config/multer.config.js";
-import { MONGODB_URL } from "./config/mongoDb.config.js";
-import { EXPRESS_PORT } from "./config/express.config.js";
 import splitAudioQueue from "./queue/splitAudio.queue.js";
+import transmissionRouter from "./routes/transmission.routes.js";
 
 // Construct the Express application
 const app = express();
+
+// Construct the HTTP server
+const httpServer = createServer(app);
 
 //
 //  Middleware
@@ -59,8 +63,8 @@ app.use((err, req, res, next) => {
 console.log(`Connecting to DB (${MONGODB_URL})...`);
 await mongooseConnect(MONGODB_URL);
 
-// ...Start the Express server!
-console.log("Starting express...");
-app.listen(EXPRESS_PORT, () => {
-  console.log(`Listening on port ${EXPRESS_PORT}`);
+// ...Start the HTTP server!
+console.log("Starting HTTP server...");
+httpServer.listen(HTTP_PORT, () => {
+  console.log(`Listening on port ${HTTP_PORT}`);
 });
