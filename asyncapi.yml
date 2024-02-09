@@ -1,0 +1,75 @@
+asyncapi: "3.0.0"
+info:
+  title: "`emptystream` Async API"
+  version: "1.0.0"
+
+channels:
+  connection:
+    address: /stream/connection
+    messages:
+      userConnect:
+        $ref: "#/components/messages/userConnect"
+      userDisconnect:
+        $ref: "#/components/messages/userDisconnect"
+  tuning:
+    address: /stream/tuning
+    messages:
+      tuningChanged:
+        $ref: "#/components/messages/tuningChanged"
+
+components:
+  messages:
+    userConnect:
+      summary: "A user has connected to the stream."
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: "connected"
+    userDisconnect:
+      summary: "A user has disconnected from the stream."
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: "disconnected"
+    tuningChanged:
+      summary: "The `emptystream`'s tuning has changed."
+      payload:
+        type: object
+        properties:
+          event:
+            type: string
+            const: "tuning_changed"
+          updates:
+            $ref: "#/components/schemas/StreamState"
+
+  schemas:
+    StreamState:
+      description: "The partial or whole state of the stream."
+      type: array
+      items:
+        type: object
+        properties:
+          channelIndex:
+            description: "The index of the channel to tune to the attached TransmissionStem."
+            type: integer
+            enum: [0, 1, 2, 3]
+          transmission:
+            $ref: "#/components/schemas/TransmissionStem"
+    TransmissionStem:
+      description: "The specific stem of a Transmission."
+      type: object
+      properties:
+        id:
+          description: "The ID of this Transmission."
+          type: string
+          format: mongo-objectid
+          examples:
+            - "65c68b76291a617231879584"
+        stem:
+          description: "The type of stem that this represents."
+          type: string
+          enum: [other, bass, drums, vocals]
