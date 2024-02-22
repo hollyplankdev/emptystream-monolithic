@@ -105,9 +105,13 @@ export type OnSpecificMessageEventListener<
  *
  * TODO - make this name shorter.
  */
-export type GetOnSpecificMessageEventListener<HandlerType extends WebSocketHandler> = Parameters<
-  HandlerType["onSpecificMessage"]
->[1];
+export type GetOnSpecificMessageEventListener<
+  HandlerType extends WebSocketHandler,
+  SpecificMessage extends IEventMessage,
+> = (
+  session: Parameters<Parameters<HandlerType["onSpecificMessage"]>[1]>[0],
+  message: SpecificMessage,
+) => void | Promise<void>;
 
 /** Strongly type the EventEmitter part of the WebSocketHandler. */
 export declare interface WebSocketHandler<
