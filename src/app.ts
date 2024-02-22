@@ -11,7 +11,7 @@ import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.midd
 import createTransmissionStorageMiddleware from "./middleware/transmissionStorage.middleware.js";
 import splitAudioQueue from "./queue/splitAudio.queue.js";
 import transmissionRouter from "./routes/transmission.routes.js";
-import setupStreamWebSocketServer from "./websockets/stream.websocket.js";
+import streamWebSocket from "./websockets/stream.websocket.js";
 
 // Construct the Express application
 const app = express();
@@ -26,7 +26,7 @@ const webSocketServer = new WebSocketServer({ server: httpServer, path: "/stream
 //  WebSocket Implementations
 //
 
-setupStreamWebSocketServer(webSocketServer);
+streamWebSocket.setupServer(webSocketServer);
 
 //
 //  Middleware
