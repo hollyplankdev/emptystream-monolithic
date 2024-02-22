@@ -261,6 +261,65 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AlreadyExistsError"
+  /stream:
+    get:
+      description: Get the current state of the content stream.
+      summary: Get stream state.
+      tags:
+        - Content Stream API
+      responses:
+        "200":
+          description: The current state of the content stream.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - time
+                properties:
+                  time:
+                    description: The current time.
+                    type: string
+                    format: date-time
+                  tunings:
+                    description: The current tuning values of the content stream.
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/TransmissionTuning"
+  /stream/tune:
+    post:
+      description: Set one or multiple tunings for the content stream.
+      summary: Set stream tuning.
+      tags:
+        - Content Stream API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tunings:
+                  description: The new tuning values for the content stream
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/TransmissionTuning"
+      responses:
+        "200":
+          description: The content stream has been tuned.
+        "400":
+          description: Missing required params or malformed request body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: No transmission tuning with the specified ID found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundError"
+
 components:
   schemas:
     Transmission:
@@ -301,6 +360,31 @@ components:
         * Drums
         * Vocals
         * Everything Else
+    TransmissionStem:
+      type: object
+      required:
+        - id
+        - stem
+      properties:
+        id:
+          type: string
+          format: mongo-objectid
+          example: fMW0PcHRJGUtUnadq4mvy
+        stem:
+          $ref: "#/components/schemas/StemType"
+    TransmissionTuning:
+      type: object
+      required:
+        - index
+        - transmission
+      properties:
+        startTime:
+          type: string
+          format: date-time
+        index:
+          type: integer
+        transmission:
+          $ref: "#/components/schemas/TransmissionStem"
     StemType:
       type: string
       enum: [source, drums, bass, vocals, other]
