@@ -26,9 +26,6 @@ export interface IClientSession {
 export interface IEventMessage {
   /** The name of the event that this message represents. */
   event: string;
-
-  /** Data sent alongside the event. */
-  data?: any;
 }
 
 /** Strongly type the EventEmitter part of the WebSocketHandler. */
