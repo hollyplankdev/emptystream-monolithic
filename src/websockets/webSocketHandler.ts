@@ -3,25 +3,79 @@ import { IncomingMessage } from "http";
 import { nanoid } from "nanoid";
 import { WebSocket, WebSocketServer } from "ws";
 
+/** Session data for the client of a WebSocket connection. */
 export interface IClientSession {
+  /** The client that this session belongs to. */
   client: WebSocket;
+  /** The server that this session's client is connected to. */
   server: WebSocketServer;
+  /**
+   * Data sent alongside this session's client's initial connection. Can be used to determine if
+   * connections should be approved or denied when using auth, for example.
+   */
   connectionRequest: IncomingMessage;
+
+  /** The unique nanoID that represents this specific session. */
   id: string;
 }
 
+/**
+ * A message sent on a WebSocket connection indicating an event. Can be extended and passed into a
+ * WebSocketHandler to strongly type it!
+ */
 export interface IEventMessage {
+  /** The name of the event that this message represents. */
   event: string;
+
+  /** Data sent alongside the event. */
   data?: any;
 }
 
-export declare interface WebSocketHandler {
+/** Strongly type the EventEmitter part of the WebSocketHandler. */
+export declare interface WebSocketHandler<EventMessageType extends IEventMessage = IEventMessage> {
+  /**
+   * Called when a new WebSocket client has connected to this server. New clients can be denied
+   * connection by checking their session's connection request, if desired.
+   *
+   * @param event "connect"
+   * @param listener The function to call when a new client connects.
+   */
   on(event: "connect", listener: (session: IClientSession) => void);
+
+  /**
+   * Called when a previously connected WebSocket client disconnects from this server.
+   *
+   * @param event "disconnect"
+   * @param listener The function to call when an existing client disconnects.
+   */
   on(event: "disconnect", listener: (session: IClientSession) => void);
-  on(event: "message", listener: (session: IClientSession, message: IEventMessage) => void);
+
+  /**
+   * Called when a currently connected WebSocket client sends a valid message to this server.
+   *
+   * @param event "message"
+   * @param listener The function to call when a connected client sends a message.
+   */
+  on(event: "message", listener: (session: IClientSession, message: EventMessageType) => void);
 }
 
-export class WebSocketHandler extends EventEmitter {
+/**
+ * A wrapper class to make handling WebSocket interactions easier.
+ *
+ * - Creates an IClientSession object for each new WebSocket client.
+ * - Uses an event emitter structure to allow for simpler code.
+ * - Parses and handles data sent by the client and types it appropriately.
+ * - Can be strongly typed by passing in an interface that extends from IEventMessage in order to
+ *   determine what messages are expected.
+ */
+export class WebSocketHandler<
+  EventMessageType extends IEventMessage = IEventMessage,
+> extends EventEmitter {
+  /**
+   * Create a new WebSocketHandler.
+   *
+   * @param server The WebSocketServer that this handler will use to listen to clients on.
+   */
   constructor(server: WebSocketServer) {
     super();
 
@@ -43,7 +97,7 @@ export class WebSocketHandler extends EventEmitter {
       });
 
       client.on("message", async (data) => {
-        let eventMessage: IEventMessage | undefined;
+        let eventMessage: EventMessageType | undefined;
 
         /**
          * Try to parse the data that the client has sent. If we fail to parse it for some reason
@@ -73,7 +127,7 @@ export class WebSocketHandler extends EventEmitter {
           }
 
           // ...and if we make it here, we have an event message!
-          eventMessage = parsedData as IEventMessage;
+          eventMessage = parsedData as EventMessageType;
         } catch (e) {
           client.send(
             JSON.stringify({
