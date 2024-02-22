@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 import { WebSocket, WebSocketServer } from "ws";
 
 /** Session data for the client of a WebSocket connection. */
-export interface IClientSession {
+export interface IClientSession<EventMessageType extends IEventMessage> {
   /** The client that this session belongs to. */
   client: WebSocket;
   /** The server that this session's client is connected to. */
@@ -17,6 +17,9 @@ export interface IClientSession {
 
   /** The unique nanoID that represents this specific session. */
   id: string;
+
+  /** Sends a message to this session's client. */
+  messageClient(message: EventMessageType | IEventErrorMessage): Promise<void>;
 }
 
 /**
@@ -28,6 +31,12 @@ export interface IEventMessage {
   event: string;
 }
 
+/** An error message sent on a WebSocket connection. */
+export interface IEventErrorMessage extends IEventMessage {
+  event: "error";
+  message: string;
+}
+
 /** Strongly type the EventEmitter part of the WebSocketHandler. */
 export declare interface WebSocketHandler<EventMessageType extends IEventMessage = IEventMessage> {
   /**
@@ -37,7 +46,7 @@ export declare interface WebSocketHandler<EventMessageType extends IEventMessage
    * @param event "connect"
    * @param listener The function to call when a new client connects.
    */
-  on(event: "connect", listener: (session: IClientSession) => void);
+  on(event: "connect", listener: (session: IClientSession<EventMessageType>) => void);
 
   /**
    * Called when a previously connected WebSocket client disconnects from this server.
@@ -45,7 +54,7 @@ export declare interface WebSocketHandler<EventMessageType extends IEventMessage
    * @param event "disconnect"
    * @param listener The function to call when an existing client disconnects.
    */
-  on(event: "disconnect", listener: (session: IClientSession) => void);
+  on(event: "disconnect", listener: (session: IClientSession<EventMessageType>) => void);
 
   /**
    * Called when a currently connected WebSocket client sends a valid message to this server.
@@ -53,7 +62,10 @@ export declare interface WebSocketHandler<EventMessageType extends IEventMessage
    * @param event "message"
    * @param listener The function to call when a connected client sends a message.
    */
-  on(event: "message", listener: (session: IClientSession, message: EventMessageType) => void);
+  on(
+    event: "message",
+    listener: (session: IClientSession<EventMessageType>, message: EventMessageType) => void,
+  );
 }
 
 /**
@@ -77,12 +89,30 @@ export class WebSocketHandler<
     super();
 
     server.on("connection", async (client, request) => {
+      // Define how the server should send messages back to the client
+      const messageClientFunc: IClientSession<EventMessageType>["messageClient"] = (message) =>
+        new Promise<void>((resolve, reject) => {
+          // Stringify the message...
+          const encodedMessage = JSON.stringify(message);
+
+          // Encode the message as utf-8 bytes, then send it to the client
+          client.send(Buffer.from(encodedMessage, "utf-8"), (err) => {
+            // Reject or resolve this in a promise-like fashion.
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+        });
+
       // Construct the session for this client
-      const session: IClientSession = {
+      const session: IClientSession<EventMessageType> = {
         client,
         server,
         connectionRequest: request,
         id: nanoid(),
+        messageClient: messageClientFunc,
       };
 
       // Call logic when client connects
@@ -126,12 +156,7 @@ export class WebSocketHandler<
           // ...and if we make it here, we have an event message!
           eventMessage = parsedData as EventMessageType;
         } catch (e) {
-          client.send(
-            JSON.stringify({
-              event: "error",
-              message: e.toString(),
-            }),
-          );
+          await session.messageClient({ event: "error", message: e.toString() });
         }
 
         if (eventMessage) {
