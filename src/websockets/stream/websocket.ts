@@ -10,9 +10,9 @@ export class StreamWebSocketHandler extends WebSocketHandler<IClientMessages, IS
 export function setupServer(server: WebSocketServer): StreamWebSocketHandler {
   const handler = new StreamWebSocketHandler(server);
 
-  handler.on("connect", connectEvent);
-  handler.on("disconnect", disconnectEvent);
-  handler.on("get_tuning_message", getTuningEvent);
+  handler.onConnect(connectEvent);
+  handler.onDisconnect(disconnectEvent);
+  handler.onSpecificMessage("get_tuning", getTuningEvent);
 
   return handler;
 }

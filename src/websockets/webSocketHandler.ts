@@ -66,7 +66,7 @@ export type OnMessageEventListener<
 export type OnSpecificMessageEventListener<
   IClientMessages extends IEventMessage,
   IServerMessages extends IEventMessage,
-  ISpecificMessage extends IEventMessage,
+  ISpecificMessage extends IClientMessages,
 > = (
   session: IClientSession<IClientMessages, IServerMessages>,
   message: ISpecificMessage,
@@ -82,17 +82,24 @@ export declare interface WebSocketHandler<
    * connection by checking their session's connection request, if desired.
    */
   on(event: "connect", listener: OnConnectEventListener<IClientMessages, IServerMessages>);
+  onConnect(listener: OnConnectEventListener<IClientMessages, IServerMessages>);
 
   /** Called when a previously connected WebSocket client disconnects from this server. */
   on(event: "disconnect", listener: OnDisconnectEventListener<IClientMessages, IServerMessages>);
+  onDisconnect(listener: OnDisconnectEventListener<IClientMessages, IServerMessages>);
 
   /** Called when a currently connected WebSocket client sends a valid message to this server. */
   on(event: "message", listener: OnMessageEventListener<IClientMessages, IServerMessages>);
+  onMessage(listener: OnMessageEventListener<IClientMessages, IServerMessages>);
 
   /** Called when a currently connected WebSocket client sends a specific message to this server. */
   on(
     event: `${IClientMessages["event"]}_message`,
     listener: OnSpecificMessageEventListener<IClientMessages, IServerMessages, IClientMessages>,
+  );
+  onSpecificMessage<ISpecificMessage extends IClientMessages>(
+    event: ISpecificMessage["event"],
+    listener: OnSpecificMessageEventListener<IClientMessages, IServerMessages, ISpecificMessage>,
   );
 }
 
@@ -197,5 +204,28 @@ export class WebSocketHandler<
         }
       });
     });
+  }
+
+  //
+  //  Functions
+  //
+
+  public onConnect(listener: OnConnectEventListener<IClientMessages, IServerMessages>) {
+    this.on("connect", listener);
+  }
+
+  public onDisconnect(listener: OnDisconnectEventListener<IClientMessages, IServerMessages>) {
+    this.on("disconnect", listener);
+  }
+
+  public onMessage(listener: OnMessageEventListener<IClientMessages, IServerMessages>) {
+    this.on("message", listener);
+  }
+
+  public onSpecificMessage<ISpecificMessage extends IClientMessages>(
+    event: ISpecificMessage["event"],
+    listener: OnSpecificMessageEventListener<IClientMessages, IServerMessages, ISpecificMessage>,
+  ) {
+    this.on(`${event}_message`, listener);
   }
 }
