@@ -5,6 +5,7 @@ import { WebSocket, WebSocketServer } from "ws";
 
 /** Session data for the client of a WebSocket connection. */
 export interface IClientSession<
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ClientEventMessageType extends IEventMessage,
   ServerEventMessageType extends IEventMessage,
 > {
