@@ -1,6 +1,7 @@
+import { GetOnDisconnectEventListener } from "../../webSocketHandler.js";
 import { StreamWebSocketHandler } from "../websocket.js";
 
-const disconnectEvent: Parameters<StreamWebSocketHandler["onDisconnect"]>[0] = async (session) => {
+const disconnectEvent: GetOnDisconnectEventListener<StreamWebSocketHandler> = async (session) => {
   console.log(`Client ${session.id} disconnected.`);
 };
 export default disconnectEvent;

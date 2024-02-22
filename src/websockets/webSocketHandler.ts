@@ -47,11 +47,29 @@ export type OnConnectEventListener<
   IServerMessages extends IEventMessage,
 > = (session: IClientSession<IClientMessages, IServerMessages>) => void | Promise<void>;
 
+/**
+ * A utility type to simplify getting the type of a WebSocketHandler's OnConnectEventListener.
+ *
+ * TODO - Make this name shorter.
+ */
+export type GetOnConnectEventListenerType<HandlerType extends WebSocketHandler> = Parameters<
+  HandlerType["onConnect"]
+>[0];
+
 /** A function to call when an existing client disconnects. */
 export type OnDisconnectEventListener<
   IClientMessages extends IEventMessage,
   IServerMessages extends IEventMessage,
 > = (session: IClientSession<IClientMessages, IServerMessages>) => void | Promise<void>;
+
+/**
+ * A utility type to simplify getting the type of a WebSocketHandler's OnDisconnectEventListener.
+ *
+ * TODO - make this name shorter.
+ */
+export type GetOnDisconnectEventListener<HandlerType extends WebSocketHandler> = Parameters<
+  HandlerType["onDisconnect"]
+>[0];
 
 /** A function to call when an existing client sends a message of any type. */
 export type OnMessageEventListener<
@@ -62,6 +80,15 @@ export type OnMessageEventListener<
   message: IClientMessages,
 ) => void | Promise<void>;
 
+/**
+ * A utility type to simplify getting the type of a WebSocketHandler's OnMessageEventListener.
+ *
+ * TODO - make this name shorter.
+ */
+export type GetOnMessageEventListener<HandlerType extends WebSocketHandler> = Parameters<
+  HandlerType["onMessage"]
+>[0];
+
 /** A function to call when an existing client sends a strongly typed message. */
 export type OnSpecificMessageEventListener<
   IClientMessages extends IEventMessage,
@@ -71,6 +98,16 @@ export type OnSpecificMessageEventListener<
   session: IClientSession<IClientMessages, IServerMessages>,
   message: ISpecificMessage,
 ) => void | Promise<void>;
+
+/**
+ * A utility type to simplify getting the type of a WebSocketHandler's
+ * OnSpecificMessageEventListener.
+ *
+ * TODO - make this name shorter.
+ */
+export type GetOnSpecificMessageEventListener<HandlerType extends WebSocketHandler> = Parameters<
+  HandlerType["onSpecificMessage"]
+>[1];
 
 /** Strongly type the EventEmitter part of the WebSocketHandler. */
 export declare interface WebSocketHandler<
