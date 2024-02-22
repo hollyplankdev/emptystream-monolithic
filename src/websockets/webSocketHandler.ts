@@ -41,108 +41,45 @@ export interface IEventErrorMessage extends IEventMessage {
   message: string;
 }
 
-/** A function to call when a new client connects. */
-export type OnConnectEventListener<
-  IClientMessages extends IEventMessage,
-  IServerMessages extends IEventMessage,
-> = (session: IClientSession<IClientMessages, IServerMessages>) => void | Promise<void>;
-
 /**
- * A utility type to simplify getting the type of a WebSocketHandler's OnConnectEventListener.
+ * A utility type to simplify getting the type of a WebSocketHandler's onConnect listener.
  *
  * TODO - Make this name shorter.
  */
-export type GetOnConnectEventListenerType<HandlerType extends WebSocketHandler> = Parameters<
+export type OnConnectListener<HandlerType extends WebSocketHandler> = Parameters<
   HandlerType["onConnect"]
 >[0];
 
-/** A function to call when an existing client disconnects. */
-export type OnDisconnectEventListener<
-  IClientMessages extends IEventMessage,
-  IServerMessages extends IEventMessage,
-> = (session: IClientSession<IClientMessages, IServerMessages>) => void | Promise<void>;
-
 /**
- * A utility type to simplify getting the type of a WebSocketHandler's OnDisconnectEventListener.
+ * A utility type to simplify getting the type of a WebSocketHandler's onDisconnect listener.
  *
  * TODO - make this name shorter.
  */
-export type GetOnDisconnectEventListener<HandlerType extends WebSocketHandler> = Parameters<
+export type OnDisconnectListener<HandlerType extends WebSocketHandler> = Parameters<
   HandlerType["onDisconnect"]
 >[0];
 
-/** A function to call when an existing client sends a message of any type. */
-export type OnMessageEventListener<
-  IClientMessages extends IEventMessage,
-  IServerMessages extends IEventMessage,
-> = (
-  session: IClientSession<IClientMessages, IServerMessages>,
-  message: IClientMessages,
-) => void | Promise<void>;
-
 /**
- * A utility type to simplify getting the type of a WebSocketHandler's OnMessageEventListener.
+ * A utility type to simplify getting the type of a WebSocketHandler's onMessage listener.
  *
  * TODO - make this name shorter.
  */
-export type GetOnMessageEventListener<HandlerType extends WebSocketHandler> = Parameters<
+export type OnMessageListener<HandlerType extends WebSocketHandler> = Parameters<
   HandlerType["onMessage"]
 >[0];
 
-/** A function to call when an existing client sends a strongly typed message. */
-export type OnSpecificMessageEventListener<
-  IClientMessages extends IEventMessage,
-  IServerMessages extends IEventMessage,
-  ISpecificMessage extends IClientMessages,
-> = (
-  session: IClientSession<IClientMessages, IServerMessages>,
-  message: ISpecificMessage,
-) => void | Promise<void>;
-
 /**
- * A utility type to simplify getting the type of a WebSocketHandler's
- * OnSpecificMessageEventListener.
+ * A utility type to simplify getting the type of a WebSocketHandler's onSpecificMessage listener.
  *
  * TODO - make this name shorter.
  */
-export type GetOnSpecificMessageEventListener<
+export type OnSpecificMessageListener<
   HandlerType extends WebSocketHandler,
   SpecificMessage extends IEventMessage,
 > = (
   session: Parameters<Parameters<HandlerType["onSpecificMessage"]>[1]>[0],
   message: SpecificMessage,
 ) => void | Promise<void>;
-
-/** Strongly type the EventEmitter part of the WebSocketHandler. */
-export declare interface WebSocketHandler<
-  IClientMessages extends IEventMessage = IEventMessage,
-  IServerMessages extends IEventMessage = IEventMessage,
-> {
-  /**
-   * Called when a new WebSocket client has connected to this server. New clients can be denied
-   * connection by checking their session's connection request, if desired.
-   */
-  on(event: "connect", listener: OnConnectEventListener<IClientMessages, IServerMessages>);
-  onConnect(listener: OnConnectEventListener<IClientMessages, IServerMessages>);
-
-  /** Called when a previously connected WebSocket client disconnects from this server. */
-  on(event: "disconnect", listener: OnDisconnectEventListener<IClientMessages, IServerMessages>);
-  onDisconnect(listener: OnDisconnectEventListener<IClientMessages, IServerMessages>);
-
-  /** Called when a currently connected WebSocket client sends a valid message to this server. */
-  on(event: "message", listener: OnMessageEventListener<IClientMessages, IServerMessages>);
-  onMessage(listener: OnMessageEventListener<IClientMessages, IServerMessages>);
-
-  /** Called when a currently connected WebSocket client sends a specific message to this server. */
-  on(
-    event: `${IClientMessages["event"]}_message`,
-    listener: OnSpecificMessageEventListener<IClientMessages, IServerMessages, IClientMessages>,
-  );
-  onSpecificMessage<ISpecificMessage extends IClientMessages>(
-    event: ISpecificMessage["event"],
-    listener: OnSpecificMessageEventListener<IClientMessages, IServerMessages, ISpecificMessage>,
-  );
-}
 
 /**
  * A wrapper class to make handling WebSocket interactions easier.
@@ -251,21 +188,40 @@ export class WebSocketHandler<
   //  Functions
   //
 
-  public onConnect(listener: OnConnectEventListener<IClientMessages, IServerMessages>) {
+  /**
+   * Called when a new WebSocket client has connected to this server. New clients can be denied
+   * connection by checking their session's connection request, if desired.
+   */
+  public onConnect(
+    listener: (session: IClientSession<IClientMessages, IServerMessages>) => void | Promise<void>,
+  ) {
     this.on("connect", listener);
   }
 
-  public onDisconnect(listener: OnDisconnectEventListener<IClientMessages, IServerMessages>) {
+  /** Called when a previously connected WebSocket client disconnects from this server. */
+  public onDisconnect(
+    listener: (session: IClientSession<IClientMessages, IServerMessages>) => void | Promise<void>,
+  ) {
     this.on("disconnect", listener);
   }
 
-  public onMessage(listener: OnMessageEventListener<IClientMessages, IServerMessages>) {
+  /** Called when a currently connected WebSocket client sends a valid message to this server. */
+  public onMessage(
+    listener: (
+      session: IClientSession<IClientMessages, IServerMessages>,
+      message: IClientMessages,
+    ) => void | Promise<void>,
+  ) {
     this.on("message", listener);
   }
 
+  /** Called when a currently connected WebSocket client sends a specific message to this server. */
   public onSpecificMessage<ISpecificMessage extends IClientMessages>(
     event: ISpecificMessage["event"],
-    listener: OnSpecificMessageEventListener<IClientMessages, IServerMessages, ISpecificMessage>,
+    listener: (
+      session: IClientSession<IClientMessages, IServerMessages>,
+      message: ISpecificMessage,
+    ) => void | Promise<void>,
   ) {
     this.on(`${event}_message`, listener);
   }

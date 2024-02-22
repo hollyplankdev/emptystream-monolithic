@@ -1,7 +1,7 @@
-import { GetOnConnectEventListenerType } from "../../webSocketHandler.js";
+import { OnConnectListener } from "../../webSocketHandler.js";
 import { StreamWebSocketHandler } from "../websocket.js";
 
-const connectEvent: GetOnConnectEventListenerType<StreamWebSocketHandler> = async (session) => {
+const connectEvent: OnConnectListener<StreamWebSocketHandler> = async (session) => {
   // TODO - send client a IStreamJoinMessage
 
   console.log(`Client ${session.id} connected.`);

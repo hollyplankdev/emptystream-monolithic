@@ -1,11 +1,10 @@
-import { GetOnSpecificMessageEventListener } from "../../webSocketHandler.js";
+import { OnSpecificMessageListener } from "../../webSocketHandler.js";
 import { IGetTuningMessage } from "../messages.js";
 import { StreamWebSocketHandler } from "../websocket.js";
 
-const getTuningEvent: GetOnSpecificMessageEventListener<
-  StreamWebSocketHandler,
-  IGetTuningMessage
-> = async (session) => {
+const getTuningEvent: OnSpecificMessageListener<StreamWebSocketHandler, IGetTuningMessage> = async (
+  session,
+) => {
   // TODO - ACTUALLY IMPLEMENT
 
   await session.messageClient({
