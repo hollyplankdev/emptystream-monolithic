@@ -4,8 +4,19 @@ import { IEventMessage, WebSocketHandler } from "./webSocketHandler.js";
 type TuningChannelIndex = 0 | 1 | 2 | 3;
 type TuningTransmissionStem = { id: string; stem: "other" | "bass" | "drums" | "vocals" };
 
-export interface IStreamJoinMessage extends IEventMessage {
-  event: "join";
+//
+//  Client Messages
+//
+
+export interface IStreamGetTuningMessage extends IEventMessage {
+  event: "get_tuning";
+}
+
+//
+//  Server Messages
+//
+export interface IStreamGiveTuningMessage extends IEventMessage {
+  event: "give_tuning";
   wholeState: Array<{
     index: TuningChannelIndex;
     transmission: TuningTransmissionStem;
@@ -20,12 +31,15 @@ export interface IStreamTuningChangedMessage extends IEventMessage {
   }>;
 }
 
-export type IStreamEventMessage = IStreamJoinMessage | IStreamTuningChangedMessage;
+export type IStreamClientMessages = IStreamGetTuningMessage;
+export type IStreamServerMessages = IStreamGiveTuningMessage | IStreamTuningChangedMessage;
 
 export default function setupStreamWebSocketServer(server: WebSocketServer) {
-  const handler = new WebSocketHandler<IStreamEventMessage>(server);
+  const handler = new WebSocketHandler<IStreamClientMessages, IStreamServerMessages>(server);
 
-  handler.on("connect", (session) => {
+  handler.on("connect", async (session) => {
+    // TODO - send client a IStreamJoinMessage
+
     console.log(`Client ${session.id} connected.`);
   });
 
@@ -33,7 +47,12 @@ export default function setupStreamWebSocketServer(server: WebSocketServer) {
     console.log(`Client ${session.id} disconnected.`);
   });
 
-  handler.on("message", (session, message) => {
-    console.log(`Client ${session.id} sent ${message.event}`);
+  handler.on("get_tuning_message", async (session) => {
+    // TODO - ACTUALLY IMPLEMENT
+
+    await session.messageClient({
+      event: "give_tuning",
+      wholeState: [{ index: 0, transmission: { id: "test", stem: "bass" } }],
+    });
   });
 }

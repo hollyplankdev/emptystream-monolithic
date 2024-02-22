@@ -4,7 +4,10 @@ import { nanoid } from "nanoid";
 import { WebSocket, WebSocketServer } from "ws";
 
 /** Session data for the client of a WebSocket connection. */
-export interface IClientSession<EventMessageType extends IEventMessage> {
+export interface IClientSession<
+  ClientEventMessageType extends IEventMessage,
+  ServerEventMessageType extends IEventMessage,
+> {
   /** The client that this session belongs to. */
   client: WebSocket;
   /** The server that this session's client is connected to. */
@@ -19,7 +22,7 @@ export interface IClientSession<EventMessageType extends IEventMessage> {
   id: string;
 
   /** Sends a message to this session's client. */
-  messageClient(message: EventMessageType | IEventErrorMessage): Promise<void>;
+  messageClient(message: ServerEventMessageType | IEventErrorMessage): Promise<void>;
 }
 
 /**
@@ -38,7 +41,10 @@ export interface IEventErrorMessage extends IEventMessage {
 }
 
 /** Strongly type the EventEmitter part of the WebSocketHandler. */
-export declare interface WebSocketHandler<EventMessageType extends IEventMessage = IEventMessage> {
+export declare interface WebSocketHandler<
+  ClientEventMessageType extends IEventMessage = IEventMessage,
+  ServerEventMessageType extends IEventMessage = IEventMessage,
+> {
   /**
    * Called when a new WebSocket client has connected to this server. New clients can be denied
    * connection by checking their session's connection request, if desired.
@@ -46,7 +52,10 @@ export declare interface WebSocketHandler<EventMessageType extends IEventMessage
    * @param event "connect"
    * @param listener The function to call when a new client connects.
    */
-  on(event: "connect", listener: (session: IClientSession<EventMessageType>) => void);
+  on(
+    event: "connect",
+    listener: (session: IClientSession<ClientEventMessageType, ServerEventMessageType>) => void,
+  );
 
   /**
    * Called when a previously connected WebSocket client disconnects from this server.
@@ -54,7 +63,10 @@ export declare interface WebSocketHandler<EventMessageType extends IEventMessage
    * @param event "disconnect"
    * @param listener The function to call when an existing client disconnects.
    */
-  on(event: "disconnect", listener: (session: IClientSession<EventMessageType>) => void);
+  on(
+    event: "disconnect",
+    listener: (session: IClientSession<ClientEventMessageType, ServerEventMessageType>) => void,
+  );
 
   /**
    * Called when a currently connected WebSocket client sends a valid message to this server.
@@ -64,7 +76,19 @@ export declare interface WebSocketHandler<EventMessageType extends IEventMessage
    */
   on(
     event: "message",
-    listener: (session: IClientSession<EventMessageType>, message: EventMessageType) => void,
+    listener: (
+      session: IClientSession<ClientEventMessageType, ServerEventMessageType>,
+      message: ClientEventMessageType,
+    ) => void,
+  );
+
+  /** Called when a currently connected WebSocket client sends a specific message to this server. */
+  on(
+    event: `${ClientEventMessageType["event"]}_message`,
+    listener: (
+      session: IClientSession<ClientEventMessageType, ServerEventMessageType>,
+      message: ClientEventMessageType,
+    ) => void,
   );
 }
 
@@ -78,7 +102,8 @@ export declare interface WebSocketHandler<EventMessageType extends IEventMessage
  *   determine what messages are expected.
  */
 export class WebSocketHandler<
-  EventMessageType extends IEventMessage = IEventMessage,
+  ClientEventMessageType extends IEventMessage = IEventMessage,
+  ServerEventMessageType extends IEventMessage = IEventMessage,
 > extends EventEmitter {
   /**
    * Create a new WebSocketHandler.
@@ -90,7 +115,10 @@ export class WebSocketHandler<
 
     server.on("connection", async (client, request) => {
       // Define how the server should send messages back to the client
-      const messageClientFunc: IClientSession<EventMessageType>["messageClient"] = (message) =>
+      const messageClientFunc: IClientSession<
+        ClientEventMessageType,
+        ServerEventMessageType
+      >["messageClient"] = (message) =>
         new Promise<void>((resolve, reject) => {
           // Stringify the message...
           const encodedMessage = JSON.stringify(message);
@@ -107,7 +135,7 @@ export class WebSocketHandler<
         });
 
       // Construct the session for this client
-      const session: IClientSession<EventMessageType> = {
+      const session: IClientSession<ClientEventMessageType, ServerEventMessageType> = {
         client,
         server,
         connectionRequest: request,
@@ -124,7 +152,7 @@ export class WebSocketHandler<
       });
 
       client.on("message", async (data) => {
-        let eventMessage: EventMessageType | undefined;
+        let eventMessage: ClientEventMessageType | undefined;
 
         /**
          * Try to parse the data that the client has sent. If we fail to parse it for some reason
@@ -154,7 +182,7 @@ export class WebSocketHandler<
           }
 
           // ...and if we make it here, we have an event message!
-          eventMessage = parsedData as EventMessageType;
+          eventMessage = parsedData as ClientEventMessageType;
         } catch (e) {
           await session.messageClient({ event: "error", message: e.toString() });
         }
@@ -162,6 +190,7 @@ export class WebSocketHandler<
         if (eventMessage) {
           // Call logic when client sends a message to this server
           this.emit("message", session, eventMessage);
+          this.emit(`${eventMessage.event}_message`, session, eventMessage);
         }
       });
     });
