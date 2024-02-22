@@ -36,5 +36,5 @@ export interface ITuningChangedMessage extends IEventMessage {
 //  Consolidated Messages
 //
 
-export type IClientMessages = IGetTuningMessage | { event: "test"; thing: boolean };
+export type IClientMessages = IGetTuningMessage;
 export type IServerMessages = IGiveTuningMessage | ITuningChangedMessage;
