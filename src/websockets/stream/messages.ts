@@ -1,5 +1,5 @@
+import { IChannelTuning } from "../../models/streamState.js";
 import { IEventMessage } from "../webSocketHandler.js";
-import { TuningChannelIndex, TuningTransmissionStem } from "./types.js";
 
 //
 //  Client Messages
@@ -18,18 +18,12 @@ export interface IGetTuningMessage extends IEventMessage {
 //
 export interface IGiveTuningMessage extends IEventMessage {
   event: "give_tuning";
-  wholeState: Array<{
-    index: TuningChannelIndex;
-    transmission: TuningTransmissionStem;
-  }>;
+  tunings: IChannelTuning[];
 }
 
 export interface ITuningChangedMessage extends IEventMessage {
   event: "tuning_changed";
-  updates: Array<{
-    index: TuningChannelIndex;
-    transmission: TuningTransmissionStem;
-  }>;
+  tuningUpdates: IChannelTuning[];
 }
 
 //
