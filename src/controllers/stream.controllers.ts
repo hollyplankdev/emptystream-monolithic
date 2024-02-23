@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RequestHandler } from "express";
-import { FilterQuery } from "mongoose";
-import { ITransmission, Transmission } from "../models/transmission.js";
-import getFileReadStreamFromRequest from "../utils/get_file_read_stream_from_request.js";
-import splitAudioQueue from "../queue/splitAudio.queue.js";
+import { StreamState } from "../models/streamState.js";
 
 const read: RequestHandler = async (req, res) => {
+  const currentState = await StreamState.findOrCreateSingleton();
+
+  // Return information about the current stream state.
   res
-    .status(500)
+    .status(200)
     .contentType("json")
-    .send(JSON.stringify({ message: "Not implemented yet!" }));
+    .send(JSON.stringify({ time: new Date(), tunings: currentState.tunings }));
 };
 
 const tune: RequestHandler = async (req, res) => {

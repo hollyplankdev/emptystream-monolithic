@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Schema, model } from "mongoose";
+import mongoose, { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose";
 import { ITimestamps } from "./timestamps.js";
 import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
 
@@ -30,6 +30,11 @@ export interface IStreamState {
   tunings: IChannelTuning[];
 }
 
+export interface IStreamStateModel extends Model<IStreamState> {
+  /** Returns the singleton stream state object from the DB. Creates one if it doesn't exist yet. */
+  findOrCreateSingleton(): Promise<HydratedDocument<IStreamState>>;
+}
+
 export const ChannelTuningSchema = new Schema<IChannelTuning>(
   {
     index: { type: Number, required: true },
@@ -49,11 +54,28 @@ export const ChannelTuningSchema = new Schema<IChannelTuning>(
   { _id: false },
 );
 
-export const StreamStateSchema = new Schema<IStreamState>(
+export const StreamStateSchema = new Schema<IStreamState, IStreamStateModel>(
   {
     tunings: { type: [ChannelTuningSchema], required: true },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    statics: {
+      /** Implements findOrCreateSingleton from IStreamStateModel. */
+      async findOrCreateSingleton() {
+        // Try to grab the singleton. If it exists, return it.
+        const foundDoc = await this.findById(new mongoose.Types.ObjectId(0));
+        if (foundDoc) return foundDoc;
+
+        // OTHERWISE - the singleton doesn't exist yet. Create it!
+        const createdDoc = await this.create({ _id: new mongoose.Types.ObjectId(0), tunings: [] });
+        return createdDoc;
+      },
+    },
+  },
 );
 
-export const StreamState = model<IStreamState & ITimestamps>("StreamState", StreamStateSchema);
+export const StreamState = model<IStreamState & ITimestamps, IStreamStateModel>(
+  "StreamState",
+  StreamStateSchema,
+);
