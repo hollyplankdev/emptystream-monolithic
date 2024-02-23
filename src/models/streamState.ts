@@ -1,5 +1,6 @@
 import mongoose, { ObjectId, Schema, model } from "mongoose";
 import { ITimestamps } from "./timestamps.js";
+import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
 
 export interface IChannelTuning {
   /** The index of the channel that this tuning represents. */
@@ -11,7 +12,7 @@ export interface IChannelTuning {
     id: ObjectId;
 
     /** The stem of the transmission that this channel is tuned to. */
-    stem: string;
+    stem: TransmissionStem;
   };
 
   /** When this tuning started. */
@@ -36,7 +37,7 @@ export const ChannelTuningSchema = new Schema<IChannelTuning>(
       type: new Schema<IChannelTuning["transmission"]>(
         {
           id: { type: mongoose.Types.ObjectId, required: true },
-          stem: { type: String, required: true },
+          stem: { type: String, required: true, enum: ALL_TRANSMISSION_STEMS },
         },
         { _id: false },
       ),

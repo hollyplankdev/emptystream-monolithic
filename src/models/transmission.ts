@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { ITimestamps } from "./timestamps.js";
+import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
 
 export interface ISplitOperation {
   /** The current status of the operation. */
@@ -14,7 +15,7 @@ export interface ITransmission {
   name: string;
 
   /** The stem types that this transmission has. */
-  stems: [string];
+  stems: [TransmissionStem];
 
   /** Information about the audio splitting operation for this Transmission. */
   splitOperation: ISplitOperation;
@@ -31,7 +32,7 @@ export const SplitOperationSchema = new Schema<ISplitOperation>(
 export const TransmissionSchema = new Schema<ITransmission>(
   {
     name: { type: String, required: true },
-    stems: { type: [String], required: true },
+    stems: { type: [String], required: true, enum: ALL_TRANSMISSION_STEMS },
     splitOperation: { type: SplitOperationSchema, required: true },
   },
   { timestamps: true },

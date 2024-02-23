@@ -40,7 +40,7 @@ paths:
           description: The name of the type of stem to get.
           required: true
           schema:
-            $ref: "#/components/schemas/StemType"
+            $ref: "#/components/schemas/TransmissionStem"
       responses:
         "200":
           description: The audio file of the specific stem for the desired Transmission.
@@ -340,7 +340,7 @@ components:
         stems:
           type: array
           items:
-            $ref: "#/components/schemas/StemType"
+            $ref: "#/components/schemas/TransmissionStem"
           example: ["drums", "bass", "vocals", "other"]
         splitOperation:
           type: object
@@ -360,18 +360,6 @@ components:
         * Drums
         * Vocals
         * Everything Else
-    TransmissionStem:
-      type: object
-      required:
-        - id
-        - stem
-      properties:
-        id:
-          type: string
-          format: mongo-objectid
-          example: fMW0PcHRJGUtUnadq4mvy
-        stem:
-          $ref: "#/components/schemas/StemType"
     ChannelTuning:
       type: object
       required:
@@ -387,8 +375,18 @@ components:
         index:
           type: integer
         transmission:
-          $ref: "#/components/schemas/TransmissionStem"
-    StemType:
+          type: object
+          required:
+            - id
+            - stem
+          properties:
+            id:
+              type: string
+              format: mongo-objectid
+              example: fMW0PcHRJGUtUnadq4mvy
+            stem:
+              $ref: "#/components/schemas/TransmissionStem"
+    TransmissionStem:
       type: string
       enum: [source, drums, bass, vocals, other]
     NotFoundError:
