@@ -381,6 +381,9 @@ components:
         startTime:
           type: string
           format: date-time
+        transitionDuration:
+          type: string
+          format: date-time
         index:
           type: integer
         transmission:
