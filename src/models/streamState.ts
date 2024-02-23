@@ -2,6 +2,7 @@ import mongoose, { HydratedDocument, Model, ObjectId, Schema, model } from "mong
 import { ITimestamps } from "./timestamps.js";
 import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
 import { ALL_CHANNEL_INDEX, ChannelIndex } from "./channelIndex.js";
+import { Transmission } from "./transmission.js";
 
 export interface IChannelTuning {
   /** The index of the channel that this tuning represents. */
@@ -36,7 +37,12 @@ export interface IStreamState {
 
 export interface IStreamStateModel extends Model<IStreamState> {
   /** Returns the singleton stream state object from the DB. Creates one if it doesn't exist yet. */
-  findOrCreateSingleton(): Promise<HydratedDocument<IStreamState>>;
+  findOrCreateSingleton(): Promise<HydratedDocument<IStreamState, IStreamStateMethods>>;
+}
+
+export interface IStreamStateMethods {
+  /** Retunes the channels in the state. */
+  retune(tunings: IChannelTuning[]): Promise<HydratedDocument<IStreamState, IStreamStateMethods>>;
 }
 
 export const ChannelTuningSchema = new Schema<IChannelTuning>(
@@ -58,7 +64,7 @@ export const ChannelTuningSchema = new Schema<IChannelTuning>(
   { _id: false },
 );
 
-export const StreamStateSchema = new Schema<IStreamState, IStreamStateModel>(
+export const StreamStateSchema = new Schema<IStreamState, IStreamStateModel, IStreamStateMethods>(
   {
     _id: { type: Number, enum: [0] },
     tunings: { type: [ChannelTuningSchema], required: true },
@@ -76,6 +82,43 @@ export const StreamStateSchema = new Schema<IStreamState, IStreamStateModel>(
         // OTHERWISE - the singleton doesn't exist yet. Create it!
         const createdDoc = await this.create({ _id: 0, tunings: [] });
         return createdDoc;
+      },
+    },
+    methods: {
+      /** Implements retune from IStreamStateMethods. */
+      async retune(tunings: IChannelTuning[]) {
+        // Before doing anything, validate the given tunings.
+        await Promise.all(
+          tunings.map(async (tuning) => {
+            const transmission = await Transmission.findById(tuning.transmission.id);
+            if (!transmission || !transmission.stems.includes(tuning.transmission.stem)) {
+              throw new Error(`Could not find transmission ${JSON.stringify(tuning.transmission)}`);
+            }
+          }),
+        );
+
+        // Store the current time. We do this ahead of time so that the value stays the same
+        const currentTime = new Date();
+
+        // For each tuning provided, update / add channel tunings as necessary
+        tunings.forEach((tuning) => {
+          // Find out where in the state's tuning array is the channel that we're tuning.
+          const indexInArray = this.tunings.findIndex(
+            (oldTuning) => oldTuning.index === tuning.index,
+          );
+
+          // If this channel doesn't have a tuning yet, add it!
+          if (indexInArray === -1) {
+            this.tunings.push({ ...tuning, startTime: currentTime });
+          } else {
+            // If this channel DOES have a tuning, update it!
+            const oldTuning = this.tunings[indexInArray];
+            this.tunings[indexInArray] = { ...oldTuning, ...tuning, startTime: currentTime };
+          }
+        });
+
+        // Save the stream state!
+        return this.save();
       },
     },
   },
