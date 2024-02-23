@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { ITimestamps } from "./timestamps.js";
 
 export interface ISplitOperation {
   /** The current status of the operation. */
@@ -6,11 +7,6 @@ export interface ISplitOperation {
 
   /** How complete the operation is, from 0-100. */
   percentage: number;
-}
-
-export interface ITimestamps {
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface ITransmission {
