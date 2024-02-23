@@ -1,10 +1,11 @@
 import mongoose, { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose";
 import { ITimestamps } from "./timestamps.js";
 import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
+import { ALL_CHANNEL_INDEX, ChannelIndex } from "./channelIndex.js";
 
 export interface IChannelTuning {
   /** The index of the channel that this tuning represents. */
-  index: number;
+  index: ChannelIndex;
 
   /** Details about the transmission that this channel is tuned to. */
   transmission: {
@@ -37,7 +38,7 @@ export interface IStreamStateModel extends Model<IStreamState> {
 
 export const ChannelTuningSchema = new Schema<IChannelTuning>(
   {
-    index: { type: Number, required: true },
+    index: { type: Number, required: true, enum: ALL_CHANNEL_INDEX },
     transmission: {
       type: new Schema<IChannelTuning["transmission"]>(
         {

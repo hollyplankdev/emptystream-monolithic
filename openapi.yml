@@ -374,6 +374,7 @@ components:
           format: date-time
         index:
           type: integer
+          enum: [0, 1, 2, 3]
         transmission:
           type: object
           required:

@@ -9,7 +9,9 @@ import mongoose from "mongoose";
 export default function create(apiSpecPath: string, uploadFileDestPath: string) {
   return OpenAPIValidator.middleware({
     apiSpec: apiSpecPath,
-    validateRequests: true,
+    validateRequests: {
+      removeAdditional: "all",
+    },
     validateResponses: true,
     fileUploader: {
       dest: uploadFileDestPath,
