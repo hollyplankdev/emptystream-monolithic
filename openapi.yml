@@ -285,7 +285,7 @@ paths:
                     description: The current tuning values of the content stream.
                     type: array
                     items:
-                      $ref: "#/components/schemas/TransmissionTuning"
+                      $ref: "#/components/schemas/ChannelTuning"
   /stream/tune:
     post:
       description: Set one or multiple tunings for the content stream.
@@ -303,7 +303,7 @@ paths:
                   description: The new tuning values for the content stream
                   type: array
                   items:
-                    $ref: "#/components/schemas/TransmissionTuning"
+                    $ref: "#/components/schemas/ChannelTuning"
       responses:
         "200":
           description: The content stream has been tuned.
@@ -372,7 +372,7 @@ components:
           example: fMW0PcHRJGUtUnadq4mvy
         stem:
           $ref: "#/components/schemas/StemType"
-    TransmissionTuning:
+    ChannelTuning:
       type: object
       required:
         - index
