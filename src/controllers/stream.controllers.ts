@@ -28,7 +28,7 @@ const tune: RequestHandler = async (req, res) => {
         // If there's no transmission with this ID, THROW
         if (!transmission) throw new Error("404");
         // If this stem isn't in this transmission, THROW
-        if (!(tuning.transmission.stem in transmission.stems)) throw new Error("404");
+        if (!transmission.stems.includes(tuning.transmission.stem)) throw new Error("404");
       }),
     );
   } catch (e) {
