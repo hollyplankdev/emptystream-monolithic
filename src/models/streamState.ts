@@ -27,6 +27,9 @@ export interface IChannelTuning {
 }
 
 export interface IStreamState {
+  /** The explicit ID of this singleton. Should always be 0. */
+  _id: number;
+
   /** The tunings for each channel on the stream. */
   tunings: IChannelTuning[];
 }
@@ -57,19 +60,21 @@ export const ChannelTuningSchema = new Schema<IChannelTuning>(
 
 export const StreamStateSchema = new Schema<IStreamState, IStreamStateModel>(
   {
+    _id: { type: Number, enum: [0] },
     tunings: { type: [ChannelTuningSchema], required: true },
   },
   {
+    _id: false,
     timestamps: true,
     statics: {
       /** Implements findOrCreateSingleton from IStreamStateModel. */
       async findOrCreateSingleton() {
         // Try to grab the singleton. If it exists, return it.
-        const foundDoc = await this.findById(new mongoose.Types.ObjectId(0));
+        const foundDoc = await this.findById(0);
         if (foundDoc) return foundDoc;
 
         // OTHERWISE - the singleton doesn't exist yet. Create it!
-        const createdDoc = await this.create({ _id: new mongoose.Types.ObjectId(0), tunings: [] });
+        const createdDoc = await this.create({ _id: 0, tunings: [] });
         return createdDoc;
       },
     },
