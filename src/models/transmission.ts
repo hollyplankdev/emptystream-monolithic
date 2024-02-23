@@ -15,7 +15,7 @@ export interface ITransmission {
   name: string;
 
   /** The stem types that this transmission has. */
-  stems: [TransmissionStem];
+  stems: TransmissionStem[];
 
   /** Information about the audio splitting operation for this Transmission. */
   splitOperation: ISplitOperation;

@@ -27,7 +27,7 @@ export interface IChannelTuning {
 
 export interface IStreamState {
   /** The tunings for each channel on the stream. */
-  tunings: [IChannelTuning];
+  tunings: IChannelTuning[];
 }
 
 export const ChannelTuningSchema = new Schema<IChannelTuning>(
