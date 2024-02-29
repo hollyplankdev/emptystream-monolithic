@@ -8,6 +8,6 @@ const onProgress: QueueEventsListener["progress"] = async (args) => {
   const job = await queue.getJob(args.jobId);
   if (!job) return;
 
-  console.log(`Retune job progress ${job.name} - ${args.data}`);
+  console.log(`Retune job progress ${job.name} - ${JSON.stringify(args.data)}`);
 };
 export default onProgress;

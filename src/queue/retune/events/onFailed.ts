@@ -7,6 +7,6 @@ const onFailed: QueueEventsListener["failed"] = async (args) => {
   const job = await queue.getJob(args.jobId);
   if (!job) return;
 
-  console.log(`Retune job failed ${job.name}`);
+  console.log(`Retune job failed ${job.name}: ${args.failedReason}`);
 };
 export default onFailed;

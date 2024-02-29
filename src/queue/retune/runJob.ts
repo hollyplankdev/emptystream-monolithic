@@ -26,7 +26,12 @@ const runJob: Processor<IRetuneInput> = async (job) => {
 
   // Get a list of all valid transmissions
   const validTransmissions = await Transmission.find({
+    // Find transmissions that have finished being split into stems.
     splitOperation: { status: "complete", percentage: 100 },
+
+    // Hack - only load transmissions with all stems. Had trouble getting the size operator to work,
+    // this'll do for now.
+    stems: { $in: ["vocals", "bass", "other", "drums"] },
   });
   await job.updateProgress({ percentage: 80, status: "loaded_transmissions" });
   console.log(`Found ${validTransmissions.length} transmissions`);
