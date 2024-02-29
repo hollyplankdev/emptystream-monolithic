@@ -21,10 +21,10 @@ export const queue = new Queue<IRetuneInput>(queueName, {
 
 /** The object allowing us to listen to events on the queue described by this file. */
 export const queueEvents = new QueueEvents(queueName, { connection: getRedisConnectionOptions() });
-queueEvents.on("active", onActive);
-queueEvents.on("completed", onCompleted);
+// queueEvents.on("active", onActive);
+// queueEvents.on("completed", onCompleted);
 queueEvents.on("failed", onFailed);
-queueEvents.on("progress", onProgress);
+// queueEvents.on("progress", onProgress);
 
 /** @returns A new BullMQ worker that runs this job */
 export function createWorker() {

@@ -34,7 +34,7 @@ const runJob: Processor<IRetuneInput> = async (job) => {
     stems: { $in: ["vocals", "bass", "other", "drums"] },
   });
   await job.updateProgress({ percentage: 80, status: "loaded_transmissions" });
-  console.log(`Found ${validTransmissions.length} transmissions`);
+  // console.log(`Found ${validTransmissions.length} transmissions`);
 
   // Pick a random transmission
   const transmission = validTransmissions[Math.floor(Math.random() * validTransmissions.length)];
