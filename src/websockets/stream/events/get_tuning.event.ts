@@ -1,3 +1,4 @@
+import { StreamState } from "../../../models/streamState.js";
 import { OnSpecificMessageListener } from "../../webSocketHandler.js";
 import { IGetTuningMessage } from "../messages.js";
 import { StreamWebSocketHandler } from "../websocket.js";
@@ -5,11 +6,13 @@ import { StreamWebSocketHandler } from "../websocket.js";
 const getTuningEvent: OnSpecificMessageListener<StreamWebSocketHandler, IGetTuningMessage> = async (
   session,
 ) => {
-  // TODO - ACTUALLY IMPLEMENT
+  // Get the current tunings
+  const state = await StreamState.findOrCreateSingleton();
 
+  // ...and send them!
   await session.messageClient({
     event: "give_tuning",
-    wholeState: [{ index: 0, transmission: { id: "test", stem: "bass" } }],
+    tunings: state.tunings,
   });
 };
 export default getTuningEvent;

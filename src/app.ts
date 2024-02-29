@@ -10,7 +10,9 @@ import { MULTER_FILE_DEST_PATH } from "./config/multer.config.js";
 import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.middleware.js";
 import createTransmissionStorageMiddleware from "./middleware/transmissionStorage.middleware.js";
 import splitAudioQueue from "./queue/splitAudio.queue.js";
+import retuneQueue from "./queue/retune.queue.js";
 import transmissionRouter from "./routes/transmission.routes.js";
+import streamRouter from "./routes/stream.routes.js";
 import streamWebSocket from "./websockets/stream.websocket.js";
 
 // Construct the Express application
@@ -41,6 +43,8 @@ app.use(createTransmissionStorageMiddleware());
 //
 
 splitAudioQueue.createWorker();
+retuneQueue.createWorker();
+await retuneQueue.kickstart();
 
 //
 //  Routes
@@ -55,6 +59,7 @@ app.use(express.static(path.join(process.cwd(), "static")));
 
 // Add the routers from the routes directory
 app.use("/transmission", transmissionRouter);
+app.use("/stream", streamRouter);
 
 // Handle any errors from express and wrap them as JSON
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

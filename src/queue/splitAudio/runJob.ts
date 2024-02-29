@@ -8,6 +8,7 @@ import { getTransmissionStorageClient } from "../../config/transmissionStorage.c
 import { Transmission } from "../../models/transmission.js";
 import { ISplitAudioInput } from "./interfaces.js";
 import TransmissionStorage from "../../utils/transmission_storage.js";
+import { TransmissionStem } from "../../models/transmissionStem.js";
 
 /** Where demucs expects audio files to be located when splitting, on the local filesystem. */
 const demucsInputPath: string = path.join(process.cwd(), "docker-facebook-demucs", "input");
@@ -83,7 +84,7 @@ async function uploadTransmissionStems(
   id: string,
   storage: TransmissionStorage,
 ) {
-  const stemTypes = ["drums", "bass", "vocals", "other"];
+  const stemTypes: TransmissionStem[] = ["drums", "bass", "vocals", "other"];
 
   // Pipe each stem into transmission storage
   await Promise.all(
