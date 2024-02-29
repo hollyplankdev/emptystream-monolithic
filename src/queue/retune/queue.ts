@@ -13,6 +13,10 @@ export const queueName: string = "Retune";
 /** The queue holding all retune jobs. */
 export const queue = new Queue<IRetuneInput>(queueName, {
   connection: getRedisConnectionOptions(),
+  defaultJobOptions: {
+    removeOnComplete: 5,
+    removeOnFail: 20,
+  },
 });
 
 /** The object allowing us to listen to events on the queue described by this file. */
