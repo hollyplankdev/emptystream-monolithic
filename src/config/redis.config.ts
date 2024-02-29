@@ -1,5 +1,6 @@
 import { ConnectionOptions } from "bullmq";
 import * as dotenv from "dotenv";
+import { RedisClientOptions } from "redis";
 
 //
 //  Defaults
@@ -29,10 +30,20 @@ export const REDIS_PASSWORD: string = process.env.REDIS_PASSWORD || DEFAULT_REDI
 //  Functions
 //
 
-export function getRedisConnectionOptions(): ConnectionOptions {
+export function getIoRedisConnectionOptions(): ConnectionOptions {
   return {
     host: REDIS_HOST,
     port: REDIS_PORT,
     password: REDIS_PASSWORD,
+  };
+}
+
+export function getRedisConnectionOptions(): RedisClientOptions {
+  return {
+    password: REDIS_PASSWORD,
+    socket: {
+      host: REDIS_HOST,
+      port: REDIS_PORT,
+    },
   };
 }

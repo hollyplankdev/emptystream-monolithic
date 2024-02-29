@@ -1,8 +1,10 @@
 import mongoose, { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose";
-import { ITimestamps } from "./timestamps.js";
-import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
+import { createClient as createRedisClient } from "redis";
+import { getRedisConnectionOptions } from "../config/redis.config.js";
 import { ALL_CHANNEL_INDEX, ChannelIndex } from "./channelIndex.js";
+import { ITimestamps } from "./timestamps.js";
 import { Transmission } from "./transmission.js";
+import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
 
 export interface IChannelTuning {
   /** The index of the channel that this tuning represents. */
@@ -118,7 +120,16 @@ export const StreamStateSchema = new Schema<IStreamState, IStreamStateModel, ISt
         });
 
         // Save the stream state!
-        return this.save();
+        this.save();
+
+        // Publish this change
+        // TODO - (how can we do better?)
+        const redisClient = createRedisClient(getRedisConnectionOptions());
+        await redisClient.connect();
+        await redisClient.publish("tuningsUpdated", JSON.stringify(tunings));
+        await redisClient.disconnect();
+
+        return this;
       },
     },
   },

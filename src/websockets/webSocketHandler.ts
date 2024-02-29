@@ -94,6 +94,9 @@ export class WebSocketHandler<
   IClientMessages extends IEventMessage = IEventMessage,
   IServerMessages extends IEventMessage = IEventMessage,
 > extends EventEmitter {
+  /** A map that stores currently connected client sessions by their ID. */
+  private sessions = new Map<string, IClientSession<IClientMessages, IServerMessages>>();
+
   /**
    * Create a new WebSocketHandler.
    *
@@ -131,12 +134,12 @@ export class WebSocketHandler<
         messageClient: messageClientFunc,
       };
 
-      // Call logic when client connects
-      this.emit("connect", session);
-
       client.on("close", async () => {
         // Call logic when client disconnects
         this.emit("disconnect", session);
+
+        // Stop keeping track of this client.
+        this.sessions.delete(session.id);
       });
 
       client.on("message", async (data) => {
@@ -181,12 +184,31 @@ export class WebSocketHandler<
           this.emit(`${eventMessage.event}_message`, session, eventMessage);
         }
       });
+
+      // Start keeping track of this client.
+      this.sessions.set(session.id, session);
+
+      // Call logic when client connects
+      this.emit("connect", session);
     });
   }
 
   //
   //  Functions
   //
+
+  /** @returns A list of all currently connected sessions. */
+  public getSessions(): IClientSession<IClientMessages, IServerMessages>[] {
+    return Array.from(this.sessions.values());
+  }
+
+  /**
+   * @param id The ID of the session to get.
+   * @returns The desired session, or undefined if not found.
+   */
+  public getSession(id: string): IClientSession<IClientMessages, IServerMessages> | undefined {
+    return this.sessions.get(id);
+  }
 
   /**
    * Called when a new WebSocket client has connected to this server. New clients can be denied
