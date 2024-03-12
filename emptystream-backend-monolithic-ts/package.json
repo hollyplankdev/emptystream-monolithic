@@ -19,7 +19,7 @@
     "docker:build": "docker compose up --build",
     "test": "jest --config=jest.config.ts --coverage",
     "test:watch": "jest --config=jest.config.ts --coverage --watch",
-    "lint": "eslint --ignore-path .gitignore --ext .js,.ts ./src",
+    "lint": "eslint --ignore-path ../.gitignore --ext .js,.ts ./src",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.json",
