@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "packages/frontend-react"
+		},
+		{
+			"path": "packages/backend-monolithic"
+		}
+	],
+	"settings": {}
+}
