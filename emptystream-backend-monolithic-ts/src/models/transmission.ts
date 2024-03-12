@@ -1,6 +1,6 @@
+import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "emptystream-shared-ts";
 import { Schema, model } from "mongoose";
 import { ITimestamps } from "./timestamps.js";
-import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
 
 export interface ISplitOperation {
   /** The current status of the operation. */

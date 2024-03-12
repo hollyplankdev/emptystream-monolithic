@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { RequestHandler } from "express";
-import { IChannelTuning, StreamState } from "../models/streamState.js";
-import { Transmission } from "../models/transmission.js";
+import { StreamState } from "../models/streamState.js";
 
 const read: RequestHandler = async (req, res) => {
   // Grab or create the stream state.

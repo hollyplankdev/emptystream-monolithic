@@ -1,4 +1,4 @@
-import { IChannelTuning } from "../../models/streamState.js";
+import { ChannelTuning } from "emptystream-shared-ts";
 import { queue } from "./queue.js";
 
 /**
@@ -7,7 +7,7 @@ import { queue } from "./queue.js";
  * @param tunings The new channel tunings to apply to the stream state.
  * @param delay The delay of this retune, in milliseconds.
  */
-export default function addJob(tunings: IChannelTuning[], delay: number) {
+export default function addJob(tunings: ChannelTuning[], delay: number) {
   let operationName = "retune";
   tunings.forEach((tuning) => {
     operationName += `_[${tuning.index}_to_${tuning.transmission.id}:${tuning.transmission.stem}]`;

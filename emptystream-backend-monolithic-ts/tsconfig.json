@@ -8,6 +8,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "target": "ES2021",
-    "lib": ["ES2021"]
+    "lib": ["ES2021"],
+    "paths": {
+      "emptystream-shared-ts": ["../emptystream-shared-ts/.src/*.ts"]
+    }
   }
 }

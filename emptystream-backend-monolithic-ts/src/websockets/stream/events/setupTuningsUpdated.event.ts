@@ -1,6 +1,6 @@
+import { ChannelTuning } from "emptystream-shared-ts";
 import { createClient } from "redis";
 import { StreamWebSocketHandler } from "../websocket.js";
-import { IChannelTuning } from "../../../models/streamState.js";
 
 export default async function setupTuningsUpdatedEvent(
   handler: StreamWebSocketHandler,
@@ -8,7 +8,7 @@ export default async function setupTuningsUpdatedEvent(
 ) {
   // Whenever the the tunings are updated...
   await redisClient.subscribe("tuningsUpdated", async (tuningsJSON) => {
-    const tunings: IChannelTuning[] = JSON.parse(tuningsJSON);
+    const tunings: ChannelTuning[] = JSON.parse(tuningsJSON);
 
     // Message every connected session that tuning has changed, and give tuning updates.
     await Promise.allSettled(

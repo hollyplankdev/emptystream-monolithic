@@ -3,6 +3,7 @@
   "private": "true",
   "type": "module",
   "license": "BOBBO-NET Friendly MIT License",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint --ignore-path ../.gitignore --ext .js,.ts ./src",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",

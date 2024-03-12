@@ -1,14 +1,14 @@
 import { Processor } from "bullmq";
 import { spawn } from "child_process";
 import crypto from "crypto";
+import { TransmissionStem } from "emptystream-shared-ts";
 import * as fs from "fs";
 import * as fsPromise from "fs/promises";
 import path from "path";
 import { getTransmissionStorageClient } from "../../config/transmissionStorage.config.js";
 import { Transmission } from "../../models/transmission.js";
-import { ISplitAudioInput } from "./interfaces.js";
 import TransmissionStorage from "../../utils/transmission_storage.js";
-import { TransmissionStem } from "../../models/transmissionStem.js";
+import { ISplitAudioInput } from "./interfaces.js";
 
 /** Where demucs expects audio files to be located when splitting, on the local filesystem. */
 const demucsInputPath: string = path.join(process.cwd(), "docker-facebook-demucs", "input");
