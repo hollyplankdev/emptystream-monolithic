@@ -1,40 +1,16 @@
-import mongoose, { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose";
+import { ALL_CHANNEL_INDEX, ALL_TRANSMISSION_STEMS, ChannelTuning } from "@emptystream/shared";
+import { HydratedDocument, Model, Schema, model } from "mongoose";
 import { createClient as createRedisClient } from "redis";
 import { getRedisConnectionOptions } from "../config/redis.config.js";
-import { ALL_CHANNEL_INDEX, ChannelIndex } from "./channelIndex.js";
 import { ITimestamps } from "./timestamps.js";
 import { Transmission } from "./transmission.js";
-import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "./transmissionStem.js";
-
-export interface IChannelTuning {
-  /** The index of the channel that this tuning represents. */
-  index: ChannelIndex;
-
-  /** Details about the transmission that this channel is tuned to. */
-  transmission: {
-    /** The ID of the transmission that this channel is tuned to. */
-    id: ObjectId;
-
-    /** The stem of the transmission that this channel is tuned to. */
-    stem: TransmissionStem;
-  };
-
-  /** When this tuning started. */
-  startTime?: Date;
-
-  /**
-   * How long it should take to go from some previous tuning settings to the tuning settings
-   * described in this object.
-   */
-  transitionDuration?: Date;
-}
 
 export interface IStreamState {
   /** The explicit ID of this singleton. Should always be 0. */
   _id: number;
 
   /** The tunings for each channel on the stream. */
-  tunings: IChannelTuning[];
+  tunings: ChannelTuning[];
 }
 
 export interface IStreamStateModel extends Model<IStreamState> {
@@ -44,16 +20,16 @@ export interface IStreamStateModel extends Model<IStreamState> {
 
 export interface IStreamStateMethods {
   /** Retunes the channels in the state. */
-  retune(tunings: IChannelTuning[]): Promise<HydratedDocument<IStreamState, IStreamStateMethods>>;
+  retune(tunings: ChannelTuning[]): Promise<HydratedDocument<IStreamState, IStreamStateMethods>>;
 }
 
-export const ChannelTuningSchema = new Schema<IChannelTuning>(
+export const ChannelTuningSchema = new Schema<ChannelTuning>(
   {
     index: { type: Number, required: true, enum: ALL_CHANNEL_INDEX },
     transmission: {
-      type: new Schema<IChannelTuning["transmission"]>(
+      type: new Schema<ChannelTuning["transmission"]>(
         {
-          id: { type: mongoose.Types.ObjectId, required: true },
+          id: { type: String, required: true },
           stem: { type: String, required: true, enum: ALL_TRANSMISSION_STEMS },
         },
         { _id: false },
@@ -88,7 +64,7 @@ export const StreamStateSchema = new Schema<IStreamState, IStreamStateModel, ISt
     },
     methods: {
       /** Implements retune from IStreamStateMethods. */
-      async retune(tunings: IChannelTuning[]) {
+      async retune(tunings: ChannelTuning[]) {
         // Before doing anything, validate the given tunings.
         await Promise.all(
           tunings.map(async (tuning) => {

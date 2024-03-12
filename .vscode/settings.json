@@ -2,5 +2,6 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "cmake.configureOnOpen": false,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "eslint.workingDirectories": ["./packages/*"]
 }

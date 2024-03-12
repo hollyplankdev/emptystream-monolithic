@@ -1,9 +1,9 @@
 import { Processor } from "bullmq";
-import { IRetuneInput } from "./interfaces.js";
+import { ChannelIndex } from "@emptystream/shared";
 import { StreamState } from "../../models/streamState.js";
 import { Transmission } from "../../models/transmission.js";
 import addJob from "./addJob.js";
-import { ChannelIndex } from "../../models/channelIndex.js";
+import { IRetuneInput } from "./interfaces.js";
 
 //
 //

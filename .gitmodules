@@ -1,3 +1,3 @@
-[submodule "docker-facebook-demucs"]
-	path = docker-facebook-demucs
-	url = https://github.com/xserrat/docker-facebook-demucs.git
+# [submodule "emptystream-backend-monolithic-ts/docker-facebook-demucs"]
+# 	path = emptystream-backend-monolithic-ts/docker-facebook-demucs
+# 	url = https://github.com/xserrat/docker-facebook-demucs.git

@@ -1,3 +1,4 @@
+import { WebSocketMessage } from "@emptystream/shared";
 import { EventEmitter } from "events";
 import { IncomingMessage } from "http";
 import { nanoid } from "nanoid";
@@ -6,8 +7,8 @@ import { WebSocket, WebSocketServer } from "ws";
 /** Session data for the client of a WebSocket connection. */
 export interface IClientSession<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ClientEventMessageType extends IEventMessage = IEventMessage,
-  ServerEventMessageType extends IEventMessage = IEventMessage,
+  ClientEventMessageType extends WebSocketMessage.Base = WebSocketMessage.Base,
+  ServerEventMessageType extends WebSocketMessage.Base = WebSocketMessage.Base,
 > {
   /** The client that this session belongs to. */
   client: WebSocket;
@@ -23,22 +24,7 @@ export interface IClientSession<
   id: string;
 
   /** Sends a message to this session's client. */
-  messageClient(message: ServerEventMessageType | IEventErrorMessage): Promise<void>;
-}
-
-/**
- * A message sent on a WebSocket connection indicating an event. Can be extended and passed into a
- * WebSocketHandler to strongly type it!
- */
-export interface IEventMessage {
-  /** The name of the event that this message represents. */
-  event: string;
-}
-
-/** An error message sent on a WebSocket connection. */
-export interface IEventErrorMessage extends IEventMessage {
-  event: "error";
-  message: string;
+  messageClient(message: ServerEventMessageType | WebSocketMessage.Error): Promise<void>;
 }
 
 /**
@@ -75,7 +61,7 @@ export type OnMessageListener<HandlerType extends WebSocketHandler> = Parameters
  */
 export type OnSpecificMessageListener<
   HandlerType extends WebSocketHandler,
-  SpecificMessage extends IEventMessage,
+  SpecificMessage extends WebSocketMessage.Base,
 > = (
   session: Parameters<Parameters<HandlerType["onSpecificMessage"]>[1]>[0],
   message: SpecificMessage,
@@ -87,12 +73,11 @@ export type OnSpecificMessageListener<
  * - Creates an IClientSession object for each new WebSocket client.
  * - Uses an event emitter structure to allow for simpler code.
  * - Parses and handles data sent by the client and types it appropriately.
- * - Can be strongly typed by passing in an interface that extends from IEventMessage in order to
- *   determine what messages are expected.
+ * - Can be strongly typed by passing in an interface that extends from WebSocketMessage.Base
  */
 export class WebSocketHandler<
-  IClientMessages extends IEventMessage = IEventMessage,
-  IServerMessages extends IEventMessage = IEventMessage,
+  IClientMessages extends WebSocketMessage.Base = WebSocketMessage.Base,
+  IServerMessages extends WebSocketMessage.Base = WebSocketMessage.Base,
 > extends EventEmitter {
   /** A map that stores currently connected client sessions by their ID. */
   private sessions = new Map<string, IClientSession<IClientMessages, IServerMessages>>();
@@ -167,7 +152,7 @@ export class WebSocketHandler<
             throw new Error("Failed to parse JSON from utf-8 data");
           }
 
-          // Ensure that sent data has enough field for IEventMessage
+          // Ensure that sent data has enough field for WebSocketMessage.Base
           if (!("event" in parsedData)) {
             throw new Error("Message doesn't contain `event` field.");
           }
