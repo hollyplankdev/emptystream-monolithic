@@ -1,14 +1,20 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "packages/frontend-react"
-		},
-		{
-			"path": "packages/backend-monolithic"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": ".",
+    },
+    {
+      "path": "packages/frontend-react",
+    },
+    {
+      "path": "packages/backend-monolithic",
+    },
+  ],
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "cmake.configureOnOpen": false,
+    "editor.tabSize": 2,
+    "eslint.workingDirectories": ["./packages/*"],
+  },
 }
