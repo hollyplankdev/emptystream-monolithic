@@ -54,20 +54,20 @@ export function useStreamSocket(props: UseStreamSocketProps) {
 
       // If ALL tunings are changed, update the state
       if (data.event === "tuning_changed") {
-        setState((state) => {
+        setState((currentState) => {
           data.tuningUpdates.forEach((tuning) => {
-            state.tunings.set(tuning.index, tuning);
+            currentState.tunings.set(tuning.index, tuning);
           });
-          return state;
+          return currentState;
         });
       }
       // If SOME tunings are changed, update the state
       else if (data.event === "give_tuning") {
-        setState((state) => {
+        setState((currentState) => {
           data.tunings.forEach((tuning) => {
-            state.tunings.set(tuning.index, tuning);
+            currentState.tunings.set(tuning.index, tuning);
           });
-          return state;
+          return currentState;
         });
       }
     }

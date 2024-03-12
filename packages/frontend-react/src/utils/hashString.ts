@@ -7,13 +7,13 @@
  *   string.
  */
 export default function hashString(str: string, length: number): number {
-  var hashValue = 0;
+  let hashValue = 0;
   if (str.length === 0) return hashValue;
 
-  for (var x = 0; x < str.length; x++) {
-    var ch = str.charCodeAt(x);
+  for (let x = 0; x < str.length; x++) {
+    const ch = str.charCodeAt(x);
     hashValue = (hashValue << 5) - hashValue + ch;
-    hashValue = hashValue & hashValue;
+    hashValue &= hashValue;
   }
   return Math.floor(Math.abs(hashValue) % length);
 }
