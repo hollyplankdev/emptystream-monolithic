@@ -1,3 +1,0 @@
-[submodule "docker-facebook-demucs"]
-	path = docker-facebook-demucs
-	url = https://github.com/xserrat/docker-facebook-demucs.git
