@@ -1,4 +1,4 @@
-# `emptystream`-monolithic
+# `emptystream`: backend-monolithic-ts
 
 # Resources
 

@@ -1,15 +1,15 @@
 {
-  "name": "emptystream",
+  "name": "emptystream-backend-monolithic-ts",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HollyGrahamPlank/emptystream.git"
+    "url": "git+https://github.com/HollyGrahamPlank/emptystream-monolithic.git"
   },
   "license": "BOBBO-NET Friendly MIT License",
   "bugs": {
-    "url": "https://github.com/HollyGrahamPlank/emptystream/issues"
+    "url": "https://github.com/HollyGrahamPlank/emptystream-monolithic/issues"
   },
-  "homepage": "https://github.com/HollyGrahamPlank/emptystream#readme",
+  "homepage": "https://github.com/HollyGrahamPlank/emptystream-monolithic#readme",
   "scripts": {
     "dev": "tsx src/app.ts",
     "dev:watch": "tsx watch src/app.ts",
