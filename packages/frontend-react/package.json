@@ -20,6 +20,7 @@
   "dependencies": {
     "@mantine/core": "^7.6.2",
     "@mantine/dropzone": "^7.6.2",
+    "@mantine/form": "^7.6.2",
     "@mantine/hooks": "^7.6.2",
     "@mantine/modals": "^7.6.2",
     "@react-spring/web": "^9.7.3",
