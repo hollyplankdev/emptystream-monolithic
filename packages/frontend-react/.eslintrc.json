@@ -1,6 +1,31 @@
 {
-  "extends": ["../../.eslintrc.json"],
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:react/recommended",
+    "../../.eslintrc.json"
+  ],
+  "ignorePatterns": ["dist"],
   "parserOptions": {
     "project": ["./tsconfig.json"]
-  }
+  },
+  "rules": {
+    "@typescript-eslint/no-restricted-imports": [
+      2,
+      {
+        "paths": [
+          {
+            "name": "react-redux",
+            "importNames": ["useSelector", "useStore", "useDispatch"],
+            "message": "Please use pre-typed versions from `src/app/hooks.ts` instead."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    { "files": ["*.{c,m,}{t,j}s", "*.{t,j}sx"] },
+    { "files": ["*{test,spec}.{t,j}s?(x)"], "env": { "jest": true } }
+  ]
 }

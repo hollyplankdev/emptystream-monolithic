@@ -1,0 +1,54 @@
+import { Howl } from "howler"
+import { useEffect, useRef, useState } from "react"
+import { useStreamSocket } from "../streamSocket/useStreamSocket"
+
+export interface TransmissionAudioProps {
+  index: number
+}
+
+export const TransmissionAudio = (props: TransmissionAudioProps) => {
+  const socketURL = "ws://localhost:3000/stream"
+  const { streamState } = useStreamSocket({ websocketURL: socketURL })
+  const transmissionId = useRef<string>("")
+  const transmissionStem = useRef<string>("")
+  const howl = useRef<Howl | null>(null)
+
+  useEffect(() => {
+    // Transition audio when tunings change
+    const transmission = streamState.tunings.get(props.index)?.transmission
+    if (!transmission) return
+
+    // If we are already tuned to this...
+    if (
+      transmission.id === transmissionId.current &&
+      transmission.stem === transmissionStem.current
+    ) {
+      return
+    }
+
+    // Update our cache of what we are
+    transmissionId.current = transmission.id
+    transmissionStem.current = transmission.stem
+
+    // Create the new howler object representing the audio for the transmission
+    const audioPath = `http://localhost:3000/transmission/${transmission.id}/${transmission.stem}`
+    console.log(`Loading ${audioPath}`)
+    const newAudio = new Howl({ src: [audioPath], format: "mp3", loop: true })
+    newAudio.volume(0)
+    newAudio.play()
+
+    const fadeTime = 1000 * 1
+    const oldHowl = howl.current
+    if (oldHowl) {
+      oldHowl.fade(1, 0, fadeTime)
+      oldHowl.once("fade", () => {
+        oldHowl.unload()
+      })
+    }
+
+    howl.current = newAudio
+    newAudio.fade(0, 1, fadeTime)
+  })
+
+  return <div></div>
+}

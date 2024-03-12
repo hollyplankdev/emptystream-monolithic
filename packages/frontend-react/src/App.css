@@ -1,0 +1,25 @@
+.App {
+  text-align: center;
+  background-color: black;
+  color: white;
+}
+
+.AppContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
+.CenterPanel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-width: 2px;
+  border-color: aqua;
+  border-style: dashed;
+}
+

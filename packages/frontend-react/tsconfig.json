@@ -5,11 +5,20 @@
     "rootDir": "src",
     "outDir": "build",
     "sourceMap": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "allowJs": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["vitest/globals"],
+    "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "target": "ES2021",
-    "lib": ["ES2021"],
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
     "composite": true
-  }
+  },
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
