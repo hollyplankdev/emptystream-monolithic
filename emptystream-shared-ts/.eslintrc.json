@@ -7,7 +7,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "emptystream-shared-ts/tsconfig.json"
   },
   "rules": {
     "prettier/prettier": "error",
