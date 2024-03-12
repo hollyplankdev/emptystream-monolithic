@@ -1,0 +1,14 @@
+{
+  "name": "@emptystream/frontend-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "type": "module",
+  "private": "true",
+  "scripts": {
+    "lint": "eslint --ignore-path ../../.gitignore --ext .js,.ts ./src",
+    "format": "prettier --ignore-path ../../.gitignore --write \"**/*.+(js|ts|json)\"",
+    "prebuild": "npm run lint",
+    "build": "tsc --build --verbose"
+  }
+}
