@@ -8,9 +8,6 @@
     "../../.eslintrc.json"
   ],
   "ignorePatterns": ["dist"],
-  "parserOptions": {
-    "project": ["./tsconfig.json"]
-  },
   "rules": {
     "@typescript-eslint/no-restricted-imports": [
       2,

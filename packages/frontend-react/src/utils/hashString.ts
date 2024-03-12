@@ -10,9 +10,11 @@ export default function hashString(str: string, length: number): number {
   let hashValue = 0;
   if (str.length === 0) return hashValue;
 
-  for (let x = 0; x < str.length; x++) {
+  for (let x = 0; x < str.length; x += 1) {
     const ch = str.charCodeAt(x);
+    // eslint-disable-next-line no-bitwise
     hashValue = (hashValue << 5) - hashValue + ch;
+    // eslint-disable-next-line no-bitwise
     hashValue &= hashValue;
   }
   return Math.floor(Math.abs(hashValue) % length);
