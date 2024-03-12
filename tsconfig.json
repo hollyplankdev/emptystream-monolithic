@@ -10,5 +10,9 @@
     "target": "ES2021",
     "lib": ["ES2021"]
   },
-  "references": [{ "path": "./packages/shared" }, { "path": "./packages/backend-monolithic" }]
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/backend-monolithic" },
+    { "path": "./packages/frontend-react" }
+  ]
 }
