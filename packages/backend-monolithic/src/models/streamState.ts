@@ -1,5 +1,5 @@
-import { ALL_CHANNEL_INDEX, ALL_TRANSMISSION_STEMS, ChannelTuning } from "emptystream-shared-ts";
-import mongoose, { HydratedDocument, Model, Schema, model } from "mongoose";
+import { ALL_CHANNEL_INDEX, ALL_TRANSMISSION_STEMS, ChannelTuning } from "@emptystream/shared";
+import { HydratedDocument, Model, Schema, model } from "mongoose";
 import { createClient as createRedisClient } from "redis";
 import { getRedisConnectionOptions } from "../config/redis.config.js";
 import { ITimestamps } from "./timestamps.js";
@@ -29,7 +29,7 @@ export const ChannelTuningSchema = new Schema<ChannelTuning>(
     transmission: {
       type: new Schema<ChannelTuning["transmission"]>(
         {
-          id: { type: mongoose.Types.ObjectId, required: true },
+          id: { type: String, required: true },
           stem: { type: String, required: true, enum: ALL_TRANSMISSION_STEMS },
         },
         { _id: false },

@@ -2,12 +2,13 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "module": "ES2022",
-    "outDir": ".build",
+    "outDir": "build",
     "sourceMap": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "target": "ES2021",
     "lib": ["ES2021"]
-  }
+  },
+  "references": [{ "path": "./packages/shared" }, { "path": "./packages/backend-monolithic" }]
 }

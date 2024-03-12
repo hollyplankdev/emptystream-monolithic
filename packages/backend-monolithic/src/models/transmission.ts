@@ -1,4 +1,4 @@
-import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "emptystream-shared-ts";
+import { ALL_TRANSMISSION_STEMS, TransmissionStem } from "@emptystream/shared";
 import { Schema, model } from "mongoose";
 import { ITimestamps } from "./timestamps.js";
 

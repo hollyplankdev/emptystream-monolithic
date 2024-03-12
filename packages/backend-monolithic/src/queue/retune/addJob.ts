@@ -1,4 +1,4 @@
-import { ChannelTuning } from "emptystream-shared-ts";
+import { ChannelTuning } from "@emptystream/shared";
 import { queue } from "./queue.js";
 
 /**

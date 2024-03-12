@@ -1,7 +1,7 @@
 import { Processor } from "bullmq";
 import { spawn } from "child_process";
 import crypto from "crypto";
-import { TransmissionStem } from "emptystream-shared-ts";
+import { TransmissionStem } from "@emptystream/shared";
 import * as fs from "fs";
 import * as fsPromise from "fs/promises";
 import path from "path";

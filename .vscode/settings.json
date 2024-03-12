@@ -3,8 +3,5 @@
   "editor.formatOnSave": true,
   "cmake.configureOnOpen": false,
   "editor.tabSize": 2,
-  "eslint.workingDirectories": [
-    "./emptystream-backend-monolithic-ts",
-    "./emptystream-shared-ts"
-  ]
+  "eslint.workingDirectories": ["./packages/*"]
 }

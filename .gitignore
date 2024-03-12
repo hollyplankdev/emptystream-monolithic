@@ -12,7 +12,7 @@
 #
 
 # Typescript build
-.build
+build
 
 #
 #   NodeJS Ignore

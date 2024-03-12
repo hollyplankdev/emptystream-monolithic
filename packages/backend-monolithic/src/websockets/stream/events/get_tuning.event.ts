@@ -1,4 +1,4 @@
-import { StreamMessage } from "emptystream-shared-ts";
+import { StreamMessage } from "@emptystream/shared";
 import { StreamState } from "../../../models/streamState.js";
 import { OnSpecificMessageListener } from "../../webSocketHandler.js";
 import { StreamWebSocketHandler } from "../websocket.js";

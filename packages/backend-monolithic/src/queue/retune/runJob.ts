@@ -1,5 +1,5 @@
 import { Processor } from "bullmq";
-import { ChannelIndex } from "emptystream-shared-ts";
+import { ChannelIndex } from "@emptystream/shared";
 import { StreamState } from "../../models/streamState.js";
 import { Transmission } from "../../models/transmission.js";
 import addJob from "./addJob.js";

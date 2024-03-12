@@ -1,4 +1,4 @@
-import { ChannelTuning } from "emptystream-shared-ts";
+import { ChannelTuning } from "@emptystream/shared";
 import { createClient } from "redis";
 import { StreamWebSocketHandler } from "../websocket.js";
 

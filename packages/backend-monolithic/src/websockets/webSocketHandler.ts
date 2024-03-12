@@ -1,4 +1,4 @@
-import { WebSocketMessage } from "emptystream-shared-ts";
+import { WebSocketMessage } from "@emptystream/shared";
 import { EventEmitter } from "events";
 import { IncomingMessage } from "http";
 import { nanoid } from "nanoid";

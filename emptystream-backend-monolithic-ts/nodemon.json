@@ -1,8 +1,0 @@
-{
-  "watch": ["src", "./openapi.yml"],
-  "ext": "ts",
-  "execMap": {
-    "ts": "ts-node-esm"
-  },
-  "ignore": ["src/**/*.spec.ts"]
-}

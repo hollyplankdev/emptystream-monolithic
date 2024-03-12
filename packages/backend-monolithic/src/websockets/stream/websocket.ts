@@ -1,4 +1,4 @@
-import { StreamMessage } from "emptystream-shared-ts";
+import { StreamMessage } from "@emptystream/shared";
 import { createClient as createRedisClient } from "redis";
 import { WebSocketServer } from "ws";
 import { getRedisConnectionOptions } from "../../config/redis.config.js";
