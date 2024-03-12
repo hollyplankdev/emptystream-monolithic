@@ -1,8 +1,8 @@
 import "./App.css";
 import { TransmissionAudio } from "./features/transmissionAudio/TransmissionAudio";
-import { StreamImage } from "./features/streamImage/StreamImage";
+import StreamImage from "./features/streamImage/StreamImage";
 import { StreamTuner } from "./features/streamTuner/StreamTuner";
-import { VolumeSlider } from "./features/volumeSlider/VolumeSlider";
+import VolumeSlider from "./features/volumeSlider/VolumeSlider";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
           <StreamTuner index={1} />
           <StreamTuner index={2} />
           <StreamTuner index={3} />
-          <StreamTuner holographic />
+          <StreamTuner index={-3} holographic />
           <TransmissionAudio index={0} />
           <TransmissionAudio index={1} />
           <TransmissionAudio index={2} />
