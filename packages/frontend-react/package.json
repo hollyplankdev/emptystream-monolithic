@@ -18,8 +18,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@mantine/core": "^7.6.2",
+    "@mantine/dropzone": "^7.6.2",
+    "@mantine/hooks": "^7.6.2",
+    "@mantine/modals": "^7.6.2",
     "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^2.0.1",
+    "@tabler/icons-react": "^3.0.1",
     "howler": "^2.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -38,6 +43,9 @@
     "@vitejs/plugin-react": "^4.2.1",
     "eslint-config-airbnb": "^19.0.4",
     "jsdom": "^23.2.0",
+    "postcss": "^8.4.35",
+    "postcss-preset-mantine": "^1.13.0",
+    "postcss-simple-vars": "^7.0.1",
     "vite": "^5.0.11",
     "vitest": "^1.2.0"
   }

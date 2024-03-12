@@ -3,5 +3,12 @@
   "editor.formatOnSave": true,
   "cmake.configureOnOpen": false,
   "editor.tabSize": 2,
-  "eslint.workingDirectories": ["./packages/*"]
+  "eslint.workingDirectories": ["./packages/*"],
+  "cssVariables.lookupFiles": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.less",
+    "**/node_modules/@mantine/core/styles.css"
+  ]
 }
