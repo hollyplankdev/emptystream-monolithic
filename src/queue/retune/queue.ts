@@ -2,10 +2,7 @@ import { Queue, QueueEvents, Worker } from "bullmq";
 import { getIoRedisConnectionOptions } from "../../config/redis.config.js";
 import { IRetuneInput } from "./interfaces.js";
 import runJob from "./runJob.js";
-import onActive from "./events/onActive.js";
-import onCompleted from "./events/onCompleted.js";
 import onFailed from "./events/onFailed.js";
-import onProgress from "./events/onProgress.js";
 
 /** The name of the queue that this file is describing. */
 export const queueName: string = "Retune";

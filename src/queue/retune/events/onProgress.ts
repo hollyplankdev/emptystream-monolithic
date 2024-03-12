@@ -1,5 +1,4 @@
 import { QueueEventsListener } from "bullmq";
-import { ISplitOperation, Transmission } from "../../../models/transmission.js";
 import { queue } from "../queue.js";
 
 /** Called when a job reports an update to it's progress. */

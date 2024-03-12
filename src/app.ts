@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import * as http from "http";
 import { connect as mongooseConnect } from "mongoose";
@@ -9,10 +10,10 @@ import { MONGODB_URL } from "./config/mongoDb.config.js";
 import { MULTER_FILE_DEST_PATH } from "./config/multer.config.js";
 import createOpenApiValidatorMiddleware from "./middleware/openApiValidator.middleware.js";
 import createTransmissionStorageMiddleware from "./middleware/transmissionStorage.middleware.js";
-import splitAudioQueue from "./queue/splitAudio.queue.js";
 import retuneQueue from "./queue/retune.queue.js";
-import transmissionRouter from "./routes/transmission.routes.js";
+import splitAudioQueue from "./queue/splitAudio.queue.js";
 import streamRouter from "./routes/stream.routes.js";
+import transmissionRouter from "./routes/transmission.routes.js";
 import streamWebSocket from "./websockets/stream.websocket.js";
 
 // Construct the Express application
@@ -34,6 +35,7 @@ streamWebSocket.setupServer(webSocketServer);
 //  Middleware
 //
 
+app.use(cors());
 app.use(express.json());
 app.use(createOpenApiValidatorMiddleware(API_SPEC_PATH, MULTER_FILE_DEST_PATH));
 app.use(createTransmissionStorageMiddleware());
