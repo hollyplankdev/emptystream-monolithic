@@ -4,7 +4,7 @@ import { StreamImage } from "./features/streamImage/StreamImage";
 import { StreamTuner } from "./features/streamTuner/StreamTuner";
 import { VolumeSlider } from "./features/volumeSlider/VolumeSlider";
 
-const App = () => {
+function App() {
   return (
     <div className="App">
       <div className="AppContainer">
@@ -24,6 +24,6 @@ const App = () => {
       </div>
     </div>
   );
-};
+}
 
 export default App;

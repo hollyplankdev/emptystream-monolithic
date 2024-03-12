@@ -1,11 +1,10 @@
-import styles from "./StreamImage.module.css"
+import styles from "./StreamImage.module.css";
 
-export const StreamImage = () => {
-    return (
-        <div>
-            <img className={styles.image}>
-            </img>
-            <div className={styles.televisionOverlay}></div>
-        </div>
-    );
+export default function StreamImage() {
+  return (
+    <div>
+      <img className={styles.image} alt="" />
+      <div className={styles.televisionOverlay} />
+    </div>
+  );
 }

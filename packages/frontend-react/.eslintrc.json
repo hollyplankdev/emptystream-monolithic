@@ -20,7 +20,8 @@
           }
         ]
       }
-    ]
+    ],
+    "react/require-default-props": "off"
   },
   "overrides": [
     { "files": ["*.{c,m,}{t,j}s", "*.{t,j}sx"] },
