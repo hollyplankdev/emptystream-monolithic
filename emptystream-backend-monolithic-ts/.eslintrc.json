@@ -7,7 +7,7 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "emptystream-backend-monolithic-ts/tsconfig.json"
+    "project": "tsconfig.json"
   },
   "rules": {
     "prettier/prettier": "error",
