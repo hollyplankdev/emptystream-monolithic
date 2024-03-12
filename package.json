@@ -1,0 +1,5 @@
+{
+    "name": "emptystream",
+    "private": true,
+    "workspaces": ["emptystream-shared-ts"]
+}
