@@ -5,6 +5,7 @@
     "airbnb/hooks",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "../../.eslintrc.json"
   ],
   "ignorePatterns": ["dist", "vite.config.ts"],
