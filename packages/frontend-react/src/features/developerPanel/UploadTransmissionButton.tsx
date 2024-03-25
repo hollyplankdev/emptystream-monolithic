@@ -6,14 +6,16 @@ import UploadTransmission from "./UploadTransmission";
 const modalId = "uploadTransmissionModal";
 
 export default function UploadTransmissionButton() {
-  const closeUploadTransmission = () => {
+  /** The function to call when the Transmission upload is finished. */
+  const onUploadComplete = () => {
     modals.close(modalId);
   };
 
+  /** Opens a modal containing the UploadTransmission component. */
   const openUploadTransmission = () =>
     modals.open({
       title: <Text size="lg">Upload a new Transmission to `emptystream`</Text>,
-      children: <UploadTransmission onComplete={closeUploadTransmission} />,
+      children: <UploadTransmission onComplete={onUploadComplete} />,
       modalId,
     });
 
