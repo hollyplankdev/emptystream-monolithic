@@ -10,14 +10,14 @@ const uploadModalId = "uploadTransmissionModal";
 export default function DeveloperPanel() {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const onFinishUploadTransmission = () => {
+  const closeUploadTransmission = () => {
     modals.close(uploadModalId);
   };
 
-  const uploadTransmissionModal = () =>
+  const openUploadTransmission = () =>
     modals.open({
       title: <Text size="lg">Upload a new Transmission to `emptystream`</Text>,
-      children: <UploadTransmission onComplete={onFinishUploadTransmission} />,
+      children: <UploadTransmission onComplete={closeUploadTransmission} />,
       modalId: uploadModalId,
     });
 
@@ -30,7 +30,7 @@ export default function DeveloperPanel() {
         position="right"
         overlayProps={{ backgroundOpacity: 0.5, blur: 2 }}
       >
-        <Button onClick={uploadTransmissionModal}>Upload Transmission</Button>
+        <Button onClick={openUploadTransmission}>Upload Transmission</Button>
       </Drawer>
 
       <Button className={styles.devPanelButton} onClick={open}>
