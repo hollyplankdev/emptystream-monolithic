@@ -4,13 +4,21 @@ import { modals } from "@mantine/modals";
 import styles from "./DeveloperPanel.module.css";
 import UploadTransmission from "./UploadTransmission";
 
+/** The ID to use when opening / closing the UploadTransmission modal. */
+const uploadModalId = "uploadTransmissionModal";
+
 export default function DeveloperPanel() {
   const [opened, { open, close }] = useDisclosure(false);
+
+  const onFinishUploadTransmission = () => {
+    modals.close(uploadModalId);
+  };
 
   const uploadTransmissionModal = () =>
     modals.open({
       title: <Text size="lg">Upload a new Transmission to `emptystream`</Text>,
-      children: <UploadTransmission />,
+      children: <UploadTransmission onComplete={onFinishUploadTransmission} />,
+      modalId: uploadModalId,
     });
 
   return (

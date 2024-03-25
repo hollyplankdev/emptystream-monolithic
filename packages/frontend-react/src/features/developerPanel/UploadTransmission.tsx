@@ -9,7 +9,11 @@ interface FormValues {
   name: string;
 }
 
-export default function UploadTransmission() {
+export interface UploadTransmissionProps {
+  onComplete?: Function;
+}
+
+export default function UploadTransmission({ onComplete = undefined }: UploadTransmissionProps) {
   const form = useForm<FormValues>({
     initialValues: {
       file: null,
@@ -40,7 +44,12 @@ export default function UploadTransmission() {
 
   const onFormSubmit = form.onSubmit(() => {
     // TODO
-    console.log("TODO");
+    // NEXT UP - Implement this!
+
+    // TODO - Implement Upload
+
+    // Tell us that we are done!
+    if (onComplete) onComplete();
   });
 
   return (
@@ -97,7 +106,6 @@ export default function UploadTransmission() {
         <Group justify="end" mt="md">
           <Button type="submit">Submit</Button>
         </Group>
-        <Text>huh.</Text>
       </form>
     </Box>
   );
