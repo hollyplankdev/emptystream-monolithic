@@ -1,6 +1,7 @@
-import { Box, Button, Group, Text, TextInput } from "@mantine/core";
+import { Box, Button, Group, LoadingOverlay, Text, TextInput } from "@mantine/core";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { IconMusic, IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import isURLSafe from "../../utils/isURLSafe";
 
@@ -14,6 +15,9 @@ export interface UploadTransmissionProps {
 }
 
 export default function UploadTransmission({ onComplete = undefined }: UploadTransmissionProps) {
+  const [isLoading, { open: startLoadingDisplay, close: stopLoadingDisplay }] =
+    useDisclosure(false);
+
   const form = useForm<FormValues>({
     initialValues: {
       file: null,
@@ -42,11 +46,29 @@ export default function UploadTransmission({ onComplete = undefined }: UploadTra
     form.setFieldValue("name", "");
   };
 
-  const onFormSubmit = form.onSubmit(() => {
-    // TODO
-    // NEXT UP - Implement this!
+  const onFormSubmit = form.onSubmit(async () => {
+    startLoadingDisplay(); // Show the loading spinner
 
-    // TODO - Implement Upload
+    // Construct the form-data object to POST
+    const formData = new FormData();
+    formData.append("name", form.values.name);
+    formData.append("audio", form.values.file as File);
+
+    // Send the request!
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 2000);
+    });
+    // const response = await fetch("http://localhost:3000/transmission", {
+    //   method: "POST",
+    //   body: formData,
+    // });
+
+    // TODO - re-enable actual POST request
+    // TODO - Handle error from above
+    // TODO - Flag that there may be new transmissions to display
+
+    stopLoadingDisplay(); // Hide the loading spinner
+    form.reset(); // Clean form in case we wanna re-use it
 
     // Tell us that we are done!
     if (onComplete) onComplete();
@@ -54,6 +76,7 @@ export default function UploadTransmission({ onComplete = undefined }: UploadTra
 
   return (
     <Box maw={340} mx="auto">
+      <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
       <form onSubmit={onFormSubmit}>
         {/* The input allowing an audio file to be selected */}
         <Dropzone
