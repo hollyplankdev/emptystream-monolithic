@@ -1,11 +1,9 @@
 {
   "name": "@emptystream/backend-monolithic",
-  "type": "module",
   "license": "BOBBO-NET Friendly MIT License",
   "private": "true",
   "scripts": {
-    "dev": "tsx src/app.ts",
-    "dev:watch": "tsx watch src/app.ts",
+    "dev": "tsx watch src/app.ts",
     "dev:up": "docker compose -f local-compose.yaml up -d --build --remove-orphans",
     "dev:down": "docker compose -f local-compose.yaml down",
     "docker:build": "docker compose up --build",
@@ -13,16 +11,15 @@
     "test:watch": "jest --config=../../jest.config.ts --coverage --watch",
     "lint": "eslint --ignore-path ../../.gitignore --ext .js,.ts ./src",
     "format": "prettier --ignore-path ../../.gitignore --write \"**/*.+(js|ts|json)\"",
-    "prebuild": "npm run lint",
-    "build": "tsc --build",
-    "start": "node .build/src/app.js"
+    "start": "tsx src/app.ts"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/ws": "^8.5.10"
+    "@types/ws": "^8.5.10",
+    "tsx": "^4.7.1"
   },
   "dependencies": {
-    "@emptystream/shared": "^1.0.0",
+    "@emptystream/shared": "workspace:*",
     "bullmq": "^5.1.9",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

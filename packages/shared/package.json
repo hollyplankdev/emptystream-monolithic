@@ -2,13 +2,19 @@
   "name": "@emptystream/shared",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
-  "type": "module",
+  "main": "dist/index",
+  "types": "dist/index",
   "private": "true",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "lint": "eslint --ignore-path ../../.gitignore --ext .js,.ts ./src",
-    "format": "prettier --ignore-path ../../.gitignore --write \"**/*.+(js|ts|json)\"",
-    "prebuild": "npm run lint",
-    "build": "tsc --build --verbose"
+    "build": "pnpm run clean && pnpm run compile",
+    "clean": "rimraf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "rimraf": "~5.0.0"
   }
 }
