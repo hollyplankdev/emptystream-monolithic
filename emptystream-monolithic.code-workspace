@@ -4,10 +4,13 @@
       "path": ".",
     },
     {
-      "path": "packages/frontend-react",
+      "path": "apps/frontend-react",
     },
     {
-      "path": "packages/backend-monolithic",
+      "path": "apps/backend-monolithic",
+    },
+    {
+      "path": "packages/shared",
     },
   ],
   "settings": {
