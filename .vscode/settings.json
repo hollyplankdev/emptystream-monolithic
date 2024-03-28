@@ -3,7 +3,7 @@
   "editor.formatOnSave": true,
   "cmake.configureOnOpen": false,
   "editor.tabSize": 2,
-  "eslint.workingDirectories": ["./packages/*"],
+  "eslint.workingDirectories": ["./packages/*", "./apps/*"],
   "cssVariables.lookupFiles": [
     "**/*.css",
     "**/*.scss",

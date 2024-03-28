@@ -2,20 +2,13 @@
   "name": "@emptystream/frontend-react",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
   "type": "module",
   "private": "true",
   "scripts": {
-    "lint": "eslint --ignore-path ../../.gitignore --ext .js,.ts,.tsx ./src",
-    "lint:fix": "eslint --ignore-path ../../.gitignore --ext .js,.ts,.tsx ./src --fix",
-    "format": "prettier --ignore-path ../../.gitignore --write \"**/*.+(js|ts|json|tsx)\"",
-    "prebuild": "npm run lint",
-    "build": "tsc --build && vite build",
     "dev": "vite",
-    "start": "vite",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest run",
-    "type-check": "tsc --noEmit"
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "@mantine/core": "^7.6.2",
@@ -35,7 +28,6 @@
     "react-use-websocket": "^4.8.1"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^5.28.6",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
@@ -44,12 +36,13 @@
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
-    "eslint-config-airbnb": "^19.0.4",
+    "rimraf": "~5.0.0",
     "jsdom": "^23.2.0",
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
     "vite": "^5.0.11",
+    "vite-tsconfig-paths": "~4.2.0",
     "vitest": "^1.2.0"
   }
 }

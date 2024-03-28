@@ -46,7 +46,8 @@ app.use(createTransmissionStorageMiddleware());
 
 splitAudioQueue.createWorker();
 retuneQueue.createWorker();
-await retuneQueue.kickstart();
+// TODO - make sure this works
+retuneQueue.kickstart();
 
 //
 //  Routes
@@ -79,10 +80,11 @@ app.use((err, req, res, next) => {
 
 // Connect to the DB
 console.log(`Connecting to DB (${MONGODB_URL})...`);
-await mongooseConnect(MONGODB_URL);
-
-// ...Start the HTTP server!
-console.log("Starting HTTP server...");
-httpServer.listen(HTTP_PORT, () => {
-  console.log(`Listening on port ${HTTP_PORT}`);
+// TODO - make sure this works
+mongooseConnect(MONGODB_URL).then(() => {
+  // ...Start the HTTP server!
+  console.log("Starting HTTP server...");
+  httpServer.listen(HTTP_PORT, () => {
+    console.log(`Listening on port ${HTTP_PORT}`);
+  });
 });
