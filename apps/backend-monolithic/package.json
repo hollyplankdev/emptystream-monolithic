@@ -9,8 +9,6 @@
     "docker:build": "docker compose up --build",
     "test": "jest --config=../../jest.config.ts --coverage",
     "test:watch": "jest --config=../../jest.config.ts --coverage --watch",
-    "lint": "eslint --ignore-path ../../.gitignore --ext .js,.ts ./src",
-    "format": "prettier --ignore-path ../../.gitignore --write \"**/*.+(js|ts|json)\"",
     "start": "tsx src/app.ts"
   },
   "devDependencies": {
