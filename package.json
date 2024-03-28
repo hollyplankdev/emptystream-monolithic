@@ -7,7 +7,7 @@
     "clean": "pnpm run -r clean",
     "build": "pnpm run -r build",
     "test": "pnpm run -r test",
-    "lint": "eslint --ext js,ts,tsx ."
+    "lint": "pnpm run -r lint"
   },
   "workspaces": [
     "packages/*",

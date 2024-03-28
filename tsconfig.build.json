@@ -3,7 +3,7 @@
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
-    "strict": true,
+    "strictNullChecks": true,
     "declaration": true,
     "declarationMap": true,
     "noEmitOnError": true,
