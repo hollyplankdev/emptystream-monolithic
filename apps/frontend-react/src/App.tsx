@@ -15,9 +15,9 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <MantineProvider theme={theme} defaultColorScheme="dark">
-      <ModalsProvider>
-        <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme} defaultColorScheme="dark">
+        <ModalsProvider>
           <div className="App">
             <DeveloperPanel />
             <div className="AppContainer">
@@ -36,9 +36,9 @@ function App() {
               </div>
             </div>
           </div>
-        </QueryClientProvider>
-      </ModalsProvider>
-    </MantineProvider>
+        </ModalsProvider>
+      </MantineProvider>
+    </QueryClientProvider>
   );
 }
 

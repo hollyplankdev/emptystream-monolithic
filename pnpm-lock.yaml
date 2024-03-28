@@ -118,6 +118,9 @@ importers:
 
   apps/frontend-react:
     dependencies:
+      '@emptystream/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@mantine/core':
         specifier: ^7.6.2
         version: 7.7.0(@mantine/hooks@7.7.0)(@types/react@18.2.73)(react-dom@18.2.0)(react@18.2.0)

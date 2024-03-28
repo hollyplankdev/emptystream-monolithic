@@ -17,7 +17,7 @@ export default function DeveloperPanel() {
         overlayProps={{ backgroundOpacity: 0.5, blur: 2 }}
       >
         <UploadTransmissionButton />
-        <TransmissionList />
+        {/* <TransmissionList /> */}
       </Drawer>
 
       <Button className={styles.devPanelButton} onClick={open}>

@@ -1,3 +1,5 @@
+import { ITransmission } from "@emptystream/shared";
+
 /**
  * Upload a new Transmission.
  *
@@ -25,8 +27,9 @@ const upload = async (name: string, audio: File): Promise<void> => {
   // TODO - Flag that there may be new transmissions to display
 };
 
-const list = async (lastPageKey: number, pageSize?: number): Promise<void> => {
+const list = async (lastPageKey: number, pageSize?: number): Promise<ITransmission[]> => {
   // TODO
+  return [];
 };
 
 export default {
