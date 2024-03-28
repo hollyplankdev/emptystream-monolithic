@@ -1,9 +1,24 @@
+import { Text, Divider } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-
-const getTransmissions = async () => {};
+import TransmissionAPI from "../../api/TransmissionAPI";
+import TransmissionListElement from "./TransmissionListElement";
 
 export default function TransmissionList() {
-  const query = useQuery({ queryKey: ["transmission", "list"], queryFn: getTransmissions });
+  const query = useQuery({
+    queryKey: ["transmission", "list"],
+    queryFn: TransmissionAPI.all,
+    initialData: [],
+  });
 
-  return <div>Hello world!</div>;
+  return (
+    <>
+      <Text size="lg">Transmissions</Text>
+      <Divider />
+      <ul>
+        {query.data.map((transmission) => {
+          return <TransmissionListElement transmission={transmission} />;
+        })}
+      </ul>
+    </>
+  );
 }

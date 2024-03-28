@@ -1,5 +1,6 @@
 export * from "./ChannelIndex";
 export * from "./ChannelTuning";
+export * from "./DbObject";
 export * from "./ISplitOperation";
 export * from "./IStreamState";
 export * from "./ITimestamps";

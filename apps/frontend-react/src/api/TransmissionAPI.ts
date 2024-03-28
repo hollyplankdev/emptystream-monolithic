@@ -1,4 +1,5 @@
-import { ITransmission } from "@emptystream/shared";
+import { DbObject, ITransmission } from "@emptystream/shared";
+import axios from "axios";
 
 /**
  * Upload a new Transmission.
@@ -6,7 +7,7 @@ import { ITransmission } from "@emptystream/shared";
  * @param name The name of the new Transmission.
  * @param audio The MP3 file for the new Transmission. Will get split on the server.
  */
-const upload = async (name: string, audio: File): Promise<void> => {
+const upload = async (name: string, audio: File): Promise<DbObject<ITransmission>> => {
   // Format the data correctly
   const formData = new FormData();
   formData.append("name", name);
@@ -14,25 +15,43 @@ const upload = async (name: string, audio: File): Promise<void> => {
 
   // Upload the transmission
   // Send the request!
-  await new Promise<void>((resolve) => {
-    setTimeout(() => resolve(), 2000);
-  });
-  // const response = await fetch("http://localhost:3000/transmission", {
-  //   method: "POST",
-  //   body: formData,
-  // });
+  const response = await axios.postForm("http://localhost:3000/transmission", formData);
 
-  // TODO - re-enable actual POST request
   // TODO - Handle error from above
   // TODO - Flag that there may be new transmissions to display
+  const transmission: DbObject<ITransmission> = response.data;
+  return transmission;
 };
 
-const list = async (lastPageKey: number, pageSize?: number): Promise<ITransmission[]> => {
-  // TODO
-  return [];
+const list = async (
+  args: { lastPageKey?: number; pageSize?: number } = {},
+): Promise<{ pageKey: number; items: DbObject<ITransmission>[] }> => {
+  const response = await axios.get("http://localhost:3000/transmission", {
+    params: {
+      lastPageKey: args.lastPageKey,
+      pageSize: args.pageSize,
+    },
+  });
+
+  return response.data;
+};
+
+const all = async (): Promise<DbObject<ITransmission>[]> => {
+  let lastPageKey: number | undefined = undefined;
+  const foundItems: DbObject<ITransmission>[] = [];
+
+  do {
+    const response = await list({ lastPageKey });
+
+    lastPageKey = response.pageKey;
+    foundItems.push(...response.items);
+  } while (lastPageKey);
+
+  return foundItems;
 };
 
 export default {
   upload,
   list,
+  all,
 };

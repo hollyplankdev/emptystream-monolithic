@@ -1,6 +1,8 @@
+import { DbObject } from "./DbObject";
 import { ISplitOperation } from "./ISplitOperation";
 import { TransmissionStem } from "./TransmissionStem";
 
+/** A Transmission. */
 export interface ITransmission {
   /** The name describing this transmission. */
   name: string;
