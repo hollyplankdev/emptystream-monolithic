@@ -4,10 +4,14 @@
   "private": "true",
   "license": "BOBBO-NET Friendly MIT License",
   "scripts": {
-    "build": "tsc --build --verbose"
+    "clean": "pnpm run -r clean",
+    "build": "pnpm run -r build",
+    "test": "pnpm run -r test",
+    "lint": "eslint --ext js,ts,tsx ."
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "dependencies": {
     "typescript": "^5.4.2"
