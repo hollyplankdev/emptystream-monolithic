@@ -4,6 +4,8 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconMusic, IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import isURLSafe from "../../utils/isURLSafe";
+import TransmissionAPI from "../../api/TransmissionAPI";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface FormValues {
   file: File | null;
@@ -17,6 +19,14 @@ export interface UploadTransmissionProps {
 export default function UploadTransmission({ onComplete = undefined }: UploadTransmissionProps) {
   const [isLoading, { open: startLoadingDisplay, close: stopLoadingDisplay }] =
     useDisclosure(false);
+
+  // Setup a query mutation for uploading the transmission
+  const queryClient = useQueryClient();
+  const uploadMutation = useMutation({
+    mutationFn: (args: { name: string; audio: File }) =>
+      TransmissionAPI.upload(args.name, args.audio),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transmission", "list"] }),
+  });
 
   const form = useForm<FormValues>({
     initialValues: {
@@ -49,23 +59,8 @@ export default function UploadTransmission({ onComplete = undefined }: UploadTra
   const onFormSubmit = form.onSubmit(async () => {
     startLoadingDisplay(); // Show the loading spinner
 
-    // Construct the form-data object to POST
-    const formData = new FormData();
-    formData.append("name", form.values.name);
-    formData.append("audio", form.values.file as File);
-
-    // Send the request!
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 2000);
-    });
-    // const response = await fetch("http://localhost:3000/transmission", {
-    //   method: "POST",
-    //   body: formData,
-    // });
-
-    // TODO - re-enable actual POST request
-    // TODO - Handle error from above
-    // TODO - Flag that there may be new transmissions to display
+    // Upload the new Transmission
+    await uploadMutation.mutateAsync({ name: form.values.name, audio: form.values.file as File });
 
     stopLoadingDisplay(); // Hide the loading spinner
     form.reset(); // Clean form in case we wanna re-use it

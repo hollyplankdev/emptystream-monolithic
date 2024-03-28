@@ -2,6 +2,7 @@ import { Button, Drawer } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import styles from "./DeveloperPanel.module.css";
 import UploadTransmissionButton from "./UploadTransmissionButton";
+import TransmissionList from "./TransmissionList";
 
 export default function DeveloperPanel() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -16,6 +17,7 @@ export default function DeveloperPanel() {
         overlayProps={{ backgroundOpacity: 0.5, blur: 2 }}
       >
         <UploadTransmissionButton />
+        <TransmissionList />
       </Drawer>
 
       <Button className={styles.devPanelButton} onClick={open}>
