@@ -37,10 +37,11 @@ const list = async (
 };
 
 const all = async (): Promise<DbObject<ITransmission>[]> => {
-  let lastPageKey: number | undefined = undefined;
+  let lastPageKey: number | undefined;
   const foundItems: DbObject<ITransmission>[] = [];
 
   do {
+    // eslint-disable-next-line no-await-in-loop
     const response = await list({ lastPageKey });
 
     lastPageKey = response.pageKey;

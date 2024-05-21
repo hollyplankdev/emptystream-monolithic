@@ -11,7 +11,9 @@ function StemStatus({ transmission }: { transmission: ITransmission }) {
       return (
         <Group>
           {transmission.stems.map((stem) => (
-            <Text size="xs">{stem}</Text>
+            <Text key={stem} size="xs">
+              {stem}
+            </Text>
           ))}
         </Group>
       );

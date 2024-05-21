@@ -15,9 +15,9 @@ export default function TransmissionList() {
       <Text size="lg">Transmissions</Text>
       <Divider />
       <ul>
-        {query.data.map((transmission) => {
-          return <TransmissionListElement transmission={transmission} />;
-        })}
+        {query.data.map((transmission) => (
+          <TransmissionListElement key={transmission._id} transmission={transmission} />
+        ))}
       </ul>
     </>
   );
