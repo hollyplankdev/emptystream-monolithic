@@ -15,7 +15,7 @@ const upload = async (name: string, audio: File): Promise<DbObject<ITransmission
 
   // Upload the transmission
   // Send the request!
-  const response = await axios.postForm("http://localhost:3000/transmission", formData);
+  const response = await axios.postForm("transmission", formData);
 
   // TODO - Handle error from above
   // TODO - Flag that there may be new transmissions to display
@@ -26,7 +26,7 @@ const upload = async (name: string, audio: File): Promise<DbObject<ITransmission
 const list = async (
   args: { lastPageKey?: number; pageSize?: number } = {},
 ): Promise<{ pageKey: number; items: DbObject<ITransmission>[] }> => {
-  const response = await axios.get("http://localhost:3000/transmission", {
+  const response = await axios.get("transmission", {
     params: {
       lastPageKey: args.lastPageKey,
       pageSize: args.pageSize,
