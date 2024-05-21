@@ -1,8 +1,22 @@
-import { Box, Text, Group } from "@mantine/core";
 import { DbObject, ITransmission } from "@emptystream/shared";
+import { Box, Group, Loader, Text } from "@mantine/core";
+import { IconExclamationCircle, IconMusic } from "@tabler/icons-react";
 
 export interface TransmissionListElementProps {
   transmission: DbObject<ITransmission>;
+}
+
+function StemIcon({ transmission }: { transmission: ITransmission }) {
+  switch (transmission.splitOperation.status) {
+    case "complete":
+      return <IconMusic size={24} />;
+
+    case "failed":
+      return <IconExclamationCircle size={24} />;
+
+    default:
+      return <Loader size={24} />;
+  }
 }
 
 function StemStatus({ transmission }: { transmission: ITransmission }) {
@@ -28,10 +42,13 @@ function StemStatus({ transmission }: { transmission: ITransmission }) {
 
 export default function TransmissionListElement({ transmission }: TransmissionListElementProps) {
   return (
-    <Box mx="auto">
-      <Text size="lg">{transmission.name}</Text>
-      <Text size="xs">{transmission._id}</Text>
-      <StemStatus transmission={transmission} />
-    </Box>
+    <Group justify="flex-start">
+      <StemIcon transmission={transmission} />
+      <Box>
+        <Text size="lg">{transmission.name}</Text>
+        <Text size="xs">{transmission._id}</Text>
+        <StemStatus transmission={transmission} />
+      </Box>
+    </Group>
   );
 }
