@@ -10,7 +10,7 @@ export interface StreamTunerProps {
 }
 
 export function StreamTuner({ index = -1, holographic = false }: StreamTunerProps) {
-  const socketURL = "ws://localhost:3000/stream";
+  const socketURL = "/stream";
   const { streamState } = useStreamSocket({ websocketURL: socketURL });
   const [springStyles, springApi] = useSpring(() => ({
     from: { left: "0%" },

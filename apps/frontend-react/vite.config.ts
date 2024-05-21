@@ -12,13 +12,13 @@ export default defineConfig({
        * server.
        */
       "/transmission": {
-        target: "http://localhost:3000",
+        target: "http://localhost:3000/transmission",
         rewrite: (path) => path.replace(/^\/transmission/, ""),
       },
 
       /** Setup the frontend dev server so that it re-routes websockets to our backend dev server. */
       "/stream": {
-        target: "ws://localhost:3000",
+        target: "ws://localhost:3000/stream",
         rewrite: (path) => path.replace(/^\/stream/, ""),
         ws: true,
       },

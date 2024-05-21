@@ -7,7 +7,7 @@ export interface TransmissionAudioProps {
 }
 
 export function TransmissionAudio({ index = -1 }: TransmissionAudioProps) {
-  const socketURL = "ws://localhost:3000/stream";
+  const socketURL = "/stream";
   const { streamState } = useStreamSocket({ websocketURL: socketURL });
   const transmissionId = useRef<string>("");
   const transmissionStem = useRef<string>("");
@@ -31,7 +31,7 @@ export function TransmissionAudio({ index = -1 }: TransmissionAudioProps) {
     transmissionStem.current = transmission.stem;
 
     // Create the new howler object representing the audio for the transmission
-    const audioPath = `http://localhost:3000/transmission/${transmission.id}/${transmission.stem}`;
+    const audioPath = `transmission/${transmission.id}/${transmission.stem}`;
     console.log(`Loading ${audioPath}`);
     const newAudio = new Howl({ src: [audioPath], format: "mp3", loop: true });
     newAudio.volume(0);
