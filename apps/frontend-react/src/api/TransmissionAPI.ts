@@ -1,6 +1,12 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import axios from "axios";
 
+const get = async (id: string): Promise<DbObject<ITransmission>> => {
+  const response = await axios.get(`transmission/${id}`);
+
+  return response.data;
+};
+
 /**
  * Upload a new Transmission.
  *
@@ -55,4 +61,5 @@ export default {
   upload,
   list,
   all,
+  get,
 };

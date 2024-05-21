@@ -16,7 +16,7 @@ export default function TransmissionList() {
       <Divider />
       <ul>
         {query.data.map((transmission) => (
-          <TransmissionListElement key={transmission._id} transmission={transmission} />
+          <TransmissionListElement key={transmission._id} initialData={transmission} />
         ))}
       </ul>
     </>
