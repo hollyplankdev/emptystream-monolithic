@@ -78,7 +78,7 @@ export default function UploadTransmission({ onComplete = undefined }: UploadTra
           onDrop={onGoodFiles}
           onReject={onBadFiles}
           multiple={false}
-          accept={{ "audio/mpeg": [".mp3  "] }}
+          accept={{ "audio/mpeg": [".mp3"] }}
         >
           <Group justify="center" gap="x1" mih={80} style={{ pointerEvents: "none" }}>
             {/* When the hovered file is valid */}
