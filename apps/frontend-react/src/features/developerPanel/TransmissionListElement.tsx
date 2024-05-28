@@ -67,7 +67,7 @@ function TransmissionDetailsMenu({
   openFunc,
   closeFunc,
 }: {
-  transmission?: ITransmission;
+  transmission?: DbObject<ITransmission>;
   isOpened: boolean;
   openFunc: () => void;
   closeFunc: () => void;
@@ -80,7 +80,7 @@ function TransmissionDetailsMenu({
         <IconDots size="100%" stroke={2} />
       </ActionIcon>
       <Modal opened={isOpened} onClose={closeFunc} title={`Transmission: "${transmission.name}"`}>
-        <TransmissionDetails />
+        <TransmissionDetails id={transmission._id} initialData={transmission} />
       </Modal>
     </>
   );
