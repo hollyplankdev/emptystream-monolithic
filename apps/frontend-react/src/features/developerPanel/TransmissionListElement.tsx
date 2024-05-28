@@ -1,6 +1,6 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import { Group, Loader, Paper, Progress, Stack, Text } from "@mantine/core";
-import { IconExclamationCircle, IconMusic } from "@tabler/icons-react";
+import { ActionIcon, Group, Loader, Paper, Progress, Stack, Text } from "@mantine/core";
+import { IconDots, IconExclamationCircle, IconMusic } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import TransmissionAPI from "../../api/TransmissionAPI";
@@ -91,6 +91,9 @@ export default function TransmissionListElement({ initialData }: TransmissionLis
           <Text size="md">{transmission.name}</Text>
           <TransmissionProgress transmission={transmission} />
         </Stack>
+        <ActionIcon variant="transparent" color="white" size="md">
+          <IconDots size="100%" stroke={2} />
+        </ActionIcon>
       </Group>
     </Paper>
   );
