@@ -1,9 +1,10 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import { Box, Group, Loader, Text } from "@mantine/core";
+import { Group, Loader, Paper, Progress, Stack, Text } from "@mantine/core";
 import { IconExclamationCircle, IconMusic } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import TransmissionAPI from "../../api/TransmissionAPI";
+import styles from "./TransmissionListElement.module.css";
 
 export interface TransmissionListElementProps {
   initialData: DbObject<ITransmission>;
@@ -16,35 +17,31 @@ export interface TransmissionListElementProps {
 function StemIcon({ transmission }: { transmission: ITransmission }) {
   switch (transmission.splitOperation.status) {
     case "complete":
-      return <IconMusic size={24} />;
+      return <IconMusic size={20} />;
 
     case "failed":
-      return <IconExclamationCircle size={24} />;
+      return <IconExclamationCircle size={20} />;
 
     default:
-      return <Loader size={24} />;
+      return <Loader size={20} />;
   }
 }
 
-function StemStatus({ transmission }: { transmission: ITransmission }) {
-  switch (transmission.splitOperation.status) {
-    case "complete":
-      return (
-        <Group>
-          {transmission.stems.map((stem) => (
-            <Text key={stem} size="xs">
-              {stem}
-            </Text>
-          ))}
-        </Group>
-      );
+function TransmissionProgress({ transmission }: { transmission: ITransmission }) {
+  // If we're already done splitting, exit early
+  if (transmission.splitOperation.status === "complete") return undefined;
 
-    case "failed":
-      return <Text size="xs">Split Error @ {transmission.splitOperation.percentage}%</Text>;
+  const isError = transmission.splitOperation.status === "failed";
+  const color = isError ? "red" : "blue";
 
-    default:
-      return <Text size="xs">Split Progress {transmission.splitOperation.percentage}%</Text>;
-  }
+  return (
+    <Progress
+      h="5px"
+      value={transmission.splitOperation.percentage}
+      color={color}
+      animated={!isError}
+    />
+  );
 }
 
 //
@@ -87,13 +84,14 @@ export default function TransmissionListElement({ initialData }: TransmissionLis
   const transmission = useTransmission(initialData);
 
   return (
-    <Group justify="flex-start">
-      <StemIcon transmission={transmission} />
-      <Box>
-        <Text size="lg">{transmission.name}</Text>
-        <Text size="xs">{transmission._id}</Text>
-        <StemStatus transmission={transmission} />
-      </Box>
-    </Group>
+    <Paper withBorder radius={0} pl="xs" pr="xs" pt={1} pb={1} className={styles.elementButton}>
+      <Group justify="flex-start">
+        <StemIcon transmission={transmission} />
+        <Stack gap={0} flex={1} justify="center" mih="35px">
+          <Text size="md">{transmission.name}</Text>
+          <TransmissionProgress transmission={transmission} />
+        </Stack>
+      </Group>
+    </Paper>
   );
 }
