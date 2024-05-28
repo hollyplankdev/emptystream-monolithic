@@ -79,7 +79,7 @@ function TransmissionDetailsMenu({
       <ActionIcon onClick={openFunc} variant="transparent" color="white" size="md">
         <IconDots size="100%" stroke={2} />
       </ActionIcon>
-      <Modal opened={isOpened} onClose={closeFunc} title={`Transmission: "${transmission.name}"`}>
+      <Modal opened={isOpened} onClose={closeFunc}>
         <TransmissionDetails id={transmission._id} initialData={transmission} />
       </Modal>
     </>
