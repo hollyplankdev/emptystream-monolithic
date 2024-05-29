@@ -1,7 +1,6 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import TransmissionAPI from "../api/TransmissionAPI";
+import TransmissionQueries from "./TransmissionQueries";
 
 export interface UseQueryTransmissionProps {
   id: string;
@@ -12,13 +11,7 @@ export default function useQueryTransmission({ id, initialData }: UseQueryTransm
   const [refetchInterval, setRefetchInterval] = useState<number | false>(false);
 
   // Configure the query itself
-  const query = useQuery({
-    queryKey: ["transmission", "id", id],
-    queryFn: () => TransmissionAPI.get(id),
-    staleTime: 1000 * 60,
-    refetchInterval,
-    initialData,
-  });
+  const query = TransmissionQueries.useQuerySingle(id, { initialData, refetchInterval });
 
   // If we're still loading the query, EXIT EARLY
   if (!query.data) return undefined;

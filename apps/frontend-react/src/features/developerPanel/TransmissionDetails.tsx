@@ -4,6 +4,7 @@ import {
   Button,
   Divider,
   Group,
+  LoadingOverlay,
   Menu,
   Modal,
   SegmentedControl,
@@ -18,6 +19,7 @@ import { useState } from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import useQueryTransmission from "../../queries/useQueryTransmission";
+import TransmissionQueries from "../../queries/TransmissionQueries";
 
 //
 //  Local Components
@@ -80,11 +82,18 @@ function ConfirmDeletionModal({
   transmission,
   isOpen,
   close,
+  confirmDelete,
 }: {
   transmission: DbObject<ITransmission>;
   isOpen: boolean;
   close: () => void;
+  confirmDelete: () => void;
 }) {
+  const onClickDelete = () => {
+    close();
+    confirmDelete();
+  };
+
   return (
     <Modal opened={isOpen} onClose={close} centered withCloseButton={false}>
       <Stack>
@@ -92,10 +101,10 @@ function ConfirmDeletionModal({
         <Text>You can not undo this!</Text>
         <Divider />
         <Group justify="flex-start">
-          <Button variant="filled" flex={1}>
+          <Button variant="filled" flex={1} onClick={close}>
             Nevermind...
           </Button>
-          <Button variant="filled" color="red">
+          <Button variant="filled" color="red" onClick={onClickDelete}>
             Yes, delete!
           </Button>
         </Group>
@@ -104,7 +113,13 @@ function ConfirmDeletionModal({
   );
 }
 
-function SettingsMenu({ transmission }: { transmission?: DbObject<ITransmission> }) {
+function SettingsMenu({
+  onDelete,
+  transmission,
+}: {
+  onDelete: () => void;
+  transmission?: DbObject<ITransmission>;
+}) {
   const [
     isRemoveConfirmationOpen,
     { open: openRemoveConfirmation, close: closeRemoveConfirmation },
@@ -145,9 +160,14 @@ function SettingsMenu({ transmission }: { transmission?: DbObject<ITransmission>
         transmission={transmission}
         isOpen={isRemoveConfirmationOpen}
         close={closeRemoveConfirmation}
+        confirmDelete={onDelete}
       />
     </>
   );
+}
+
+function RemovingOverlay({ isRemoving }: { isRemoving: boolean }) {
+  return <LoadingOverlay visible={isRemoving} loaderProps={{ children: "Removing..." }} />;
 }
 
 //
@@ -155,22 +175,41 @@ function SettingsMenu({ transmission }: { transmission?: DbObject<ITransmission>
 //
 
 export interface TransmissionDetailsProps {
+  /** The known ID of the Transmission to display details about. */
   id: string;
+
+  /**
+   * The information that we currently know about this transmission, if there is any. The ID in this
+   * object should match the ID provided above.
+   */
   initialData?: DbObject<ITransmission>;
+
+  /** Called when the user chooses to delete this Transmission. */
+  onDelete?: () => void;
 }
 
-export default function TransmissionDetails({ id, initialData }: TransmissionDetailsProps) {
+export default function TransmissionDetails({
+  id,
+  initialData,
+  onDelete,
+}: TransmissionDetailsProps) {
+  const removeMutation = TransmissionQueries.useMutationRemove(id);
   const transmission = useQueryTransmission({ id, initialData });
-  // const transmission = undefined;
+
+  const onDeleteFromSettings = () => {
+    removeMutation.mutate();
+    if (onDelete) onDelete();
+  };
 
   return (
     <Stack>
+      <RemovingOverlay isRemoving={removeMutation.isPending} />
       <Group justify="space-between" align="flex-end">
         <Stack gap="xs">
           <NameField transmission={transmission} />
           <IdField id={id} />
         </Stack>
-        <SettingsMenu transmission={transmission} />
+        <SettingsMenu transmission={transmission} onDelete={onDeleteFromSettings} />
       </Group>
       <Divider />
       <StemPicker transmission={transmission} />

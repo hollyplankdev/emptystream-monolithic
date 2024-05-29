@@ -7,6 +7,10 @@ const get = async (id: string): Promise<DbObject<ITransmission>> => {
   return response.data;
 };
 
+const remove = async (id: string): Promise<void> => {
+  await axios.delete(`transmission/${id}`);
+};
+
 /**
  * Upload a new Transmission.
  *
@@ -62,4 +66,5 @@ export default {
   list,
   all,
   get,
+  remove,
 };
