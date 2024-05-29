@@ -1,6 +1,7 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import {
   ActionIcon,
+  Box,
   Button,
   Divider,
   Group,
@@ -28,7 +29,11 @@ import TransmissionQueries from "../../queries/TransmissionQueries";
 function NameField({ transmission }: { transmission?: ITransmission }) {
   if (!transmission) return <Skeleton height={45} radius="xl" />;
 
-  return <Title mih={45}>{transmission.name}</Title>;
+  return (
+    <Text mih={45} size="20pt" fw={700} truncate>
+      {transmission.name}
+    </Text>
+  );
 }
 
 function IdField({ id }: { id: string }) {
@@ -199,13 +204,13 @@ export default function TransmissionDetails({
   return (
     <Stack>
       <RemovingOverlay isRemoving={removeMutation.isPending} />
-      <Group justify="space-between" align="flex-end">
-        <Stack gap="xs">
-          <NameField transmission={transmission} />
+      <Stack gap={0}>
+        <NameField transmission={transmission} />
+        <Group justify="space-between" align="flex-end">
           <IdField id={id} />
-        </Stack>
-        <SettingsMenu transmission={transmission} onDelete={removeMutation.mutate} />
-      </Group>
+          <SettingsMenu transmission={transmission} onDelete={removeMutation.mutate} />
+        </Group>
+      </Stack>
       <Divider />
       <StemPicker transmission={transmission} />
     </Stack>

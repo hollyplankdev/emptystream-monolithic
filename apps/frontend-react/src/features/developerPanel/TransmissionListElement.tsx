@@ -1,6 +1,7 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import {
   ActionIcon,
+  Box,
   Group,
   Loader,
   Modal,
@@ -41,7 +42,13 @@ function StemIcon({ transmission }: { transmission?: ITransmission }) {
 
 function TransmissionName({ transmission }: { transmission?: ITransmission }) {
   if (!transmission) return <Skeleton height={8} />;
-  return <Text size="md">{transmission.name}</Text>;
+  return (
+    <Box maw={300}>
+      <Text size="md" truncate="end">
+        {transmission.name}
+      </Text>
+    </Box>
+  );
 }
 
 function TransmissionProgress({ transmission }: { transmission?: ITransmission }) {
