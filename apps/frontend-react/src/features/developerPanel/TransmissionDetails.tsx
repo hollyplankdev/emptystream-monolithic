@@ -78,7 +78,7 @@ function SettingsMenu() {
     <Menu position="bottom-start" shadow="md">
       {/* The button that activates the visibility of this menu */}
       <Menu.Target>
-        <ActionIcon>
+        <ActionIcon size="lg" variant="default">
           <IconAdjustments />
         </ActionIcon>
       </Menu.Target>
