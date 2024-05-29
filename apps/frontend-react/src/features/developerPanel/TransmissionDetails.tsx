@@ -28,7 +28,7 @@ import TransmissionQueries from "../../queries/TransmissionQueries";
 function NameField({ transmission }: { transmission?: ITransmission }) {
   if (!transmission) return <Skeleton height={45} radius="xl" />;
 
-  return <Title h={45}>{transmission.name}</Title>;
+  return <Title mih={45}>{transmission.name}</Title>;
 }
 
 function IdField({ id }: { id: string }) {
