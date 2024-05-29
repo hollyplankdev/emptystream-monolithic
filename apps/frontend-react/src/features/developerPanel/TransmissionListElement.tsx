@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDots, IconExclamationCircle, IconMusic } from "@tabler/icons-react";
-import useQueryTransmission from "../../queries/useQueryTransmission";
+import useQueryTransmission from "../../hooks/useQueryTransmission";
 import TransmissionDetails from "./TransmissionDetails";
 import styles from "./TransmissionListElement.module.css";
 

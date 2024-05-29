@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { useStreamSocket } from "../features/streamSocket/useStreamSocket";
+import { useStreamSocket } from "../hooks/useStreamSocket";
 
 /** @returns The URL of the websocket stream */
 export function getUrl() {

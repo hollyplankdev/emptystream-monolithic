@@ -1,6 +1,6 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import { useState } from "react";
-import TransmissionQueries from "./TransmissionQueries";
+import TransmissionQueries from "../queries/TransmissionQueries";
 
 export interface UseQueryTransmissionProps {
   id: string;
