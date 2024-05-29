@@ -1,15 +1,18 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import {
   ActionIcon,
+  Button,
   Divider,
   Group,
   Menu,
+  Modal,
   SegmentedControl,
   Skeleton,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { IconAdjustments, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
@@ -73,23 +76,77 @@ function StemPicker({ transmission }: { transmission?: DbObject<ITransmission> }
   );
 }
 
-function SettingsMenu() {
+function ConfirmDeletionModal({
+  transmission,
+  isOpen,
+  close,
+}: {
+  transmission: DbObject<ITransmission>;
+  isOpen: boolean;
+  close: () => void;
+}) {
   return (
-    <Menu position="bottom-start" shadow="md">
-      {/* The button that activates the visibility of this menu */}
-      <Menu.Target>
-        <ActionIcon size="lg" variant="default">
-          <IconAdjustments />
-        </ActionIcon>
-      </Menu.Target>
+    <Modal opened={isOpen} onClose={close} centered withCloseButton={false}>
+      <Stack>
+        <Title order={2}>{`Remove Transmission ${transmission.name}?`}</Title>
+        <Text>You can not undo this!</Text>
+        <Divider />
+        <Group justify="flex-start">
+          <Button variant="filled" flex={1}>
+            Nevermind...
+          </Button>
+          <Button variant="filled" color="red">
+            Yes, delete!
+          </Button>
+        </Group>
+      </Stack>
+    </Modal>
+  );
+}
 
-      {/* The contents of the menu dropdown */}
-      <Menu.Dropdown>
-        <Menu.Item color="red" leftSection={<IconTrash size={20} />}>
-          Delete Transmission
-        </Menu.Item>
-      </Menu.Dropdown>
-    </Menu>
+function SettingsMenu({ transmission }: { transmission?: DbObject<ITransmission> }) {
+  const [
+    isRemoveConfirmationOpen,
+    { open: openRemoveConfirmation, close: closeRemoveConfirmation },
+  ] = useDisclosure(false);
+
+  /**
+   * The width & height of the settings button. We use a variable for this to make sure that the
+   * skeleton's size is the same.
+   */
+  const buttonSize = 34;
+
+  // If we don't have a transmission, just display a skeleton
+  if (!transmission) return <Skeleton height={buttonSize} width={buttonSize} />;
+
+  /** The assembled menu + button. */
+  return (
+    <>
+      <Menu position="bottom-start" shadow="md">
+        {/* The button that activates the visibility of this menu */}
+        <Menu.Target>
+          <ActionIcon size={buttonSize} variant="default">
+            <IconAdjustments />
+          </ActionIcon>
+        </Menu.Target>
+
+        {/* The contents of the menu dropdown */}
+        <Menu.Dropdown>
+          <Menu.Item
+            color="red"
+            leftSection={<IconTrash size={20} />}
+            onClick={openRemoveConfirmation}
+          >
+            Delete Transmission
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+      <ConfirmDeletionModal
+        transmission={transmission}
+        isOpen={isRemoveConfirmationOpen}
+        close={closeRemoveConfirmation}
+      />
+    </>
   );
 }
 
@@ -113,7 +170,7 @@ export default function TransmissionDetails({ id, initialData }: TransmissionDet
           <NameField transmission={transmission} />
           <IdField id={id} />
         </Stack>
-        <SettingsMenu />
+        <SettingsMenu transmission={transmission} />
       </Group>
       <Divider />
       <StemPicker transmission={transmission} />
