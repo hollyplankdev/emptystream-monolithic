@@ -49,7 +49,10 @@ function useQueryAll({ initialData }: { initialData?: DbObject<ITransmission>[] 
 //
 
 /** Mutation that removes a transmission from the API. */
-function useMutationRemove(id: string, { onSettled }: { onSettled?: () => void } = {}) {
+function useMutationRemove(
+  id: string,
+  { onSuccess, onError }: { onSuccess?: () => void; onError?: (err: Error) => void } = {},
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -57,8 +60,9 @@ function useMutationRemove(id: string, { onSettled }: { onSettled?: () => void }
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: allTransmissionKey() });
       queryClient.invalidateQueries({ queryKey: singleTransmissionKey(id) });
+      if (onSuccess) onSuccess();
     },
-    onSettled,
+    onError,
   });
 }
 

@@ -193,13 +193,8 @@ export default function TransmissionDetails({
   initialData,
   onDelete,
 }: TransmissionDetailsProps) {
-  const removeMutation = TransmissionQueries.useMutationRemove(id);
+  const removeMutation = TransmissionQueries.useMutationRemove(id, { onSuccess: onDelete });
   const transmission = useQueryTransmission({ id, initialData });
-
-  const onDeleteFromSettings = () => {
-    removeMutation.mutate();
-    if (onDelete) onDelete();
-  };
 
   return (
     <Stack>
@@ -209,7 +204,7 @@ export default function TransmissionDetails({
           <NameField transmission={transmission} />
           <IdField id={id} />
         </Stack>
-        <SettingsMenu transmission={transmission} onDelete={onDeleteFromSettings} />
+        <SettingsMenu transmission={transmission} onDelete={removeMutation.mutate} />
       </Group>
       <Divider />
       <StemPicker transmission={transmission} />

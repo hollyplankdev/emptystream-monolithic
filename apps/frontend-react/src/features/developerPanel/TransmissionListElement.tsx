@@ -80,7 +80,11 @@ function TransmissionDetailsMenu({
         <IconDots size="100%" stroke={2} />
       </ActionIcon>
       <Modal opened={isOpened} onClose={closeFunc}>
-        <TransmissionDetails id={transmission._id} initialData={transmission} />
+        <TransmissionDetails
+          id={transmission._id}
+          initialData={transmission}
+          onDelete={closeFunc}
+        />
       </Modal>
     </>
   );
