@@ -1,9 +1,20 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import { Divider, Paper, SegmentedControl, Skeleton, Stack, Text, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Divider,
+  Group,
+  Menu,
+  SegmentedControl,
+  Skeleton,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { IconAdjustments, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
-import useQueryTransmission from "../../queries/useQueryTransmission";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
+import useQueryTransmission from "../../queries/useQueryTransmission";
 
 //
 //  Local Components
@@ -62,6 +73,26 @@ function StemPicker({ transmission }: { transmission?: DbObject<ITransmission> }
   );
 }
 
+function SettingsMenu() {
+  return (
+    <Menu position="bottom-start" shadow="md">
+      {/* The button that activates the visibility of this menu */}
+      <Menu.Target>
+        <ActionIcon>
+          <IconAdjustments />
+        </ActionIcon>
+      </Menu.Target>
+
+      {/* The contents of the menu dropdown */}
+      <Menu.Dropdown>
+        <Menu.Item color="red" leftSection={<IconTrash size={20} />}>
+          Delete Transmission
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+}
+
 //
 //  Exports
 //
@@ -77,10 +108,13 @@ export default function TransmissionDetails({ id, initialData }: TransmissionDet
 
   return (
     <Stack>
-      <Stack gap="xs">
-        <NameField transmission={transmission} />
-        <IdField id={id} />
-      </Stack>
+      <Group justify="space-between" align="flex-end">
+        <Stack gap="xs">
+          <NameField transmission={transmission} />
+          <IdField id={id} />
+        </Stack>
+        <SettingsMenu />
+      </Group>
       <Divider />
       <StemPicker transmission={transmission} />
     </Stack>
