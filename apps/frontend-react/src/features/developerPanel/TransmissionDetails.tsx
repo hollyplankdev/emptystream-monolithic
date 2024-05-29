@@ -102,7 +102,9 @@ function ConfirmDeletionModal({
   return (
     <Modal opened={isOpen} onClose={close} centered withCloseButton={false}>
       <Stack>
-        <Title order={2}>{`Remove Transmission ${transmission.name}?`}</Title>
+        <Title order={2}>Remove Transmission?</Title>
+        <Text>This will remove the following transmission:</Text>
+        <Text style={{ wordBreak: "break-word" }}>{transmission.name}</Text>
         <Text>You can not undo this!</Text>
         <Divider />
         <Group justify="flex-start">
