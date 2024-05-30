@@ -1,9 +1,8 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import { ActionIcon, Group, Modal, Paper, Stack } from "@mantine/core";
+import { Group, Paper, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconDots } from "@tabler/icons-react";
 import TransmissionQueries from "../../queries/TransmissionQueries";
-import TransmissionDetails from "./TransmissionDetails";
+import TransmissionDetailsMenu from "./TransmissionDetailsMenu";
 import styles from "./TransmissionListElement.module.css";
 import TransmissionName from "./TransmissionName";
 import TransmissionSplitProgress from "./TransmissionSplitProgress";
@@ -11,39 +10,6 @@ import TransmissionStemIcon from "./TransmissionStemIcon";
 
 export interface TransmissionListElementProps {
   initialData: DbObject<ITransmission>;
-}
-
-//
-//  Sub-Elements
-//
-
-function TransmissionDetailsMenu({
-  transmission,
-  isOpened,
-  openFunc,
-  closeFunc,
-}: {
-  transmission?: DbObject<ITransmission>;
-  isOpened: boolean;
-  openFunc: () => void;
-  closeFunc: () => void;
-}) {
-  if (!transmission) return undefined;
-
-  return (
-    <>
-      <ActionIcon onClick={openFunc} variant="transparent" color="white" size="md">
-        <IconDots size="100%" stroke={2} />
-      </ActionIcon>
-      <Modal opened={isOpened} onClose={closeFunc}>
-        <TransmissionDetails
-          id={transmission._id}
-          initialData={transmission}
-          onDelete={closeFunc}
-        />
-      </Modal>
-    </>
-  );
 }
 
 //
