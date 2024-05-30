@@ -159,10 +159,6 @@ function SettingsMenu({
   );
 }
 
-function RemovingOverlay({ isRemoving }: { isRemoving: boolean }) {
-  return <LoadingOverlay visible={isRemoving} loaderProps={{ children: "Removing..." }} />;
-}
-
 //
 //  Exports
 //
@@ -191,7 +187,13 @@ export default function TransmissionDetails({
 
   return (
     <Stack>
-      <RemovingOverlay isRemoving={removeMutation.isPending} />
+      {/* The loading overlay to display while this transmission is being deleted. */}
+      <LoadingOverlay
+        visible={removeMutation.isPending}
+        loaderProps={{ children: "Removing..." }}
+      />
+
+      {/* Information about this Transmission */}
       <Stack gap={0}>
         <TransmissionName
           transmission={transmission}
