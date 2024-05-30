@@ -25,7 +25,12 @@ export default function TransmissionListElement({ initialData }: TransmissionLis
       <Group justify="flex-start">
         <TransmissionStemIcon transmission={transmission} />
         <Stack gap={0} flex={1} justify="center" mih="35px">
-          <TransmissionName transmission={transmission} />
+          <TransmissionName
+            transmission={transmission}
+            fontSize="md"
+            fontWeight={400}
+            skeletonHeight={8}
+          />
           <TransmissionSplitProgress transmission={transmission} />
         </Stack>
         <TransmissionDetailsMenu

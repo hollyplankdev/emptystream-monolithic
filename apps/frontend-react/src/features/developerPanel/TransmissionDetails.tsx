@@ -19,20 +19,11 @@ import { useState } from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import TransmissionQueries from "../../queries/TransmissionQueries";
+import TransmissionName from "./TransmissionName";
 
 //
 //  Local Components
 //
-
-function NameField({ transmission }: { transmission?: ITransmission }) {
-  if (!transmission) return <Skeleton height={45} radius="xl" />;
-
-  return (
-    <Text mih={45} size="20pt" fw={700} truncate>
-      {transmission.name}
-    </Text>
-  );
-}
 
 function IdField({ id }: { id: string }) {
   return <Text>{id}</Text>;
@@ -205,7 +196,12 @@ export default function TransmissionDetails({
     <Stack>
       <RemovingOverlay isRemoving={removeMutation.isPending} />
       <Stack gap={0}>
-        <NameField transmission={transmission} />
+        <TransmissionName
+          transmission={transmission}
+          fontSize="20pt"
+          fontWeight={700}
+          skeletonHeight={45}
+        />
         <Group justify="space-between" align="flex-end">
           <IdField id={id} />
           <SettingsMenu transmission={transmission} onDelete={removeMutation.mutate} />

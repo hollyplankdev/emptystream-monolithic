@@ -9,7 +9,7 @@ import TransmissionUploadModal from "./TransmissionUploadModal";
 //  Local Components
 //
 
-function TransmissionMenu() {
+function TransmissionDeveloperMenu() {
   const [isUploadModalOpen, { open: openUploadModal, close: closeUploadModal }] =
     useDisclosure(false);
 
@@ -52,7 +52,7 @@ export default function DeveloperPanel() {
         <Stack>
           <Group justify="space-between">
             <Title order={2}>Transmissions</Title>
-            <TransmissionMenu />
+            <TransmissionDeveloperMenu />
           </Group>
           <Divider />
           <TransmissionList />

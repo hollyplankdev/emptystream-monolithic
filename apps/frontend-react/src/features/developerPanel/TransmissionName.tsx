@@ -1,19 +1,28 @@
 import { ITransmission } from "@emptystream/shared";
-import { Box, Skeleton, Text } from "@mantine/core";
+import { Skeleton, SkeletonProps, Text, TextProps } from "@mantine/core";
 
-// TODO - allow supporting different sizes
+//
+//  Exports
+//
 
 export interface TransmissionNameProps {
   transmission?: ITransmission;
+  fontSize?: TextProps["size"];
+  fontWeight?: TextProps["fw"];
+  skeletonHeight?: SkeletonProps["height"];
 }
 
-export default function TransmissionName({ transmission }: TransmissionNameProps) {
-  if (!transmission) return <Skeleton height={8} />;
+export default function TransmissionName({
+  transmission,
+  fontSize,
+  fontWeight,
+  skeletonHeight,
+}: TransmissionNameProps) {
+  if (!transmission) return <Skeleton height={skeletonHeight} radius="xl" />;
+
   return (
-    <Box maw={300}>
-      <Text size="md" truncate="end">
-        {transmission.name}
-      </Text>
-    </Box>
+    <Text size={fontSize} mih={skeletonHeight} fw={fontWeight} style={{ wordBreak: "break-word" }}>
+      {transmission.name}
+    </Text>
   );
 }
