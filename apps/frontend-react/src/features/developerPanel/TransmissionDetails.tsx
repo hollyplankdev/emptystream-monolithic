@@ -20,14 +20,11 @@ import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import TransmissionQueries from "../../queries/TransmissionQueries";
 import TransmissionName from "./TransmissionName";
+import DatabaseId from "./DatabaseId";
 
 //
 //  Local Components
 //
-
-function IdField({ id }: { id: string }) {
-  return <Text>{id}</Text>;
-}
 
 function StemPlayer({
   transmission,
@@ -203,7 +200,7 @@ export default function TransmissionDetails({
           skeletonHeight={45}
         />
         <Group justify="space-between" align="flex-end">
-          <IdField id={id} />
+          <DatabaseId id={id} />
           <SettingsMenu transmission={transmission} onDelete={removeMutation.mutate} />
         </Group>
       </Stack>
