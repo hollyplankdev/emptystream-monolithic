@@ -1,7 +1,6 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import {
   ActionIcon,
-  Box,
   Button,
   Divider,
   Group,
@@ -19,7 +18,6 @@ import { IconAdjustments, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import useQueryTransmission from "../../hooks/useQueryTransmission";
 import TransmissionQueries from "../../queries/TransmissionQueries";
 
 //
@@ -201,7 +199,7 @@ export default function TransmissionDetails({
   onDelete,
 }: TransmissionDetailsProps) {
   const removeMutation = TransmissionQueries.useMutationRemove(id, { onSuccess: onDelete });
-  const transmission = useQueryTransmission({ id, initialData });
+  const transmission = TransmissionQueries.useQuerySingle(id, { initialData }).data;
 
   return (
     <Stack>

@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDots, IconExclamationCircle, IconMusic } from "@tabler/icons-react";
-import useQueryTransmission from "../../hooks/useQueryTransmission";
+import TransmissionQueries from "../../queries/TransmissionQueries";
 import TransmissionDetails from "./TransmissionDetails";
 import styles from "./TransmissionListElement.module.css";
 
@@ -102,7 +102,7 @@ function TransmissionDetailsMenu({
 //
 
 export default function TransmissionListElement({ initialData }: TransmissionListElementProps) {
-  const transmission = useQueryTransmission({ id: initialData._id, initialData });
+  const transmission = TransmissionQueries.useQuerySingle(initialData._id, { initialData }).data;
   const [detailsOpened, { open: openDetails, close: closeDetails }] = useDisclosure(false);
 
   return (
