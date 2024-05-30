@@ -26,5 +26,6 @@
       "**/*.less",
       "**/node_modules/@mantine/core/styles.css",
     ],
+    "cSpell.words": ["emptystream", "esbenp", "mantine", "reduxjs", "tabler", "tanstack"],
   },
 }
