@@ -2,9 +2,17 @@ import { ITransmission } from "@emptystream/shared";
 import { Progress } from "@mantine/core";
 
 export interface TransmissionSplitProgressProps {
+  /**
+   * OPTIONAL - The transmission to display the split progress for. If not provided, the component
+   * will not render.
+   */
   transmission?: ITransmission;
 }
 
+/**
+ * A progress bar that shows the state of a Transmission's ongoing split operation. Doesn't render
+ * if there's no transmission or if the split operation is complete.
+ */
 export default function TransmissionSplitProgress({
   transmission,
 }: TransmissionSplitProgressProps) {

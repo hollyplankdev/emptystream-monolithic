@@ -4,9 +4,17 @@ import { useState } from "react";
 import TransmissionStemPlayer from "./TransmissionStemPlayer";
 
 export interface TransmissionStemPickerProps {
+  /**
+   * OPTIONAL - The transmission to pick stems from. If not provided, the component will render as a
+   * skeleton.
+   */
   transmission?: DbObject<ITransmission>;
 }
 
+/**
+ * @returns A segmented control configured to allow for picking between different stems and
+ *   displaying a player for each one. Supports being rendered as a skeleton.
+ */
 export default function TransmissionStemPicker({ transmission }: TransmissionStemPickerProps) {
   const [pickedStem, setPickedStem] = useState("source");
 

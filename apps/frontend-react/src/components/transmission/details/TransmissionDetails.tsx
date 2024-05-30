@@ -24,6 +24,7 @@ export interface TransmissionDetailsProps {
   onDelete?: () => void;
 }
 
+/** @returns All details about a Transmission. Supports being rendered as a skeleton. */
 export default function TransmissionDetails({
   id,
   initialData,

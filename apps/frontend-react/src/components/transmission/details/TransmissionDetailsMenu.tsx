@@ -5,10 +5,20 @@ import { IconAdjustments, IconTrash } from "@tabler/icons-react";
 import TransmissionConfirmDeleteModal from "../TransmissionConfirmDeleteModal";
 
 export interface TransmissionDetailsMenuProps {
-  onDelete: () => void;
+  /**
+   * OPTIONAL - The transmission that this menu can act on. If not provided, the component will
+   * render as a skeleton.
+   */
   transmission?: DbObject<ITransmission>;
+
+  /** Called when the user wants to delete the Transmission. */
+  onDelete: () => void;
 }
 
+/**
+ * @returns A menu for `TransmissionDetails` that allows the user to act on the Transmission.
+ *   Supports being rendered as a skeleton.
+ */
 export default function TransmissionDetailsMenu({
   onDelete,
   transmission,

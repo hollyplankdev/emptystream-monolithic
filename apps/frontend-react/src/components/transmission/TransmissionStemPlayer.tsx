@@ -3,10 +3,20 @@ import { Skeleton } from "@mantine/core";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 
 export interface TransmissionStemPlayerProps {
+  /**
+   * OPTIONAL - The transmission containing the stem to play. If not provided, the component will
+   * render as a skeleton.
+   */
   transmission?: DbObject<ITransmission>;
+
+  /** The name of the stem to present an audio player for. */
   stem: string;
 }
 
+/**
+ * @returns An audio player configured to play specific stems from a Transmission. Supports being
+ *   rendered as a skeleton.
+ */
 export default function TransmissionStemPlayer({
   transmission,
   stem,

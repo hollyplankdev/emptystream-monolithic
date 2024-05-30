@@ -1,5 +1,6 @@
 import styles from "./VolumeSlider.module.css";
 
+/** @returns A basic volume slider. */
 export default function VolumeSlider() {
   return (
     <div className={styles.container}>

@@ -9,9 +9,14 @@ import styles from "./TransmissionListElement.module.css";
 import TransmissionListElementMenu from "./TransmissionListElementMenu";
 
 export interface TransmissionListElementProps {
+  /** The initial data to populate this element with. */
   initialData: DbObject<ITransmission>;
 }
 
+/**
+ * @returns An element of TransmissionList that shows a single Transmission and the Transmission's
+ *   current state.
+ */
 export default function TransmissionListElement({ initialData }: TransmissionListElementProps) {
   const transmission = useTransmissionQuerySingle(initialData._id, { initialData }).data;
   const [detailsOpened, { open: openDetails, close: closeDetails }] = useDisclosure(false);

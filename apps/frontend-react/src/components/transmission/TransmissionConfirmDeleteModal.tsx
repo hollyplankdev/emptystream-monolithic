@@ -2,12 +2,20 @@ import { DbObject, ITransmission } from "@emptystream/shared";
 import ConfirmationModal from "../ConfirmationModal";
 
 export interface TransmissionConfirmDeleteModalProps {
+  /** The transmission to confirm that we want to delete. */
   transmission: DbObject<ITransmission>;
+
+  /** Is this modal open? */
   isOpen: boolean;
+
+  /** A function called when this modal should be closed. Called both on confirm or cancel. */
   close: () => void;
+
+  /** A function called when the user confirms that they want to delete the transmission. */
   confirmDelete: () => void;
 }
 
+/** @returns A modal asking the user to confirm if they really want to delete a Transmission. */
 export default function TransmissionConfirmDeleteModal({
   transmission,
   isOpen,

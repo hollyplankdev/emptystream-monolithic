@@ -7,22 +7,22 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiCreateTransmission } from "../../../api/transmission";
 import isURLSafe from "../../../utils/isURLSafe";
 
+/** Values to store in the Transmission creation form. */
 interface FormValues {
+  /** The MP3 file of the new Transmission's source stem. */
   file: File | null;
+
+  /** The name to use for the new Transmission. */
   name: string;
 }
 
-//
-//  Component
-//
-
 export interface UploadTransmissionProps {
-  onComplete?: Function;
+  /** Called when the Transmission has been successfully uploaded to the API. */
+  onComplete?: () => void;
 }
 
-export default function TransmissionUploadForm({
-  onComplete = undefined,
-}: UploadTransmissionProps) {
+/** @returns A form that allows the user to create and upload a new Transmission. */
+export default function TransmissionUploadForm({ onComplete }: UploadTransmissionProps) {
   const [isLoading, { open: startLoadingDisplay, close: stopLoadingDisplay }] =
     useDisclosure(false);
 

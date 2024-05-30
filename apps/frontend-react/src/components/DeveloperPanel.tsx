@@ -9,6 +9,10 @@ import TransmissionUploadModal from "./transmission/upload/TransmissionUploadMod
 //  Local Components
 //
 
+/**
+ * @returns A menu that presents actions to take on Transmissions. Allows for uploading new
+ *   transmissions.
+ */
 function TransmissionDeveloperMenu() {
   const [isUploadModalOpen, { open: openUploadModal, close: closeUploadModal }] =
     useDisclosure(false);
@@ -37,6 +41,10 @@ function TransmissionDeveloperMenu() {
 //  Exports
 //
 
+/**
+ * @returns A button that opens a drawer containing developer tools. Developers can manage
+ *   Transmissions via this panel.
+ */
 export default function DeveloperPanel() {
   const [opened, { open, close }] = useDisclosure(false);
 
