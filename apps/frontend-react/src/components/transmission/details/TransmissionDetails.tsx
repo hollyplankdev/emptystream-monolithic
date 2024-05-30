@@ -4,7 +4,7 @@ import "react-h5-audio-player/lib/styles.css";
 import {
   useTransmissionMutationRemove,
   useTransmissionQuerySingle,
-} from "../../../queries/TransmissionQueries";
+} from "../../../queries/transmission";
 import DatabaseId from "../../DatabaseId";
 import TransmissionName from "../TransmissionName";
 import TransmissionStemPicker from "../TransmissionStemPicker";

@@ -5,7 +5,7 @@ import {
   apiGetTransmission,
   apiListAllTransmissions,
   apiRemoveTransmission,
-} from "../api/TransmissionAPI";
+} from "../api/transmission";
 
 //
 //  Keys

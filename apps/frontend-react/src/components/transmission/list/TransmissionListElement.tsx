@@ -1,7 +1,7 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import { Group, Paper, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useTransmissionQuerySingle } from "../../../queries/TransmissionQueries";
+import { useTransmissionQuerySingle } from "../../../queries/transmission";
 import TransmissionName from "../TransmissionName";
 import TransmissionSplitProgress from "../TransmissionSplitProgress";
 import TransmissionStemIcon from "../TransmissionStemIcon";

@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import { useTransmissionQueryAll } from "../../../queries/TransmissionQueries";
+import { useTransmissionQueryAll } from "../../../queries/transmission";
 import TransmissionListElement from "./TransmissionListElement";
 
 export default function TransmissionList() {

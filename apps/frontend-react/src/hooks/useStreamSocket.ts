@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
-import StreamAPI from "../api/StreamAPI";
+import StreamAPI from "../api/stream";
 
 export interface StreamSocketState {
   tunings: Map<number, IChannelTuning>;
