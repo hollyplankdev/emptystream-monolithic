@@ -9,10 +9,10 @@ import axios from "axios";
  * @returns The Transmission with matching ID.
  * @throws AxiosError if result is non-200 status code.
  */
-const get = async (id: string): Promise<DbObject<ITransmission>> => {
+export async function apiGetTransmission(id: string): Promise<DbObject<ITransmission>> {
   const response = await axios.get(`transmission/${id}`);
   return response.data;
-};
+}
 
 /**
  * Makes a request removing a single Transmission from the API, by it's ID. Not intended to be used
@@ -21,9 +21,9 @@ const get = async (id: string): Promise<DbObject<ITransmission>> => {
  * @param id The id of the transmission to remove.
  * @throws AxiosError if result is non-200 status code.
  */
-const remove = async (id: string): Promise<void> => {
+export async function apiRemoveTransmission(id: string): Promise<void> {
   await axios.delete(`transmission/${id}`);
-};
+}
 
 /**
  * Makes a request creating a new Transmission in the API. Not intended to be used directly!
@@ -34,7 +34,10 @@ const remove = async (id: string): Promise<void> => {
  * @returns The newly created Transmission.
  * @throws AxiosError if result is non-200 status code.
  */
-const create = async (name: string, audio: File): Promise<DbObject<ITransmission>> => {
+export async function apiCreateTransmission(
+  name: string,
+  audio: File,
+): Promise<DbObject<ITransmission>> {
   // Format the data correctly
   const formData = new FormData();
   formData.append("name", name);
@@ -48,7 +51,7 @@ const create = async (name: string, audio: File): Promise<DbObject<ITransmission
   // TODO - Flag that there may be new transmissions to display
   const transmission: DbObject<ITransmission> = response.data;
   return transmission;
-};
+}
 
 /**
  * Makes a request getting a paginated list result of all Transmissions from the API. Not intended
@@ -61,9 +64,9 @@ const create = async (name: string, audio: File): Promise<DbObject<ITransmission
  *   page.
  * @throws AxiosError if result is non-200 status code.
  */
-const listPage = async (
+export async function apiListTransmissionPage(
   args: { lastPageKey?: number; pageSize?: number } = {},
-): Promise<{ pageKey: number; items: DbObject<ITransmission>[] }> => {
+): Promise<{ pageKey: number; items: DbObject<ITransmission>[] }> {
   const response = await axios.get("transmission", {
     params: {
       lastPageKey: args.lastPageKey,
@@ -72,7 +75,7 @@ const listPage = async (
   });
 
   return response.data;
-};
+}
 
 /**
  * Makes a request getting a list of ALL Transmissions from the API. Not intended to be used
@@ -81,25 +84,17 @@ const listPage = async (
  * @returns A list of every Transmission known to exist.
  * @throws AxiosError if result is non-200 status code.
  */
-const listAll = async (): Promise<DbObject<ITransmission>[]> => {
+export async function apiListAllTransmissions(): Promise<DbObject<ITransmission>[]> {
   let lastPageKey: number | undefined;
   const foundItems: DbObject<ITransmission>[] = [];
 
   do {
     // eslint-disable-next-line no-await-in-loop
-    const response = await listPage({ lastPageKey });
+    const response = await apiListTransmissionPage({ lastPageKey });
 
     lastPageKey = response.pageKey;
     foundItems.push(...response.items);
   } while (lastPageKey);
 
   return foundItems;
-};
-
-export default {
-  create,
-  listPage,
-  listAll,
-  get,
-  remove,
-};
+}

@@ -1,7 +1,11 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import TransmissionAPI from "../api/TransmissionAPI";
+import {
+  apiGetTransmission,
+  apiListAllTransmissions,
+  apiRemoveTransmission,
+} from "../api/TransmissionAPI";
 
 //
 //  Keys
@@ -51,7 +55,7 @@ export function useTransmissionQuerySingle(
   // Make the actual query
   const query = useQuery({
     queryKey: singleTransmissionKey(id),
-    queryFn: () => TransmissionAPI.get(id),
+    queryFn: () => apiGetTransmission(id),
     staleTime: 1000 * 60,
     initialData,
     refetchInterval,
@@ -91,7 +95,7 @@ export function useTransmissionQueryAll(options: { initialData?: DbObject<ITrans
 
   return useQuery({
     queryKey: allTransmissionKey(),
-    queryFn: TransmissionAPI.listAll,
+    queryFn: apiListAllTransmissions,
     initialData,
   });
 }
@@ -118,7 +122,7 @@ export function useTransmissionMutationRemove(
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => TransmissionAPI.remove(id),
+    mutationFn: () => apiRemoveTransmission(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: allTransmissionKey() });
       queryClient.invalidateQueries({ queryKey: singleTransmissionKey(id) });

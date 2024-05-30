@@ -4,7 +4,7 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconMusic, IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import TransmissionAPI from "../../../api/TransmissionAPI";
+import { apiCreateTransmission } from "../../../api/TransmissionAPI";
 import isURLSafe from "../../../utils/isURLSafe";
 
 interface FormValues {
@@ -30,7 +30,7 @@ export default function TransmissionUploadForm({
   const queryClient = useQueryClient();
   const uploadMutation = useMutation({
     mutationFn: (args: { name: string; audio: File }) =>
-      TransmissionAPI.create(args.name, args.audio),
+      apiCreateTransmission(args.name, args.audio),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transmission", "list"] }),
   });
 
