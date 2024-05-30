@@ -1,31 +1,13 @@
-import {
-  ActionIcon,
-  Button,
-  Divider,
-  Drawer,
-  Group,
-  Menu,
-  Modal,
-  Stack,
-  Title,
-} from "@mantine/core";
+import { ActionIcon, Button, Divider, Drawer, Group, Menu, Stack, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconMenu2, IconUpload } from "@tabler/icons-react";
 import styles from "./DeveloperPanel.module.css";
 import TransmissionList from "./TransmissionList";
-import UploadTransmission from "./UploadTransmission";
+import TransmissionUploadModal from "./TransmissionUploadModal";
 
 //
 //  Local Components
 //
-
-function UploadTransitionModal({ isOpen, close }: { isOpen: boolean; close: () => void }) {
-  return (
-    <Modal opened={isOpen} onClose={close} title="Upload a new Transmission to `emptystream`">
-      <UploadTransmission onComplete={close} />
-    </Modal>
-  );
-}
 
 function TransmissionMenu() {
   const [isUploadModalOpen, { open: openUploadModal, close: closeUploadModal }] =
@@ -46,7 +28,7 @@ function TransmissionMenu() {
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      <UploadTransitionModal isOpen={isUploadModalOpen} close={closeUploadModal} />
+      <TransmissionUploadModal isOpen={isUploadModalOpen} close={closeUploadModal} />
     </>
   );
 }

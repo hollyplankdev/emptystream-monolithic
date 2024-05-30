@@ -12,11 +12,17 @@ interface FormValues {
   name: string;
 }
 
+//
+//  Component
+//
+
 export interface UploadTransmissionProps {
   onComplete?: Function;
 }
 
-export default function UploadTransmission({ onComplete = undefined }: UploadTransmissionProps) {
+export default function TransmissionUploadForm({
+  onComplete = undefined,
+}: UploadTransmissionProps) {
   const [isLoading, { open: startLoadingDisplay, close: stopLoadingDisplay }] =
     useDisclosure(false);
 
@@ -117,7 +123,7 @@ export default function UploadTransmission({ onComplete = undefined }: UploadTra
         {/* The input allowing the name of the transmission to be set */}
         <TextInput
           label="Transmission Name"
-          placeholder="somethingcool"
+          placeholder="something_cool"
           disabled={form.values.file === null}
           {...form.getInputProps("name")}
         />
