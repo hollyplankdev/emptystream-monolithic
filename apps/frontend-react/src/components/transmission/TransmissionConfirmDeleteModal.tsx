@@ -1,5 +1,5 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import { Button, Divider, Group, Modal, Stack, Text, Title } from "@mantine/core";
+import ConfirmationModal from "../ConfirmationModal";
 
 export interface TransmissionConfirmDeleteModalProps {
   transmission: DbObject<ITransmission>;
@@ -22,23 +22,21 @@ export default function TransmissionConfirmDeleteModal({
     confirmDelete();
   };
 
+  const title = "Remove Transmission?";
+  const description =
+    "This will remove the following transmission:" +
+    `\n${transmission.name}\n\n` +
+    "You can not undo this!";
+
   return (
-    <Modal opened={isOpen} onClose={close} centered withCloseButton={false}>
-      <Stack>
-        <Title order={2}>Remove Transmission?</Title>
-        <Text>This will remove the following transmission:</Text>
-        <Text style={{ wordBreak: "break-word" }}>{transmission.name}</Text>
-        <Text>You can not undo this!</Text>
-        <Divider />
-        <Group justify="flex-start">
-          <Button variant="filled" flex={1} onClick={onClickCancel}>
-            Nevermind...
-          </Button>
-          <Button variant="filled" color="red" onClick={onClickConfirm}>
-            Yes, delete!
-          </Button>
-        </Group>
-      </Stack>
-    </Modal>
+    <ConfirmationModal
+      isOpen={isOpen}
+      onCancel={onClickCancel}
+      onConfirm={onClickConfirm}
+      title={title}
+      description={description}
+      cancelText="Nevermind..."
+      confirmText="Yes, delete!"
+    />
   );
 }
