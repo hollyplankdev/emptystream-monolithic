@@ -3,8 +3,7 @@ import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconMusic, IconPhoto, IconUpload, IconX } from "@tabler/icons-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiCreateTransmission } from "../../../api/transmission";
+import { useTransmissionMutationCreate } from "apps/frontend-react/src/queries/transmission";
 import isURLSafe from "../../../utils/isURLSafe";
 
 /** Values to store in the Transmission creation form. */
@@ -27,12 +26,7 @@ export default function TransmissionUploadForm({ onComplete }: UploadTransmissio
     useDisclosure(false);
 
   // Setup a query mutation for uploading the transmission
-  const queryClient = useQueryClient();
-  const uploadMutation = useMutation({
-    mutationFn: (args: { name: string; audio: File }) =>
-      apiCreateTransmission(args.name, args.audio),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transmission", "list"] }),
-  });
+  const uploadMutation = useTransmissionMutationCreate();
 
   const form = useForm<FormValues>({
     initialValues: {

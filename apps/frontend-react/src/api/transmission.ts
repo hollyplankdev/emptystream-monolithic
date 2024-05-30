@@ -26,7 +26,8 @@ export async function apiRemoveTransmission(id: string): Promise<void> {
 }
 
 /**
- * Makes a request creating a new Transmission in the API. Not intended to be used directly!
+ * Makes a request creating a new Transmission in the API. Not intended to be used directly, use
+ * `useTransmissionMutationCreate` instead!
  *
  * @param name The name of the new transmission to create.
  * @param audio The MP3 file for the new Transmission. As soon as this request succeeds, the server

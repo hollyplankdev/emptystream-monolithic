@@ -2,6 +2,7 @@ import { DbObject, ITransmission } from "@emptystream/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
+  apiCreateTransmission,
   apiGetTransmission,
   apiListAllTransmissions,
   apiRemoveTransmission,
@@ -103,6 +104,32 @@ export function useTransmissionQueryAll(options: { initialData?: DbObject<ITrans
 //
 //  Mutations
 //
+
+/**
+ * A hook that allows you to create a new Transmission in the API, and keep track of the status of
+ * said operation. This will automatically invalidate queries that might return the new
+ * transmission.
+ *
+ * @param options.onSuccess OPTIONAL - A callback called if this mutation succeeds.
+ * @param options.onError OPTIONAL - A callback called if this mutation encounters some error.
+ * @returns The described mutation.
+ */
+export function useTransmissionMutationCreate(
+  options: { onSuccess?: () => void; onError?: (err: Error) => void } = {},
+) {
+  const { onSuccess, onError } = options;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (args: { name: string; audio: File }) =>
+      apiCreateTransmission(args.name, args.audio),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: allTransmissionKey() });
+      if (onSuccess) onSuccess();
+    },
+    onError,
+  });
+}
 
 /**
  * A hook that allows you to remove a Transmission from the API, and keep track of the status of
