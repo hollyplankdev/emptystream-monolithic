@@ -3,19 +3,19 @@ import { ActionIcon, Modal } from "@mantine/core";
 import { IconDots } from "@tabler/icons-react";
 import TransmissionDetails from "./TransmissionDetails";
 
-export interface TransmissionDetailsMenuProps {
+export interface TransmissionListElementMenuProps {
   transmission?: DbObject<ITransmission>;
   isOpened: boolean;
   openFunc: () => void;
   closeFunc: () => void;
 }
 
-export default function TransmissionDetailsMenu({
+export default function TransmissionListElementMenu({
   transmission,
   isOpened,
   openFunc,
   closeFunc,
-}: TransmissionDetailsMenuProps) {
+}: TransmissionListElementMenuProps) {
   // TODO - Implement skeleton
   if (!transmission) return undefined;
 

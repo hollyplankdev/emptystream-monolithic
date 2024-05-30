@@ -2,7 +2,7 @@ import { DbObject, ITransmission } from "@emptystream/shared";
 import { Group, Paper, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import TransmissionQueries from "../../queries/TransmissionQueries";
-import TransmissionDetailsMenu from "./TransmissionDetailsMenu";
+import TransmissionListElementMenu from "./TransmissionListElementMenu";
 import styles from "./TransmissionListElement.module.css";
 import TransmissionName from "./TransmissionName";
 import TransmissionSplitProgress from "./TransmissionSplitProgress";
@@ -33,7 +33,7 @@ export default function TransmissionListElement({ initialData }: TransmissionLis
           />
           <TransmissionSplitProgress transmission={transmission} />
         </Stack>
-        <TransmissionDetailsMenu
+        <TransmissionListElementMenu
           transmission={transmission}
           isOpened={detailsOpened}
           openFunc={openDetails}
