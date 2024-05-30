@@ -65,7 +65,7 @@ function useQuerySingle(id: string, { initialData }: { initialData?: DbObject<IT
 function useQueryAll({ initialData }: { initialData?: DbObject<ITransmission>[] }) {
   return useQuery({
     queryKey: allTransmissionKey(),
-    queryFn: TransmissionAPI.all,
+    queryFn: TransmissionAPI.listAll,
     initialData,
   });
 }

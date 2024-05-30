@@ -30,7 +30,7 @@ export default function TransmissionUploadForm({
   const queryClient = useQueryClient();
   const uploadMutation = useMutation({
     mutationFn: (args: { name: string; audio: File }) =>
-      TransmissionAPI.upload(args.name, args.audio),
+      TransmissionAPI.create(args.name, args.audio),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transmission", "list"] }),
   });
 
