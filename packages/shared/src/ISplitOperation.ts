@@ -1,3 +1,4 @@
+/** Information about a demucs stem-splitting job. */
 export interface ISplitOperation {
   /** The current status of the operation. */
   status: string;

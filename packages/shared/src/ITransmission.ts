@@ -1,7 +1,7 @@
 import { ISplitOperation } from "./ISplitOperation";
 import { TransmissionStem } from "./TransmissionStem";
 
-/** A Transmission. */
+/** Information about some audio transmission that can be played on `emptystream`. */
 export interface ITransmission {
   /** The name describing this transmission. */
   name: string;
