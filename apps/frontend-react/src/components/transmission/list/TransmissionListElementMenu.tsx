@@ -1,7 +1,7 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import { ActionIcon, Modal } from "@mantine/core";
 import { IconDots } from "@tabler/icons-react";
-import TransmissionDetails from "./TransmissionDetails";
+import TransmissionDetails from "../details/TransmissionDetails";
 
 export interface TransmissionListElementMenuProps {
   transmission?: DbObject<ITransmission>;

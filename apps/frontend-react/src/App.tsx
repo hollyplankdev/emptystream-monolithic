@@ -4,7 +4,7 @@ import "@mantine/dropzone/styles.css";
 import { ModalsProvider } from "@mantine/modals";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
-import DeveloperPanel from "./features/developerPanel/DeveloperPanel";
+import DeveloperPanel from "./components/DeveloperPanel";
 import StreamImage from "./features/streamImage/StreamImage";
 import { StreamTuner } from "./features/streamTuner/StreamTuner";
 import { TransmissionAudio } from "./features/transmissionAudio/TransmissionAudio";

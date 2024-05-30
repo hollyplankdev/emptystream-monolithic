@@ -1,12 +1,12 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import { Group, Paper, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import TransmissionQueries from "../../queries/TransmissionQueries";
+import TransmissionQueries from "../../../queries/TransmissionQueries";
 import TransmissionListElementMenu from "./TransmissionListElementMenu";
 import styles from "./TransmissionListElement.module.css";
-import TransmissionName from "./TransmissionName";
-import TransmissionSplitProgress from "./TransmissionSplitProgress";
-import TransmissionStemIcon from "./TransmissionStemIcon";
+import TransmissionName from "../TransmissionName";
+import TransmissionSplitProgress from "../TransmissionSplitProgress";
+import TransmissionStemIcon from "../TransmissionStemIcon";
 
 export interface TransmissionListElementProps {
   initialData: DbObject<ITransmission>;

@@ -2,7 +2,7 @@ import { DbObject, ITransmission } from "@emptystream/shared";
 import { ActionIcon, Menu, Skeleton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconAdjustments, IconTrash } from "@tabler/icons-react";
-import TransmissionConfirmDeleteModal from "./TransmissionConfirmDeleteModal";
+import TransmissionConfirmDeleteModal from "../TransmissionConfirmDeleteModal";
 
 export interface TransmissionDetailsMenuProps {
   onDelete: () => void;

@@ -1,11 +1,11 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import { Divider, Group, LoadingOverlay, Stack } from "@mantine/core";
 import "react-h5-audio-player/lib/styles.css";
-import TransmissionQueries from "../../queries/TransmissionQueries";
-import DatabaseId from "./DatabaseId";
+import TransmissionQueries from "../../../queries/TransmissionQueries";
+import DatabaseId from "../../DatabaseId";
 import TransmissionDetailsMenu from "./TransmissionDetailsMenu";
-import TransmissionName from "./TransmissionName";
-import TransmissionStemPicker from "./TransmissionStemPicker";
+import TransmissionName from "../TransmissionName";
+import TransmissionStemPicker from "../TransmissionStemPicker";
 
 export interface TransmissionDetailsProps {
   /** The known ID of the Transmission to display details about. */

@@ -2,8 +2,8 @@ import { ActionIcon, Button, Divider, Drawer, Group, Menu, Stack, Title } from "
 import { useDisclosure } from "@mantine/hooks";
 import { IconMenu2, IconUpload } from "@tabler/icons-react";
 import styles from "./DeveloperPanel.module.css";
-import TransmissionList from "./TransmissionList";
-import TransmissionUploadModal from "./TransmissionUploadModal";
+import TransmissionList from "./transmission/list/TransmissionList";
+import TransmissionUploadModal from "./transmission/upload/TransmissionUploadModal";
 
 //
 //  Local Components
