@@ -2,7 +2,7 @@ import { ITransmission } from "@emptystream/shared";
 import { Loader, Skeleton } from "@mantine/core";
 import { IconExclamationCircle, IconMusic } from "@tabler/icons-react";
 
-export interface TransmissionStemIconProps {
+export interface TransmissionStateIconProps {
   /**
    * OPTIONAL - The transmission to display an icon for. If not provided, the component will render
    * as a skeleton.
@@ -17,10 +17,10 @@ export interface TransmissionStemIconProps {
  * @returns An icon representing the current state of a Transmission. Supports being rendered as a
  *   skeleton.
  */
-export default function TransmissionStemIcon({
+export default function TransmissionStateIcon({
   transmission,
   size = 20,
-}: TransmissionStemIconProps) {
+}: TransmissionStateIconProps) {
   if (!transmission) return <Skeleton height={size} circle />;
 
   switch (transmission.splitOperation.status) {

@@ -4,7 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useTransmissionQuerySingle } from "../../../queries/transmission";
 import TransmissionName from "../TransmissionName";
 import TransmissionSplitProgress from "../TransmissionSplitProgress";
-import TransmissionStemIcon from "../TransmissionStemIcon";
+import TransmissionStateIcon from "../TransmissionStateIcon";
 import styles from "./TransmissionListElement.module.css";
 import TransmissionListElementMenu from "./TransmissionListElementMenu";
 
@@ -24,7 +24,7 @@ export default function TransmissionListElement({ initialData }: TransmissionLis
   return (
     <Paper withBorder radius={0} pl="xs" pr="xs" pt={1} pb={1} className={styles.elementButton}>
       <Group justify="flex-start">
-        <TransmissionStemIcon transmission={transmission} />
+        <TransmissionStateIcon transmission={transmission} />
         <Stack gap={0} flex={1} justify="center" mih="35px">
           <TransmissionName
             transmission={transmission}
