@@ -1,20 +1,11 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import {
-  ActionIcon,
-  Box,
-  Group,
-  Modal,
-  Paper,
-  Progress,
-  Skeleton,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Group, Modal, Paper, Progress, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDots } from "@tabler/icons-react";
 import TransmissionQueries from "../../queries/TransmissionQueries";
 import TransmissionDetails from "./TransmissionDetails";
 import styles from "./TransmissionListElement.module.css";
+import TransmissionName from "./TransmissionName";
 import TransmissionStemIcon from "./TransmissionStemIcon";
 
 export interface TransmissionListElementProps {
@@ -24,17 +15,6 @@ export interface TransmissionListElementProps {
 //
 //  Sub-Elements
 //
-
-function TransmissionName({ transmission }: { transmission?: ITransmission }) {
-  if (!transmission) return <Skeleton height={8} />;
-  return (
-    <Box maw={300}>
-      <Text size="md" truncate="end">
-        {transmission.name}
-      </Text>
-    </Box>
-  );
-}
 
 function TransmissionProgress({ transmission }: { transmission?: ITransmission }) {
   // If we're already done splitting, exit early
