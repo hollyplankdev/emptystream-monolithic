@@ -32,6 +32,12 @@ interface ITuningChangedMessage {
 
 type WebSocketMessage = IGiveTuningMessage | ITuningChangedMessage;
 
+/**
+ * Obtains the websocket connection to the Stream API. Automatically reacts to new messages and
+ * triggers an update if the stream state changes.
+ *
+ * @returns The currently known stream state.
+ */
 export function useStreamSocket() {
   const [state, setState] = useState(initialState);
   const { lastMessage } = useWebSocket(StreamAPI.getUrl(), {
