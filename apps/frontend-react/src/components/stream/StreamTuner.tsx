@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { animated, useSpring, easings } from "@react-spring/web";
 import styles from "./StreamTuner.module.css";
 import hashString from "../../utils/hashString";
-import { useStreamApiSocket } from "../../api/StreamAPI";
+import { useStreamSocket } from "../../hooks/useStreamSocket";
 
 export interface StreamTunerProps {
   index: number;
@@ -10,7 +10,7 @@ export interface StreamTunerProps {
 }
 
 export function StreamTuner({ index = -1, holographic = false }: StreamTunerProps) {
-  const { streamState } = useStreamApiSocket();
+  const { streamState } = useStreamSocket();
   const [springStyles, springApi] = useSpring(() => ({
     from: { left: "0%" },
     config: { duration: 1000 * 4, easing: easings.easeInOutSine },

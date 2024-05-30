@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
-
-export interface UseStreamSocketProps {
-  websocketURL: string;
-}
+import StreamAPI from "../api/StreamAPI";
 
 export interface StreamSocketState {
   tunings: Map<number, IChannelTuning>;
@@ -35,9 +32,9 @@ interface ITuningChangedMessage {
 
 type WebSocketMessage = IGiveTuningMessage | ITuningChangedMessage;
 
-export function useStreamSocket(props: UseStreamSocketProps) {
+export function useStreamSocket() {
   const [state, setState] = useState(initialState);
-  const { lastMessage } = useWebSocket(props.websocketURL, {
+  const { lastMessage } = useWebSocket(StreamAPI.getUrl(), {
     share: true,
   });
 

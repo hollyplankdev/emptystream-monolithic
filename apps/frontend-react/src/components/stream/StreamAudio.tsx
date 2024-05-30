@@ -1,13 +1,13 @@
 import { Howl } from "howler";
 import { useEffect, useRef } from "react";
-import { useStreamApiSocket } from "../../api/StreamAPI";
+import { useStreamSocket } from "../../hooks/useStreamSocket";
 
 export interface StreamAudioProps {
   index: number;
 }
 
 export function StreamAudio({ index = -1 }: StreamAudioProps) {
-  const { streamState } = useStreamApiSocket();
+  const { streamState } = useStreamSocket();
   const transmissionId = useRef<string>("");
   const transmissionStem = useRef<string>("");
   const howl = useRef<Howl | null>(null);
