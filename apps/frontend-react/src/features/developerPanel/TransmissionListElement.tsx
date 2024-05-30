@@ -3,7 +3,6 @@ import {
   ActionIcon,
   Box,
   Group,
-  Loader,
   Modal,
   Paper,
   Progress,
@@ -12,10 +11,11 @@ import {
   Text,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconDots, IconExclamationCircle, IconMusic } from "@tabler/icons-react";
+import { IconDots } from "@tabler/icons-react";
 import TransmissionQueries from "../../queries/TransmissionQueries";
 import TransmissionDetails from "./TransmissionDetails";
 import styles from "./TransmissionListElement.module.css";
+import TransmissionStemIcon from "./TransmissionStemIcon";
 
 export interface TransmissionListElementProps {
   initialData: DbObject<ITransmission>;
@@ -24,21 +24,6 @@ export interface TransmissionListElementProps {
 //
 //  Sub-Elements
 //
-
-function StemIcon({ transmission }: { transmission?: ITransmission }) {
-  if (!transmission) return <Skeleton height={20} circle />;
-
-  switch (transmission.splitOperation.status) {
-    case "complete":
-      return <IconMusic size={20} />;
-
-    case "failed":
-      return <IconExclamationCircle size={20} />;
-
-    default:
-      return <Loader size={20} />;
-  }
-}
 
 function TransmissionName({ transmission }: { transmission?: ITransmission }) {
   if (!transmission) return <Skeleton height={8} />;
@@ -108,7 +93,7 @@ export default function TransmissionListElement({ initialData }: TransmissionLis
   return (
     <Paper withBorder radius={0} pl="xs" pr="xs" pt={1} pb={1} className={styles.elementButton}>
       <Group justify="flex-start">
-        <StemIcon transmission={transmission} />
+        <TransmissionStemIcon transmission={transmission} />
         <Stack gap={0} flex={1} justify="center" mih="35px">
           <TransmissionName transmission={transmission} />
           <TransmissionProgress transmission={transmission} />
