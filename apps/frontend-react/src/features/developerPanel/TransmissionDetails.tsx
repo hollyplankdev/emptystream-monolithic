@@ -1,17 +1,13 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import {
   ActionIcon,
-  Button,
   Divider,
   Group,
   LoadingOverlay,
   Menu,
-  Modal,
   SegmentedControl,
   Skeleton,
   Stack,
-  Text,
-  Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconAdjustments, IconTrash } from "@tabler/icons-react";
@@ -19,8 +15,9 @@ import { useState } from "react";
 import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import TransmissionQueries from "../../queries/TransmissionQueries";
-import TransmissionName from "./TransmissionName";
 import DatabaseId from "./DatabaseId";
+import TransmissionConfirmDeleteModal from "./TransmissionConfirmDeleteModal";
+import TransmissionName from "./TransmissionName";
 
 //
 //  Local Components
@@ -69,43 +66,6 @@ function StemPicker({ transmission }: { transmission?: DbObject<ITransmission> }
   );
 }
 
-function ConfirmDeletionModal({
-  transmission,
-  isOpen,
-  close,
-  confirmDelete,
-}: {
-  transmission: DbObject<ITransmission>;
-  isOpen: boolean;
-  close: () => void;
-  confirmDelete: () => void;
-}) {
-  const onClickDelete = () => {
-    close();
-    confirmDelete();
-  };
-
-  return (
-    <Modal opened={isOpen} onClose={close} centered withCloseButton={false}>
-      <Stack>
-        <Title order={2}>Remove Transmission?</Title>
-        <Text>This will remove the following transmission:</Text>
-        <Text style={{ wordBreak: "break-word" }}>{transmission.name}</Text>
-        <Text>You can not undo this!</Text>
-        <Divider />
-        <Group justify="flex-start">
-          <Button variant="filled" flex={1} onClick={close}>
-            Nevermind...
-          </Button>
-          <Button variant="filled" color="red" onClick={onClickDelete}>
-            Yes, delete!
-          </Button>
-        </Group>
-      </Stack>
-    </Modal>
-  );
-}
-
 function SettingsMenu({
   onDelete,
   transmission,
@@ -149,7 +109,7 @@ function SettingsMenu({
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      <ConfirmDeletionModal
+      <TransmissionConfirmDeleteModal
         transmission={transmission}
         isOpen={isRemoveConfirmationOpen}
         close={closeRemoveConfirmation}
