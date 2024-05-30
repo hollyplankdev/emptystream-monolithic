@@ -1,11 +1,12 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
-import { ActionIcon, Group, Modal, Paper, Progress, Stack } from "@mantine/core";
+import { ActionIcon, Group, Modal, Paper, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDots } from "@tabler/icons-react";
 import TransmissionQueries from "../../queries/TransmissionQueries";
 import TransmissionDetails from "./TransmissionDetails";
 import styles from "./TransmissionListElement.module.css";
 import TransmissionName from "./TransmissionName";
+import TransmissionSplitProgress from "./TransmissionSplitProgress";
 import TransmissionStemIcon from "./TransmissionStemIcon";
 
 export interface TransmissionListElementProps {
@@ -15,23 +16,6 @@ export interface TransmissionListElementProps {
 //
 //  Sub-Elements
 //
-
-function TransmissionProgress({ transmission }: { transmission?: ITransmission }) {
-  // If we're already done splitting, exit early
-  if (!transmission || transmission.splitOperation.status === "complete") return undefined;
-
-  const isError = transmission.splitOperation.status === "failed";
-  const color = isError ? "red" : "blue";
-
-  return (
-    <Progress
-      h="5px"
-      value={transmission.splitOperation.percentage}
-      color={color}
-      animated={!isError}
-    />
-  );
-}
 
 function TransmissionDetailsMenu({
   transmission,
@@ -76,7 +60,7 @@ export default function TransmissionListElement({ initialData }: TransmissionLis
         <TransmissionStemIcon transmission={transmission} />
         <Stack gap={0} flex={1} justify="center" mih="35px">
           <TransmissionName transmission={transmission} />
-          <TransmissionProgress transmission={transmission} />
+          <TransmissionSplitProgress transmission={transmission} />
         </Stack>
         <TransmissionDetailsMenu
           transmission={transmission}
