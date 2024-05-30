@@ -12,10 +12,6 @@ export interface TransmissionListElementProps {
   initialData: DbObject<ITransmission>;
 }
 
-//
-//  Exported Element
-//
-
 export default function TransmissionListElement({ initialData }: TransmissionListElementProps) {
   const transmission = TransmissionQueries.useQuerySingle(initialData._id, { initialData }).data;
   const [detailsOpened, { open: openDetails, close: closeDetails }] = useDisclosure(false);
