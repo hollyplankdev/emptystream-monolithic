@@ -5,10 +5,10 @@ import { ModalsProvider } from "@mantine/modals";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import DeveloperPanel from "./components/DeveloperPanel";
-import StreamImage from "./features/streamImage/StreamImage";
-import { StreamTuner } from "./features/streamTuner/StreamTuner";
-import { TransmissionAudio } from "./features/transmissionAudio/TransmissionAudio";
-import VolumeSlider from "./features/volumeSlider/VolumeSlider";
+import StreamImage from "./components/stream/StreamImage";
+import { StreamTuner } from "./components/stream/StreamTuner";
+import { StreamAudio } from "./components/stream/StreamAudio";
+import VolumeSlider from "./components/VolumeSlider";
 import theme from "./theme";
 
 const queryClient = new QueryClient();
@@ -29,10 +29,10 @@ function App() {
                 <StreamTuner index={2} />
                 <StreamTuner index={3} />
                 <StreamTuner index={-3} holographic />
-                <TransmissionAudio index={0} />
-                <TransmissionAudio index={1} />
-                <TransmissionAudio index={2} />
-                <TransmissionAudio index={3} />
+                <StreamAudio index={0} />
+                <StreamAudio index={1} />
+                <StreamAudio index={2} />
+                <StreamAudio index={3} />
               </div>
             </div>
           </div>
