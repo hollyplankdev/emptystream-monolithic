@@ -1,14 +1,21 @@
 import { Howl } from "howler";
 import { useEffect, useRef } from "react";
-import { useStreamSocket } from "../streamSocket/useStreamSocket";
+import { useStreamSocket } from "../../hooks/useStreamSocket";
 
-export interface TransmissionAudioProps {
+export interface StreamAudioProps {
+  /**
+   * The stem in the stream state to play audio for. If this is >= 0, then it's the index in the
+   * tunings array to use. If this is < 0, then nothing will play.
+   */
   index: number;
 }
 
-export function TransmissionAudio({ index = -1 }: TransmissionAudioProps) {
-  const socketURL = "ws://localhost:3000/stream";
-  const { streamState } = useStreamSocket({ websocketURL: socketURL });
+/**
+ * @returns Plays audio from a specific tuning on `emptystream`'s state. Cross fades between stems
+ *   as the stream state updates.
+ */
+export function StreamAudio({ index }: StreamAudioProps) {
+  const { streamState } = useStreamSocket();
   const transmissionId = useRef<string>("");
   const transmissionStem = useRef<string>("");
   const howl = useRef<Howl | null>(null);
@@ -31,7 +38,7 @@ export function TransmissionAudio({ index = -1 }: TransmissionAudioProps) {
     transmissionStem.current = transmission.stem;
 
     // Create the new howler object representing the audio for the transmission
-    const audioPath = `http://localhost:3000/transmission/${transmission.id}/${transmission.stem}`;
+    const audioPath = `transmission/${transmission.id}/${transmission.stem}`;
     console.log(`Loading ${audioPath}`);
     const newAudio = new Howl({ src: [audioPath], format: "mp3", loop: true });
     newAudio.volume(0);

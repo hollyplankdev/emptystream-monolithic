@@ -1,5 +1,5 @@
-import { ChannelTuning } from "./ChannelTuning.js";
-import { WebSocketMessage } from "./WebSocketMessage.js";
+import { ChannelTuning } from "./ChannelTuning";
+import { WebSocketMessage } from "./WebSocketMessage";
 
 /** Messages used as part of the Stream WebSocket service. */
 export namespace StreamMessage {

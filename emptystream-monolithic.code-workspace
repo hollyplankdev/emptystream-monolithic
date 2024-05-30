@@ -1,14 +1,31 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "packages/frontend-react"
-		},
-		{
-			"path": "packages/backend-monolithic"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": ".",
+    },
+    {
+      "path": "apps/frontend-react",
+    },
+    {
+      "path": "apps/backend-monolithic",
+    },
+    {
+      "path": "packages/shared",
+    },
+  ],
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "cmake.configureOnOpen": false,
+    "editor.tabSize": 2,
+    "eslint.workingDirectories": ["./packages/*"],
+    "cssVariables.lookupFiles": [
+      "**/*.css",
+      "**/*.scss",
+      "**/*.sass",
+      "**/*.less",
+      "**/node_modules/@mantine/core/styles.css",
+    ],
+    "cSpell.words": ["emptystream", "esbenp", "mantine", "reduxjs", "tabler", "tanstack"],
+  },
 }

@@ -1,0 +1,8 @@
+.elementButton {
+  color: white;
+  background-color: #363636;
+
+  &:hover {
+    filter: brightness(105%);
+  }
+}

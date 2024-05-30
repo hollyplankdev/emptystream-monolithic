@@ -11,7 +11,7 @@ const onFailed: QueueEventsListener["failed"] = async (args) => {
   // Update the split operation field.
   await Transmission.updateOne(
     { _id: jobData.transmissionId },
-    { splitOperation: { status: "failed" } },
+    { $set: { "splitOperation.status": "failed" } },
   );
 };
 export default onFailed;

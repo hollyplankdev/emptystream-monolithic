@@ -1,17 +1,14 @@
-import { ALL_CHANNEL_INDEX, ALL_TRANSMISSION_STEMS, ChannelTuning } from "@emptystream/shared";
+import {
+  ALL_CHANNEL_INDEX,
+  ALL_TRANSMISSION_STEMS,
+  ChannelTuning,
+  IStreamState,
+  ITimestamps,
+} from "@emptystream/shared";
 import { HydratedDocument, Model, Schema, model } from "mongoose";
 import { createClient as createRedisClient } from "redis";
 import { getRedisConnectionOptions } from "../config/redis.config.js";
-import { ITimestamps } from "./timestamps.js";
 import { Transmission } from "./transmission.js";
-
-export interface IStreamState {
-  /** The explicit ID of this singleton. Should always be 0. */
-  _id: number;
-
-  /** The tunings for each channel on the stream. */
-  tunings: ChannelTuning[];
-}
 
 export interface IStreamStateModel extends Model<IStreamState> {
   /** Returns the singleton stream state object from the DB. Creates one if it doesn't exist yet. */

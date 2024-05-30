@@ -36,6 +36,13 @@ const runJob: Processor<IRetuneInput> = async (job) => {
   await job.updateProgress({ percentage: 80, status: "loaded_transmissions" });
   // console.log(`Found ${validTransmissions.length} transmissions`);
 
+  // If there are no valid transmissions, then just try to retune in 10 seconds, and hope that
+  // there are some new ones
+  if (validTransmissions.length === 0) {
+    await addJob([], 1000 * 10);
+    return;
+  }
+
   // Pick a random transmission
   const transmission = validTransmissions[Math.floor(Math.random() * validTransmissions.length)];
 

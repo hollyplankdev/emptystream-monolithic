@@ -9,6 +9,7 @@
     "airbnb-base",
     "airbnb-typescript/base",
     "airbnb/hooks",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "prettier"
@@ -28,7 +29,11 @@
     "prettier/prettier": "error",
     "max-len": ["error", { "code": 100 }],
     "no-console": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "event|context" }],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "event|context|req|res" }
+    ],
+    "no-underscore-dangle": 0,
     "@typescript-eslint/no-restricted-imports": [
       2,
       {
