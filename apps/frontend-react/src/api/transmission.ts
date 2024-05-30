@@ -48,8 +48,6 @@ export async function apiCreateTransmission(
   // Send the request!
   const response = await axios.postForm("transmission", formData);
 
-  // TODO - Handle error from above
-  // TODO - Flag that there may be new transmissions to display
   const transmission: DbObject<ITransmission> = response.data;
   return transmission;
 }
