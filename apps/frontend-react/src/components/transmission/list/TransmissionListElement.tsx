@@ -1,19 +1,19 @@
 import { DbObject, ITransmission } from "@emptystream/shared";
 import { Group, Paper, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import TransmissionQueries from "../../../queries/TransmissionQueries";
-import TransmissionListElementMenu from "./TransmissionListElementMenu";
-import styles from "./TransmissionListElement.module.css";
+import { useTransmissionQuerySingle } from "../../../queries/TransmissionQueries";
 import TransmissionName from "../TransmissionName";
 import TransmissionSplitProgress from "../TransmissionSplitProgress";
 import TransmissionStemIcon from "../TransmissionStemIcon";
+import styles from "./TransmissionListElement.module.css";
+import TransmissionListElementMenu from "./TransmissionListElementMenu";
 
 export interface TransmissionListElementProps {
   initialData: DbObject<ITransmission>;
 }
 
 export default function TransmissionListElement({ initialData }: TransmissionListElementProps) {
-  const transmission = TransmissionQueries.useQuerySingle(initialData._id, { initialData }).data;
+  const transmission = useTransmissionQuerySingle(initialData._id, { initialData }).data;
   const [detailsOpened, { open: openDetails, close: closeDetails }] = useDisclosure(false);
 
   return (

@@ -3,7 +3,7 @@ import axios from "axios";
 
 /**
  * Makes a request getting a single Transmission from the API, by it's ID. Not intended to be used
- * directly, use `TransmissionQueries.useQuerySingle` instead!
+ * directly, use `useTransmissionQuerySingle` instead!
  *
  * @param id The id of the transmission to get.
  * @returns The Transmission with matching ID.
@@ -16,7 +16,7 @@ const get = async (id: string): Promise<DbObject<ITransmission>> => {
 
 /**
  * Makes a request removing a single Transmission from the API, by it's ID. Not intended to be used
- * directly, use `TransmissionQueries.useMutationRemove` instead!
+ * directly, use `useTransmissionMutationRemove` instead!
  *
  * @param id The id of the transmission to remove.
  * @throws AxiosError if result is non-200 status code.
@@ -76,7 +76,7 @@ const listPage = async (
 
 /**
  * Makes a request getting a list of ALL Transmissions from the API. Not intended to be used
- * directly, use `TransmissionQueries.useQueryAll` instead!
+ * directly, use `useTransmissionQueryAll` instead!
  *
  * @returns A list of every Transmission known to exist.
  * @throws AxiosError if result is non-200 status code.

@@ -1,9 +1,9 @@
 import { Box } from "@mantine/core";
-import TransmissionQueries from "../../../queries/TransmissionQueries";
+import { useTransmissionQueryAll } from "../../../queries/TransmissionQueries";
 import TransmissionListElement from "./TransmissionListElement";
 
 export default function TransmissionList() {
-  const query = TransmissionQueries.useQueryAll({ initialData: [] });
+  const query = useTransmissionQueryAll({ initialData: [] });
 
   return (
     <Box>

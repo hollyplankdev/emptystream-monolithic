@@ -33,7 +33,10 @@ function allTransmissionKey() {
  *   from the API.
  * @returns The described query.
  */
-function useQuerySingle(id: string, options: { initialData?: DbObject<ITransmission> } = {}) {
+export function useTransmissionQuerySingle(
+  id: string,
+  options: { initialData?: DbObject<ITransmission> } = {},
+) {
   const { initialData } = options;
 
   /**
@@ -83,7 +86,7 @@ function useQuerySingle(id: string, options: { initialData?: DbObject<ITransmiss
  *   from the API.
  * @returns The described query.
  */
-function useQueryAll(options: { initialData?: DbObject<ITransmission>[] } = {}) {
+export function useTransmissionQueryAll(options: { initialData?: DbObject<ITransmission>[] } = {}) {
   const { initialData } = options;
 
   return useQuery({
@@ -107,7 +110,7 @@ function useQueryAll(options: { initialData?: DbObject<ITransmission>[] } = {}) 
  * @param options.onError OPTIONAL - A callback called if this mutation encounters some error.
  * @returns The described mutation.
  */
-function useMutationRemove(
+export function useTransmissionMutationRemove(
   id: string,
   options: { onSuccess?: () => void; onError?: (err: Error) => void } = {},
 ) {
@@ -124,13 +127,3 @@ function useMutationRemove(
     onError,
   });
 }
-
-//
-//  Export
-//
-
-export default {
-  useQuerySingle,
-  useQueryAll,
-  useMutationRemove,
-};
